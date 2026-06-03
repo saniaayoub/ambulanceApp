@@ -30,7 +30,7 @@ interface AppButtonProps {
 const AppButton: React.FC<AppButtonProps> = ({
   title,
   onPress,
-  // variant = 'primary',
+  variant = 'primary',
   size = 'md',
   loading = false,
   disabled = false,
