@@ -2,24 +2,18 @@ import { apiCall } from '../api/apiCall';
 import { ENDPOINTS } from '../api/endpoints';
 
 export type LoginPayload = {
-  email?: string;
   password: string;
-  phone?: string | null;
+  phone: string | null;
   phone_country?: string | null;
-  auth_field: 'email' | 'phone';
-  captcha_key?: string;
 };
 
 export type RegisterPayload = {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   password: string;
   password_confirmation: string;
   phone?: string | null;
   phone_country?: string | null;
-  auth_field?: 'email';
-  captcha_key?: string;
 };
 
 export type ForgotPasswordPayload = {

@@ -2,34 +2,26 @@ import React from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useForm } from 'react-hook-form';
-import { Text, TouchableOpacity, View } from 'react-native';
 import AppButton from '../../components/AppButton';
 import AuthWrapper from '../../components/AuthWrapper';
 import FormInput from '../../components/FormInput';
 import PhoneNumberInput from '../../components/PhoneInput';
 import { AuthStackParamList } from '../../navigation/AuthStack';
-import { useThemeStore } from '../../stores/themeStore';
-import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
+import { globalStyles } from '../../styles/globalStyles';
 import { registerSchema } from '../../validation/authSchemas';
 import { useAuth } from '../../hooks/useAuth';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUp'>;
 
 type SignUpForm = {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   phone: string;
-  address: string;
-  city: string;
-  postalCode: string;
   password: string;
   confirmPassword: string;
 };
 
 const SignUpScreen = ({ navigation }: Props) => {
-  const styles = useGlobalStyles();
-  const { toggleTheme } = useThemeStore();
   const { registerSubmit, authLoading } = useAuth();
 
   const { control, handleSubmit } = useForm<SignUpForm>({
@@ -37,13 +29,9 @@ const SignUpScreen = ({ navigation }: Props) => {
     reValidateMode: 'onChange',
     resolver: yupResolver(registerSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
+      fullName: '',
       email: '',
       phone: '',
-      address: '',
-      city: '',
-      postalCode: '',
       password: '',
       confirmPassword: '',
     },
@@ -51,15 +39,12 @@ const SignUpScreen = ({ navigation }: Props) => {
 
   const onSubmit = async (data: SignUpForm) => {
     const response = await registerSubmit({
-      firstName: data.firstName,
-      lastName: data.lastName,
+      fullName: data.fullName,
       email: data.email,
       password: data.password,
       password_confirmation: data.confirmPassword,
       phone: data.phone,
       phone_country: null,
-      auth_field: 'email',
-      captcha_key: 'accusamus',
     });
 
     if (response.success) {
@@ -67,34 +52,24 @@ const SignUpScreen = ({ navigation }: Props) => {
     }
   };
 
-  const handleNavigate = () => navigation.goBack();
+  const handleNavigate = () => navigation.navigate('OtpResetPassword');
 
   return (
     <AuthWrapper
-      text="Create a new Ambulanceapp account "
+      text="Sign up to  book an ambulance"
       handleNavigate={handleNavigate}
       linkText1="Already have an account?"
       linkText2=" Log In"
-      style={globalStyles.mT50}
+      style={globalStyles.negmargin20}
     >
-      <View style={[globalStyles.row, globalStyles.spaceBetween]}>
-        <FormInput
-          variant="shadowed"
-          control={control}
-          name="firstName"
-          label="First Name"
-          placeholder="Enter First Name"
-          style={globalStyles.halfwidth}
-        />
-        <FormInput
-          variant="shadowed"
-          control={control}
-          name="lastName"
-          label="Last Name"
-          placeholder="Enter Last Name"
-          style={globalStyles.halfwidth}
-        />
-      </View>
+      <FormInput
+        variant="shadowed"
+        control={control}
+        name="fullName"
+        label="Full Name"
+        placeholder="Enter Full Name"
+      />
+
       <FormInput
         variant="shadowed"
         control={control}
@@ -115,32 +90,7 @@ const SignUpScreen = ({ navigation }: Props) => {
           },
         }}
       />
-      <FormInput
-        variant="shadowed"
-        control={control}
-        name="address"
-        label="Home Address"
-        placeholder="Enter home address"
-      />
 
-      <View style={[globalStyles.row, globalStyles.spaceBetween]}>
-        <FormInput
-          variant="shadowed"
-          control={control}
-          name="city"
-          label="City"
-          placeholder="Enter city"
-          style={globalStyles.halfwidth}
-        />
-        <FormInput
-          variant="shadowed"
-          control={control}
-          name="postalCode"
-          label="Postal Code"
-          placeholder="Enter postal code"
-          style={globalStyles.halfwidth}
-        />
-      </View>
       <FormInput
         variant="shadowed"
         control={control}
@@ -155,12 +105,6 @@ const SignUpScreen = ({ navigation }: Props) => {
         label="Confirm Password"
         placeholder="Confirm password"
       />
-      <TouchableOpacity
-        onPress={() => toggleTheme()}
-        style={[globalStyles.mB20, globalStyles.negmargin]}
-      >
-        <Text style={styles.h4}>Forget your password?</Text>
-      </TouchableOpacity>
 
       <AppButton
         title="Sign Up"

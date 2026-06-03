@@ -30,7 +30,7 @@ interface AppButtonProps {
 const AppButton: React.FC<AppButtonProps> = ({
   title,
   onPress,
-  variant = 'primary',
+  // variant = 'primary',
   size = 'md',
   loading = false,
   disabled = false,
@@ -46,6 +46,7 @@ const AppButton: React.FC<AppButtonProps> = ({
       style={[
         globalStyles.centered,
         globalStyles.row,
+        globalStyles.fullRadius,
         globalStyles.mV20,
         sizeStyles[size],
         isDisabled && globalStyles.disabled,

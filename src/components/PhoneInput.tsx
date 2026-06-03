@@ -168,10 +168,10 @@ const PhoneNumberInput: React.FC<Props> = ({
 export default PhoneNumberInput;
 
 const useStyles = (variant: Variant) => {
-  return useThemedStyles(({ colors, typography }) => ({
+  return useThemedStyles(({ colors, typography, radius }) => ({
     container: {
       width: '100%',
-      marginBottom: verticalScale(16),
+      marginBottom: verticalScale(10),
     },
 
     label: {
@@ -192,7 +192,7 @@ const useStyles = (variant: Variant) => {
       flex: 1,
       flexDirection: 'row',
       width: '100%',
-      height: verticalScale(48),
+      height: verticalScale(40),
       paddingHorizontal: moderateScale(15),
       color: colors.text,
 
@@ -215,6 +215,7 @@ const useStyles = (variant: Variant) => {
         elevation: 3,
         borderWidth: 1,
         borderColor: colors.border,
+        borderRadius: radius.base,
       }),
     },
 

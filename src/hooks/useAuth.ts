@@ -15,7 +15,7 @@ import {
 const getErrorMessage = (error: any) =>
   error?.response?.data?.message || error?.message || 'Something went wrong';
 
-export const useAuth = (defaultAuthField: 'email' | 'phone' = 'email') => {
+export const useAuth = () => {
   const { token, setToken, clearToken } = useAuthStore();
   const { showLoader, hideLoader, isLoading } = useLoaderStore();
 
@@ -34,10 +34,8 @@ export const useAuth = (defaultAuthField: 'email' | 'phone' = 'email') => {
     try {
       const response = await login({
         ...payload,
-        auth_field: payload.auth_field || defaultAuthField,
         phone: payload.phone ?? null,
-        phone_country: payload.phone_country ?? null,
-        captcha_key: payload.captcha_key ?? 'accusamus',
+        phone_country: payload.phone_country ?? null
       });
 
       if (!response.success) {

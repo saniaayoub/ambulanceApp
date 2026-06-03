@@ -1,12 +1,23 @@
 import { StyleSheet } from 'react-native';
 import { moderateScale, verticalScale } from 'react-native-size-matters';
 import { useThemedStyles } from './createThemedStyles';
+import theme from './theme';
 
 export const globalStyles = StyleSheet.create({
+  flexgrow:  { flexGrow: 1 },
   absBottomTxt: {
     position: 'absolute',
     bottom: verticalScale(20),
     alignSelf: 'center',
+  },
+  justifyBetween: {
+    justifyContent: 'space-between',
+  },
+  textCenter:{
+    textAlign: 'center',
+  },
+  fullRadius: {
+    borderRadius: theme.radius.round,
   },
   flex: {
     flex: 1,
@@ -35,7 +46,9 @@ export const globalStyles = StyleSheet.create({
   alignCenter: {
     alignItems: 'center',
   },
-
+alignSelfCenter:{
+    alignSelf: 'center',
+},
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -50,8 +63,24 @@ export const globalStyles = StyleSheet.create({
   negmargin20: {
     marginTop: moderateScale(-20),
   },
+  
+    negmargin70: {  
+    marginTop: moderateScale(-70),
+  },
+  negmargin30: {
+    marginTop: moderateScale(-30),
+  },
    negmargin50: {
     marginTop: moderateScale(-50),
+  },
+    negmargin60: {
+    marginTop: moderateScale(-60),
+  },
+  mV10: {
+    marginVertical: moderateScale(10),
+  },  
+  mT10: {
+    marginTop: moderateScale(10),
   },
   mB10: {
     marginBottom: moderateScale(10),
@@ -106,6 +135,12 @@ export const globalStyles = StyleSheet.create({
   paddingV15: {
     paddingVertical: moderateScale(15),
   },
+  paddingH15:{
+    paddingHorizontal: moderateScale(15),
+  },
+   paddingH10:{
+    paddingHorizontal: moderateScale(10),
+  },
   paddingV40: {
     paddingVertical: moderateScale(40),
   },
@@ -115,7 +150,7 @@ export const globalStyles = StyleSheet.create({
 });
 
 export const useGlobalStyles = () => {
-  return useThemedStyles(({ colors, typography }) => ({
+  return useThemedStyles(({ colors, typography,radius }) => ({
     // Home Screen Styles
     link: {
       color: colors.primary,
@@ -149,6 +184,7 @@ export const useGlobalStyles = () => {
     border: {
       borderWidth: 1,
       borderColor: colors.border,
+      borderRadius: radius.regular,
     },
     buttonContainer: {
       padding: moderateScale(16),
@@ -158,6 +194,14 @@ export const useGlobalStyles = () => {
       backgroundColor: colors.background,
     },
     h4: {
+      ...typography.heading4,
+      color: colors.text,
+    },
+    h5: {
+      ...typography.heading5,
+      color: colors.text,
+    },
+    h6: {
       ...typography.heading6,
       color: colors.text,
     },
@@ -169,6 +213,9 @@ export const useGlobalStyles = () => {
       ...typography.lightText,
       color: colors.text,
     },
+    textcolor:{
+      color: colors.common.black,
+    }
     // Add more global themed styles here as needed
   }));
 };

@@ -37,6 +37,7 @@ const AppInput = forwardRef<TextInput, AppInputProps>(
           ref={ref}
           style={[styles.input, inputStyle]}
           placeholderTextColor={styles.placeholder.color}
+          secureTextEntry={rest.secureTextEntry}
           {...rest}
         />
 
@@ -62,7 +63,7 @@ const useStyles = (variant: Variant) => {
 
     input: {
       ...typography.size13,
-      height: verticalScale(48),
+      height: verticalScale(40),
       paddingHorizontal: moderateScale(15),
       color: colors.text,
 
@@ -85,6 +86,7 @@ const useStyles = (variant: Variant) => {
         elevation: 3,
         borderWidth: 1,
         borderColor: colors.border,
+        borderRadius: radius.base,
       }),
 
       ...(variant === 'blank' && {

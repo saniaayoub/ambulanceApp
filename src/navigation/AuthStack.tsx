@@ -1,34 +1,34 @@
-import React from 'react';
 import {
   createNativeStackNavigator,
   NativeStackNavigationOptions,
 } from '@react-navigation/native-stack';
+import React from 'react';
 import {
   ForgotPasswordScreen,
   GetStartedScreen,
   LoginScreen,
   OtpResetPasswordScreen,
+  ResetPasswordScreen,
   SignUpScreen,
 } from '../screens/Auth';
-import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
-import { moderateScale } from 'react-native-size-matters';
-import { TouchableOpacity } from 'react-native';
-import { useThemedStyles } from '../styles/createThemedStyles';
-import theme from '../styles/theme';
-import { useThemeStore } from '../stores/themeStore';
-import { globalStyles } from '../styles/globalStyles';
 
-export type LoginType = 'email' | 'phone';
+export type AppMode = 'driver' | 'patient';
 
 export type AuthStackParamList = {
   SplashScreen: undefined;
   GetStarted: undefined;
   Login: {
-    type: LoginType;
+    type: AppMode;
   };
   SignUp: undefined;
   ForgotPassword: undefined;
-  OtpResetPassword: undefined;
+  OtpResetPassword: {
+    email: string;
+  };
+  ResetPassword: {
+    email: string;
+    code: string;
+  };
 };
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
@@ -43,9 +43,6 @@ const authScreens: AuthScreenItem[] = [
   {
     name: 'GetStarted',
     component: GetStartedScreen,
-    options: {
-      headerShown: false,
-    },
   },
   {
     name: 'Login',
@@ -58,52 +55,23 @@ const authScreens: AuthScreenItem[] = [
   {
     name: 'ForgotPassword',
     component: ForgotPasswordScreen,
-    options: {
-      headerBackVisible: true,
-    },
   },
   {
     name: 'OtpResetPassword',
     component: OtpResetPasswordScreen,
-    options: {
-      headerBackVisible: true,
-    },
+  },
+  {
+    name: 'ResetPassword',
+    component: ResetPasswordScreen,
   },
 ] as const;
 
 export default function AuthStack() {
-  const { isDark } = useThemeStore();
   return (
     <Stack.Navigator
       initialRouteName="GetStarted"
-      screenOptions={({ navigation }) => ({
-        headerShadowVisible: false,
-        headerStyle: {
-          backgroundColor: isDark
-            ? theme.colors.dark.background
-            : theme.colors.light.background,
-        },
-        headerTitle: '',
-        headerTransparent: true,
-        headerTintColor: '#111',
-        // Custom back icon
-        headerLeft: ({ canGoBack }) =>
-          canGoBack ? (
-            <TouchableOpacity
-              style={globalStyles.paddingV15}
-              onPress={() => navigation.goBack()}
-            >
-              <MaterialDesignIcons
-                name="chevron-left"
-                size={moderateScale(24)}
-                color={
-                  isDark
-                    ? theme.colors.light.background
-                    : theme.colors.dark.background
-                }
-              />
-            </TouchableOpacity>
-          ) : null,
+      screenOptions={() => ({
+        headerShown: false,
       })}
     >
       {authScreens.map(screen => (

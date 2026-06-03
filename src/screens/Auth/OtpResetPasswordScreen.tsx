@@ -1,92 +1,160 @@
-import { type FC, useState } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useMemo, useRef, useState } from 'react';
 import {
-  Button,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
-import { moderateScale, verticalScale } from 'react-native-size-matters';
+import { moderateScale } from 'react-native-size-matters';
+import AppButton from '../../components/AppButton';
+import AuthWrapper from '../../components/AuthWrapper';
+import { useAuth } from '../../hooks/useAuth';
+import { AuthStackParamList } from '../../navigation/AuthStack';
+import { toastError } from '../../services/toast';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 
-const OtpResetPasswordScreen: FC = () => {
-  const [otp, setOtp] = useState('');
-  const [password, setPassword] = useState('');
+const OTP_LENGTH = 6;
+
+type Props = NativeStackScreenProps<AuthStackParamList, 'OtpResetPassword'>;
+
+const OtpResetPasswordScreen = ({ navigation, route }: Props) => {
+  const email = route.params?.email ?? '';
+  const styles = useGlobalStyles();
+  const [code, setCode] = useState<string[]>(Array(OTP_LENGTH).fill(''));
+  const { forgotPassword } = useAuth();
+  const inputs = useRef<Array<TextInput | null>>([]);
+
+  const otpValue = useMemo(() => code.join(''), [code]);
+
+  const focusInput = (index: number) => {
+    inputs.current[index]?.focus();
+  };
+
+  const handleChange = (value: string, index: number) => {
+    const cleanValue = value.replace(/\D/g, '');
+    if (!cleanValue) {
+      const next = [...code];
+      next[index] = '';
+      setCode(next);
+      return;
+    }
+
+    const characters = cleanValue.split('').slice(0, OTP_LENGTH - index);
+    const next = [...code];
+
+    characters.forEach((digit, digitIndex) => {
+      next[index + digitIndex] = digit;
+    });
+
+    setCode(next);
+
+    const nextIndex = index + characters.length;
+    if (nextIndex < OTP_LENGTH) {
+      focusInput(nextIndex);
+    } else {
+      inputs.current[OTP_LENGTH - 1]?.blur();
+    }
+  };
+
+  const handleKeyPress = (event: any, index: number) => {
+    if (
+      event.nativeEvent.key === 'Backspace' &&
+      code[index] === '' &&
+      index > 0
+    ) {
+      const previousIndex = index - 1;
+      const next = [...code];
+      next[previousIndex] = '';
+      setCode(next);
+      focusInput(previousIndex);
+    }
+  };
+
+  const handleVerify = () => {
+    if (otpValue.length !== OTP_LENGTH) {
+      toastError('Enter the 6-digit code');
+      return;
+    }
+
+    navigation.navigate('ResetPassword', {
+      email,
+      code: otpValue,
+    });
+  };
+
+  const handleResend = async () => {
+    if (!email) {
+      toastError('Missing email address');
+      return;
+    }
+    await forgotPassword({ email });
+  };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Reset Password</Text>
-        <Text style={styles.helpText}>
-          Enter the otp sent to your email and choose a new password.
-        </Text>
-        <View style={styles.otpRow}>
+    <AuthWrapper
+      text="Verify Code"
+      handleNavigate={() => navigation.navigate('Login', { type: 'patient' })}
+      linkText1="Having trouble?"
+      linkText2=" Back to login"
+    >
+      <Text style={[styles.text, globalStyles.mB20, globalStyles.textCenter]}>
+        Enter the 6-digit code sent to phone number.
+      </Text>
+
+      <View
+        style={[
+          globalStyles.row,
+          globalStyles.mB20,
+          globalStyles.justifyBetween,
+        ]}
+      >
+        {code.map((value, index) => (
           <TextInput
-            style={styles.otpInput}
-            placeholder="OTP"
+            key={index}
+            ref={ref => (inputs.current[index] = ref)}
+            value={value}
+            style={styless.otpBox}
             keyboardType="number-pad"
-            value={otp}
-            onChangeText={setOtp}
+            returnKeyType="next"
+            maxLength={1}
+            onChangeText={nextValue => handleChange(nextValue, index)}
+            onKeyPress={event => handleKeyPress(event, index)}
+            textContentType={index === 0 ? 'oneTimeCode' : 'none'}
+            importantForAutofill={index === 0 ? 'yes' : 'no'}
           />
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="New Password"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        <Button title="Reset Password" onPress={() => {}} />
-      </ScrollView>
-    </SafeAreaView>
+        ))}
+      </View>
+
+      <TouchableOpacity
+        onPress={handleResend}
+        style={[globalStyles.alignSelfCenter, globalStyles.mB20]}
+      >
+        <Text style={styles.lightText}>Resend code</Text>
+      </TouchableOpacity>
+
+      <AppButton
+        title="Verify code"
+        onPress={handleVerify}
+        variant="primary"
+        size="lg"
+      />
+    </AuthWrapper>
   );
 };
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
+const styless = StyleSheet.create({
+  otpBox: {
+    width: moderateScale(48),
+    height: moderateScale(58),
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: moderateScale(12),
+    textAlign: 'center',
+    fontSize: moderateScale(20),
+    color: '#1f1f1f',
     backgroundColor: '#fff',
-  },
-  container: {
-    flexGrow: 1,
-    padding: moderateScale(24),
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: moderateScale(26),
-    fontWeight: '700',
-    marginBottom: verticalScale(16),
-    textAlign: 'center',
-  },
-  helpText: {
-    fontSize: moderateScale(16),
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: verticalScale(24),
-  },
-  otpRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: verticalScale(16),
-  },
-  otpInput: {
-    height: verticalScale(48),
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: moderateScale(10),
-    paddingHorizontal: moderateScale(12),
-    fontSize: moderateScale(16),
-  },
-  input: {
-    height: verticalScale(48),
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: moderateScale(10),
-    marginBottom: verticalScale(16),
-    paddingHorizontal: moderateScale(12),
-    fontSize: moderateScale(16),
   },
 });
 

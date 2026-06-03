@@ -14,7 +14,7 @@ export const fonts = {
 
 export const colors = {
   light: {
-    background: '#F5F5F5',
+    background: '#FFFFFF',
     surface: '#FFFFFF',
     text: '#212121',
     textSecondary: '#757575',
@@ -38,6 +38,7 @@ export const colors = {
     warning: '#FB8C00',
   },
   common: {
+    black: '#000000',
     primary: '#E53935',
     primaryDark: '#B71C1C',
     white: '#FFFFFF',
@@ -68,13 +69,28 @@ export const typography = {
     lineHeight: moderateScale(42),
   },
   heading2: {
-    fontFamily: fonts.bold,
+    fontFamily: fonts.extraBold,
     fontSize: moderateScale(28),
     lineHeight: moderateScale(36),
   },
-  heading6: {
-    fontFamily: fonts.regular,
+    heading3: {
+    fontFamily: fonts.bold,
+    fontSize: moderateScale(20),
+    lineHeight: moderateScale(36),
+  },
+    heading4: {
+    fontFamily: fonts.bold,
+    fontSize: moderateScale(18),
+    // lineHeight: moderateScale(36),
+  },
+   heading5: {
+    fontFamily: fonts.medium,
     fontSize: moderateScale(16),
+    // lineHeight: moderateScale(36),
+  },
+  heading6: {
+    fontFamily: fonts.medium,
+    fontSize: moderateScale(14),
     // lineHeight: moderateScale(36),
   },
   body: {

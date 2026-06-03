@@ -15,6 +15,7 @@ import {
 } from '../services/notification';
 import { useAuthStore } from '../stores/authStore';
 import AuthStack from './AuthStack';
+import HomeScreen from '../screens/HomeScreen';
 
 export type MainStackParamList = {
   SplashScreen: undefined;
@@ -29,6 +30,7 @@ const Stack = createNativeStackNavigator<MainStackParamList>();
 
 export default function MainStack() {
   const [showSplash, setShowSplash] = useState(true);
+  const token = useAuthStore(state => state.token);
 
   useEffect(() => {
     const init = async () => {
@@ -49,12 +51,11 @@ export default function MainStack() {
             useAuthStore.getState().setFCMToken(token);
           }
         }
-
       } catch (error) {
         console.log(error);
       } finally {
         setTimeout(() => {
-        // show custom splash for 2 sec
+          // show custom splash for 2 sec
 
           setShowSplash(false);
           console.log('Splash screen hidden');
@@ -87,9 +88,12 @@ export default function MainStack() {
           {showSplash && (
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
           )}
-          <Stack.Screen name="AuthStack" component={AuthStack} />
-
-          <Stack.Screen
+          {token ? (
+            <Stack.Screen name="Home" component={HomeScreen} />
+          ) : (
+            <Stack.Screen name="AuthStack" component={AuthStack} />
+          )}
+          {/* <Stack.Screen
             name="SettingsScreen"
             component={SettingsScreen}
             options={{ title: 'SettingsScreen' }}
@@ -99,7 +103,7 @@ export default function MainStack() {
             name="Details"
             component={DetailsScreen}
             options={{ title: 'Details' }}
-          />
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

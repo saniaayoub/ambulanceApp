@@ -14,6 +14,7 @@ interface FormInputProps<T extends FieldValues> {
   placeholder?: string;
   variant?: 'outlined' | 'filled' | 'shadowed';
   style?: any;
+  secureTextEntry?: boolean;
 }
 
 const FormInput = <T extends FieldValues>({
@@ -23,6 +24,7 @@ const FormInput = <T extends FieldValues>({
   placeholder,
   variant = 'outlined',
   style,
+  secureTextEntry = false,
 }: FormInputProps<T>) => {
   return (
     <Controller
@@ -42,6 +44,7 @@ const FormInput = <T extends FieldValues>({
           error={error?.message}
           variant={variant}
           containerStyle={style}
+          secureTextEntry={secureTextEntry}
         />
       )}
     />

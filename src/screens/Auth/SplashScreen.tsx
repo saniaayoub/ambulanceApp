@@ -6,10 +6,12 @@ import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 const SplashScreen: FC = () => {
   const styles = useGlobalStyles();
   return (
-    <View style={globalStyles.container}>
+    <View style={[globalStyles.container, styles.card]}>
       <View style={[globalStyles.centered, globalStyles.mB20]}>
         <LogoSvg width={150} height={150} />
-        <Text style={styles.h4}>Every Second Counts</Text>
+        <Text style={[globalStyles.negmargin30, styles.h4, styles.textcolor]}>
+          Every Second Counts
+        </Text>
       </View>
     </View>
   );
