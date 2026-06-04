@@ -96,12 +96,17 @@ export const typography = {
   body: {
     fontFamily: fonts.regular,
     fontSize: moderateScale(16),
-    lineHeight: moderateScale(24),
+    // lineHeight: moderateScale(24),
   },
   lightText: {
     fontFamily: fonts.light,
     fontSize: moderateScale(15),
-    lineHeight: moderateScale(24),
+    // lineHeight: moderateScale(24),
+  },
+   smallText: {
+    fontFamily: fonts.light,
+    fontSize: moderateScale(12),
+    // lineHeight: moderateScale(24),
   },
   label: {
     fontFamily: fonts.medium,

@@ -15,13 +15,13 @@ import {
 } from '../services/notification';
 import { useAuthStore } from '../stores/authStore';
 import AuthStack from './AuthStack';
-import HomeScreen from '../screens/HomeScreen';
+import DrawerNavigator from './DrawerNavigator';
 
 export type MainStackParamList = {
   SplashScreen: undefined;
   LoginScreen: undefined;
   AuthStack: undefined;
-  Home: undefined;
+  App: undefined;
   SettingsScreen: undefined;
   Details: undefined;
 };
@@ -89,11 +89,11 @@ export default function MainStack() {
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
           )}
           {token ? (
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="App" component={DrawerNavigator} />
           ) : (
             <Stack.Screen name="AuthStack" component={AuthStack} />
           )}
-          {/* <Stack.Screen
+          {/* <Stack.Screenå
             name="SettingsScreen"
             component={SettingsScreen}
             options={{ title: 'SettingsScreen' }}
