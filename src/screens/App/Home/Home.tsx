@@ -1,5 +1,4 @@
-import MaterialIcons from '@react-native-vector-icons/material-design-icons';
-import React, { type FC } from 'react';
+import React, { useEffect, type FC } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import {
   DeadBodyAmbulance,
@@ -9,6 +8,13 @@ import {
 import AmbulanceCard from '../../../components/home/AmbulanceCard';
 import HomeHeader from '../../../components/home/header';
 import { globalStyles, useGlobalStyles } from '../../../styles/globalStyles';
+import AppButton from '../../../components/AppButton';
+import {
+  useBookingStore,
+  type AmbulanceType,
+} from '../../../stores/bookingStore';
+import { useLocation } from '../../../hooks/useLocation';
+import { useLocationStore } from '../../../stores/locationStore';
 
 const ambulanceCards = [
   {
@@ -39,13 +45,31 @@ const hospitals = [
 
 const Home: FC = ({ navigation }: any) => {
   const styles = useGlobalStyles();
+  const { selectedAmbulance, setSelectedAmbulance, startBooking } =
+    useBookingStore();
+
+  const { fetchLocation } = useLocation();
+  const currentLocation = useLocationStore(state => state.currentLocation);
+
+  useEffect(() => {
+    // fetchLocation();
+  }, []);
 
   const openDrawer = () => {
     navigation.openDrawer();
   };
+
+  const handleRequestAmbulance = () => {
+    startBooking();
+    navigation.navigate('BookingScreen');
+  };
+
   return (
     <View style={[globalStyles.flex, globalStyles.padding15, styles.card]}>
-      <HomeHeader onOpenMenu={openDrawer} />
+      <HomeHeader
+        onOpenMenu={openDrawer}
+        // locationLabel={currentLocation?.toString()}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.homeBanner}>
           <Text style={styles.homeBannerText}>Emergency medical transport</Text>
@@ -57,20 +81,29 @@ const Home: FC = ({ navigation }: any) => {
           </Pressable>
         </View>
 
-        <View style={styles.homeSectionHeader}>
+        <View style={[globalStyles.mV10]}>
           <Text style={styles.homeSectionTitle}>Ambulance types</Text>
           {/* <Text style={styles.homeSectionAction}>View all</Text> */}
         </View>
 
         {ambulanceCards.map(card => (
-          <AmbulanceCard card={card} key={card.title} />
+          <AmbulanceCard
+            card={card}
+            key={card.title}
+            selected={card.title === selectedAmbulance}
+            onPress={() => setSelectedAmbulance(card.title as AmbulanceType)}
+          />
         ))}
 
-        <Pressable style={styles.homePrimaryButton} onPress={() => {}}>
-          <Text style={styles.homePrimaryButtonText}>Request Ambulance</Text>
-        </Pressable>
-
-        <View style={styles.homeSectionHeader}>
+        <AppButton title="Request Ambulance" onPress={handleRequestAmbulance} />
+        <View
+          style={[
+            globalStyles.row,
+            globalStyles.alignCenter,
+            globalStyles.justifyBetween,
+            globalStyles.mB10,
+          ]}
+        >
           <Text style={styles.homeSectionTitle}>Nearby hospitals</Text>
           <Text style={styles.homeSectionAction}>See map</Text>
         </View>

@@ -4,9 +4,9 @@ import { useThemedStyles } from './createThemedStyles';
 import theme from './theme';
 
 export const globalStyles = StyleSheet.create({
-  flexgrow:  { flexGrow: 1 },
-  flex1:{
-      flex:1,
+  flexgrow: { flexGrow: 1 },
+  flex1: {
+    flex: 1,
   },
   absBottomTxt: {
     position: 'absolute',
@@ -16,7 +16,7 @@ export const globalStyles = StyleSheet.create({
   justifyBetween: {
     justifyContent: 'space-between',
   },
-  textCenter:{
+  textCenter: {
     textAlign: 'center',
   },
   fullRadius: {
@@ -34,10 +34,10 @@ export const globalStyles = StyleSheet.create({
   fullWidth: {
     width: '100%',
   },
-  width70:{ 
+  width70: {
     width: '70%',
   },
-  width80:{
+  width80: {
     width: '80%',
   },
   width90: {
@@ -58,9 +58,9 @@ export const globalStyles = StyleSheet.create({
   alignCenter: {
     alignItems: 'center',
   },
-alignSelfCenter:{
+  alignSelfCenter: {
     alignSelf: 'center',
-},
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -75,32 +75,32 @@ alignSelfCenter:{
   negmargin20: {
     marginTop: moderateScale(-20),
   },
-  
-    negmargin70: {  
+
+  negmargin70: {
     marginTop: moderateScale(-70),
   },
   negmargin30: {
     marginTop: moderateScale(-30),
   },
-   negmargin50: {
+  negmargin50: {
     marginTop: moderateScale(-50),
   },
-    negmargin60: {
+  negmargin60: {
     marginTop: moderateScale(-60),
   },
   mV10: {
     marginVertical: moderateScale(10),
-  },  
-    mV5: {
+  },
+  mV5: {
     marginVertical: moderateScale(5),
-  },  
-  mR10:{
-    marginRight:moderateScale(10)
+  },
+  mR10: {
+    marginRight: moderateScale(10),
   },
   mT10: {
     marginTop: moderateScale(10),
   },
-  mH10  : {
+  mH10: {
     marginHorizontal: moderateScale(10),
   },
   mB10: {
@@ -138,7 +138,7 @@ alignSelfCenter:{
   negmargin: {
     marginTop: moderateScale(-10),
   },
-  padding10:{
+  padding10: {
     padding: moderateScale(10),
   },
   padding30: {
@@ -150,9 +150,8 @@ alignSelfCenter:{
   padding15: {
     padding: moderateScale(15),
   },
-  padding5:{
+  padding5: {
     padding: moderateScale(5),
-
   },
   paddingH20: {
     paddingHorizontal: moderateScale(20),
@@ -166,13 +165,13 @@ alignSelfCenter:{
   paddingV15: {
     paddingVertical: moderateScale(15),
   },
-  paddingH15:{
+  paddingH15: {
     paddingHorizontal: moderateScale(15),
   },
-   paddingB10:{
+  paddingB10: {
     paddingBottom: moderateScale(10),
   },
-   paddingH10:{
+  paddingH10: {
     paddingHorizontal: moderateScale(10),
   },
   paddingV40: {
@@ -184,11 +183,9 @@ alignSelfCenter:{
 });
 
 export const useGlobalStyles = () => {
-  return useThemedStyles(({ colors, typography,radius }) => ({
+  return useThemedStyles(({ colors, typography, radius }) => ({
     // Home Screen Styles
-    borderContainer:{
-
-    },
+    borderContainer: {},
     link: {
       color: colors.primary,
     },
@@ -250,11 +247,11 @@ export const useGlobalStyles = () => {
       ...typography.lightText,
       color: colors.text,
     },
-        smallText: {
+    smallText: {
       ...typography.smallText,
       color: colors.text,
     },
-    textcolor:{
+    textcolor: {
       color: colors.common.black,
     },
     drawerContainer: {
@@ -315,13 +312,6 @@ export const useGlobalStyles = () => {
       marginRight: moderateScale(14),
     },
 
-    homeSectionHeader: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginTop: moderateScale(20),
-      marginBottom: moderateScale(10),
-    },
     homeSectionTitle: {
       ...typography.heading4,
       color: colors.text,
@@ -400,6 +390,137 @@ export const useGlobalStyles = () => {
     },
     homeCardSubtitle: {
       ...typography.lightText,
+      color: colors.textSecondary,
+    },
+    ambulanceCardSelected: {
+      borderColor: colors.primary,
+      backgroundColor: `${colors.primary}12`,
+    },
+    ambulanceCardPressed: {
+      opacity: 0.85,
+    },
+    bookingTopBar: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      paddingVertical: moderateScale(14),
+      backgroundColor: 'rgba(255,255,255,0.95)',
+      zIndex: 2,
+    },
+    bookingBackButton: {
+      width: moderateScale(44),
+      height: moderateScale(44),
+      borderRadius: radius.large,
+      backgroundColor: colors.surface,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: moderateScale(12),
+    },
+    bookingTopBarTextContainer: {
+      flex: 1,
+    },
+    bookingTopBarTitle: {
+      ...typography.heading5,
+      color: colors.text,
+    },
+    bookingTopBarSubtitle: {
+      ...typography.body,
+      color: colors.textSecondary,
+      marginTop: moderateScale(2),
+    },
+    bookingMapContainer: {
+      flex: 1,
+      backgroundColor: colors.common.black,
+    },
+    bookingMap: {
+      ...StyleSheet.absoluteFill,
+    },
+    bookingBottomSheet: {
+      flex: 1,
+      backgroundColor: colors.common.white,
+    },
+    bookingSheetContent: {
+      padding: moderateScale(18),
+    },
+    bookingSheetHandle: {
+      width: moderateScale(60),
+      height: moderateScale(6),
+      borderRadius: moderateScale(20),
+      backgroundColor: colors.border,
+      alignSelf: 'center',
+      marginBottom: moderateScale(12),
+    },
+    bookingSheetHandleIndicator: {
+      backgroundColor: colors.textSecondary,
+    },
+    bookingSheetBackground: {
+      backgroundColor: colors.common.white,
+    },
+    bookingSheetHeader: {
+      marginBottom: moderateScale(14),
+    },
+    bookingSheetTitle: {
+      ...typography.heading5,
+      color: colors.text,
+    },
+    bookingSheetSubtitle: {
+      ...typography.body,
+      color: colors.textSecondary,
+      marginTop: moderateScale(4),
+    },
+    bookingStepList: {
+      marginBottom: moderateScale(18),
+    },
+    bookingStepRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: moderateScale(10),
+    },
+    bookingStepDot: {
+      width: moderateScale(8),
+      height: moderateScale(8),
+      borderRadius: moderateScale(4),
+      backgroundColor: colors.border,
+      marginRight: moderateScale(10),
+    },
+    bookingStepDotActive: {
+      backgroundColor: colors.primary,
+    },
+    bookingStepText: {
+      ...typography.body,
+      color: colors.textSecondary,
+    },
+    bookingStepTextActive: {
+      ...typography.body,
+      color: colors.text,
+      fontWeight: '700',
+    },
+    bookingSummaryCard: {
+      padding: moderateScale(16),
+      backgroundColor: colors.surface,
+      borderRadius: radius.large,
+      marginBottom: moderateScale(16),
+    },
+    bookingSummaryLabel: {
+      ...typography.label,
+      color: colors.textSecondary,
+    },
+    bookingSummaryValue: {
+      ...typography.heading6,
+      color: colors.text,
+      marginTop: moderateScale(4),
+    },
+    bookingSummaryRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: moderateScale(16),
+    },
+    bookingSummaryItem: {
+      flex: 1,
+    },
+    bookingSummaryItemText: {
+      ...typography.body,
       color: colors.textSecondary,
     },
     homePrimaryButton: {
@@ -527,6 +648,158 @@ export const useGlobalStyles = () => {
     drawerPlaceholderDescription: {
       ...typography.body,
       color: colors.textSecondary,
+    },
+    pickupHeaderContainer: {
+      marginBottom: moderateScale(18),
+    },
+    pickupHeaderTitle: {
+      ...typography.heading5,
+      color: colors.text,
+      marginBottom: moderateScale(4),
+    },
+    pickupHeaderSubtitle: {
+      ...typography.body,
+      color: colors.textSecondary,
+    },
+    pickupSearchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: moderateScale(12),
+      paddingVertical: moderateScale(10),
+      backgroundColor: colors.surface,
+      borderRadius: radius.large,
+      marginBottom: moderateScale(16),
+    },
+    pickupSearchInput: {
+      flex: 1,
+      marginHorizontal: moderateScale(8),
+      fontSize: moderateScale(14),
+      color: colors.text,
+    },
+    pickupCurrentLocationButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: moderateScale(14),
+      paddingVertical: moderateScale(12),
+      backgroundColor: `${colors.primary}12`,
+      borderRadius: radius.large,
+      marginBottom: moderateScale(20),
+    },
+    pickupCurrentLocationText: {
+      ...typography.label,
+      color: colors.primary,
+      marginLeft: moderateScale(10),
+      fontWeight: '600',
+    },
+    pickupSectionContainer: {
+      marginBottom: moderateScale(18),
+    },
+    pickupSectionTitle: {
+      ...typography.label,
+      color: colors.textSecondary,
+      marginBottom: moderateScale(10),
+      marginLeft: moderateScale(4),
+      fontWeight: '600',
+    },
+    pickupLocationItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: moderateScale(12),
+      paddingVertical: moderateScale(12),
+      marginBottom: moderateScale(8),
+      backgroundColor: colors.surface,
+      borderRadius: radius.large,
+      borderWidth: 2,
+      borderColor: 'transparent',
+    },
+    pickupLocationItemSelected: {
+      backgroundColor: `${colors.primary}12`,
+      borderColor: colors.primary,
+    },
+    pickupLocationItemPressed: {
+      opacity: 0.7,
+    },
+    pickupLocationItemIcon: {
+      width: moderateScale(40),
+      height: moderateScale(40),
+      borderRadius: radius.large,
+      backgroundColor: colors.background,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: moderateScale(12),
+    },
+    pickupLocationItemText: {
+      flex: 1,
+    },
+    pickupLocationItemName: {
+      ...typography.label,
+      color: colors.text,
+      fontWeight: '600',
+      marginBottom: moderateScale(2),
+    },
+    pickupLocationItemAddress: {
+      ...typography.smallText,
+      color: colors.textSecondary,
+    },
+    pickupButtonContainer: {
+      marginVertical: moderateScale(16),
+    },
+    bookingStepIndicatorContainer: {
+      position: 'absolute',
+      top: moderateScale(60),
+      left: 0,
+      right: 0,
+      paddingHorizontal: moderateScale(18),
+      paddingVertical: moderateScale(14),
+      backgroundColor: colors.common.white,
+      zIndex: 1,
+    },
+    bookingStepIndicatorRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: moderateScale(10),
+    },
+    bookingStepIndicatorItemContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flex: 1,
+    },
+    bookingStepIndicatorDot: {
+      width: moderateScale(32),
+      height: moderateScale(32),
+      borderRadius: moderateScale(16),
+      backgroundColor: colors.surface,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 2,
+      borderColor: colors.border,
+    },
+    bookingStepIndicatorDotActive: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    bookingStepIndicatorDotCompleted: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    bookingStepIndicatorDotText: {
+      ...typography.label,
+      color: colors.common.white,
+      fontWeight: '700',
+    },
+    bookingStepIndicatorLine: {
+      flex: 1,
+      height: 2,
+      backgroundColor: colors.border,
+      marginHorizontal: moderateScale(4),
+    },
+    bookingStepIndicatorLineCompleted: {
+      backgroundColor: colors.primary,
+    },
+    bookingStepIndicatorLabel: {
+      ...typography.body,
+      color: colors.text,
+      fontWeight: '600',
     },
     // Add more global themed styles here as needed
   }));

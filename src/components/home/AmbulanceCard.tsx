@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native';
+import { Pressable, View, Text, Image } from 'react-native';
 import React, { FC } from 'react';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import { moderateScale } from 'react-native-size-matters';
@@ -9,18 +9,26 @@ type Props = {
     subtitle: string;
     image: any;
   };
+  selected?: boolean;
+  onPress?: () => void;
 };
-const AmbulanceCard: FC<Props> = ({ card }: Props) => {
+const AmbulanceCard: FC<Props> = ({
+  card,
+  selected = false,
+  onPress,
+}: Props) => {
   const styles = useGlobalStyles();
   return (
-    <View
-      key={card.title}
-      style={[
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
         globalStyles.row,
         globalStyles.alignCenter,
         globalStyles.paddingH15,
         globalStyles.mV5,
         styles.border,
+        selected && styles.ambulanceCardSelected,
+        pressed && styles.ambulanceCardPressed,
       ]}
     >
       <View style={[{ width: moderateScale(80), height: moderateScale(80) }]}>
@@ -35,7 +43,7 @@ const AmbulanceCard: FC<Props> = ({ card }: Props) => {
         <Text style={styles.h6}>{card.title}</Text>
         <Text style={styles.smallText}>{card.subtitle}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

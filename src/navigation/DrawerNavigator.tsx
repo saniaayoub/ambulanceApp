@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import CustomDrawerContent from '../components/CustomDrawer';
 import DrawerPlaceholder from '../screens/DrawerPlaceholder';
 import HomeScreen from '../screens/App/Home/Home';
+import BookingScreen from '../screens/App/Booking/BookingScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -13,6 +14,7 @@ const DrawerNavigator: FC = () => {
       screenOptions={{ headerShown: false, drawerType: 'slide' }}
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="BookingScreen" component={BookingScreen} />
       <Drawer.Screen
         name="RideHistory"
         component={DrawerPlaceholder}
