@@ -9,11 +9,12 @@ export type LoginPayload = {
 
 export type RegisterPayload = {
   fullName: string;
-  email: string;
   password: string;
-  password_confirmation: string;
-  phone?: string | null;
-  phone_country?: string | null;
+  phone: string | null;
+  phone_country: string | null;
+  role: string;
+  cnic?: string;
+  licenseNumber?: string;
 };
 
 export type ForgotPasswordPayload = {
@@ -38,7 +39,7 @@ export type AuthResponse<T = any> =
 
 export const handleResponse = async (config: any): Promise<AuthResponse> => {
   try {
-    const data = await apiCall(config);
+    const data = await apiCall({ ...config, skipQueue: true });
     return { success: true, data };
   } catch (error) {
     return { success: false, error };
@@ -57,14 +58,13 @@ export const register = async (payload: RegisterPayload) =>
     method: 'post',
     url: ENDPOINTS.AUTH.REGISTER,
     data: {
-      name: `${payload.firstName} ${payload.lastName}`.trim(),
-      email: payload.email,
+      fullName: payload.fullName,
       password: payload.password,
-      password_confirmation: payload.password_confirmation,
       phone: payload.phone ?? null,
       phone_country: payload.phone_country ?? null,
-      auth_field: payload.auth_field ?? 'email',
-      captcha_key: payload.captcha_key,
+      role: payload.role,
+      cnic: payload.cnic,
+      licenseNumber: payload.licenseNumber,
     },
   });
 
@@ -79,5 +79,11 @@ export const resetPassword = async (payload: ResetPasswordPayload) =>
   handleResponse({
     method: 'post',
     url: ENDPOINTS.AUTH.RESET_PASSWORD,
+    data: payload,
+  });
+export const verifyOtp = async (payload: ResetPasswordPayload) =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.AUTH.VERIFY_OTP,
     data: payload,
   });

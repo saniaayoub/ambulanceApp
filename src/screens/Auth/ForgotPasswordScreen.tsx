@@ -29,7 +29,7 @@ const ForgotPasswordScreen = ({ navigation }: Props) => {
   const onSubmit = async (data: ForgotPasswordForm) => {
     const response = await forgotPassword({ email: data.email });
     if (response.success) {
-      navigation.navigate('OtpResetPassword', { email: data.email });
+      navigation.navigate('OTPScreen', { email: data.email });
     }
   };
 

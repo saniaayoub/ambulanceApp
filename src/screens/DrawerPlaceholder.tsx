@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Text, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { useGlobalStyles } from '../styles/globalStyles';
+import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
 
 type RouteParams = {
   title?: string;
@@ -13,9 +13,18 @@ const DrawerPlaceholder: FC = () => {
   const { title } = route.params as RouteParams;
 
   return (
-    <View style={styles.drawerPlaceholderScreen}>
-      <Text style={styles.drawerPlaceholderTitle}>{title || 'Coming soon'}</Text>
-      <Text style={styles.drawerPlaceholderDescription}>
+    <View
+      style={[
+        globalStyles.flex,
+        globalStyles.justifyCenter,
+        styles.buttonCard,
+        globalStyles.paddingH20,
+      ]}
+    >
+      <Text style={[styles.h5, globalStyles.mB10]}>
+        {title || 'Coming soon'}
+      </Text>
+      <Text style={styles.text}>
         This section is available from the drawer navigation.
       </Text>
     </View>

@@ -11,6 +11,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { AuthStackParamList } from '../../navigation/AuthStack';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import { phoneLoginSchema } from '../../validation/authSchemas';
+import { useAuthStore } from '../../stores/authStore';
 
 type LoginForm = {
   email: string;
@@ -21,11 +22,10 @@ type LoginForm = {
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 const LoginScreen = ({ navigation, route }: Props) => {
-  const type = route.params?.type;
   const styles = useGlobalStyles();
 
-  const { loginSubmit, authLoading } = useAuth();
-  const { setToken } = useAuth();
+  const { loginSubmit, authLoading, setToken } = useAuth();
+  const role = useAuthStore(state => state.role);
   const currentSchema = phoneLoginSchema;
 
   const { control, handleSubmit } = useForm<LoginForm>({
@@ -57,8 +57,8 @@ const LoginScreen = ({ navigation, route }: Props) => {
     <AuthWrapper
       text={'Log in to your account'}
       handleNavigate={handleNavigate}
-      linkText1={type === 'patient' ? 'New to AmbulanceApp?' : ''}
-      linkText2={type === 'patient' ? ' Create an account' : ''}
+      linkText1={role === 'USER' ? 'New to AmbulanceApp?' : ''}
+      linkText2={role === 'USER' ? ' Create an account' : ''}
       // style={globalStyles.mT50}
     >
       <PhoneNumberInput

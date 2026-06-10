@@ -3,16 +3,15 @@
  * This file manages API environment selection (Staging or Production)
  */
 
-// Environment Enums
-export enum Environment {
-  PRODUCTION = 'production',
-  STAGING = 'staging',
-}
+import { Environment } from '../utils/enums';
+import Config from 'react-native-config';
 
 // API URLs for different environments
 export const API_URLS = {
+  // [Environment.PRODUCTION]: 'https://api.ambulanceapp.com',
+  // [Environment.STAGING]: 'https://ambulanceapp.com/api/',
   [Environment.PRODUCTION]: 'https://api.ambulanceapp.com',
-  [Environment.STAGING]: 'https://ambulanceapp.com/api/',
+  [Environment.STAGING]: Config.API_URL,
 } as const;
 
 /**

@@ -48,13 +48,10 @@
 		<string>Geologica-Black.ttf</string>
 		<string>Geologica-Regular.ttf</string>
 		<string>Geologica-ExtraLight.ttf</string>
+		<!-- <string>MaterialDesignIcons.ttf</string> -->
 	</array>
 	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>remote-notification</string>
-		<string>processing</string>
-	</array>
+	<array/>
 	<key>UILaunchStoryboardName</key>
 	<string>BootSplash</string>
 	<key>UIRequiredDeviceCapabilities</key>

@@ -17,9 +17,9 @@ import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 
 const OTP_LENGTH = 6;
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'OtpResetPassword'>;
+type Props = NativeStackScreenProps<AuthStackParamList, 'OTPScreen'>;
 
-const OtpResetPasswordScreen = ({ navigation, route }: Props) => {
+const OTPScreen = ({ navigation, route }: Props) => {
   const email = route.params?.email ?? '';
   const styles = useGlobalStyles();
   const [code, setCode] = useState<string[]>(Array(OTP_LENGTH).fill(''));
@@ -158,4 +158,4 @@ const styless = StyleSheet.create({
   },
 });
 
-export default OtpResetPasswordScreen;
+export default OTPScreen;

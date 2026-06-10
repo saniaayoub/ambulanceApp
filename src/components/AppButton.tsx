@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
+import theme from '../styles/theme';
 
 // ===== Types =====
 
@@ -21,8 +23,10 @@ interface AppButtonProps {
   size?: ButtonSize;
   loading?: boolean;
   disabled?: boolean;
-  style?: ViewStyle;
+  style?: ViewStyle | Array<Object>;
+  icon?: string;
   textStyle?: TextStyle;
+  iconColor?: string;
 }
 
 // ===== Component =====
@@ -35,7 +39,9 @@ const AppButton: React.FC<AppButtonProps> = ({
   loading = false,
   disabled = false,
   style,
+  icon,
   textStyle,
+  iconColor,
 }) => {
   const isDisabled = disabled || loading;
   const styles = useGlobalStyles();
@@ -54,6 +60,14 @@ const AppButton: React.FC<AppButtonProps> = ({
         style,
       ]}
     >
+      {icon ? (
+        <MaterialDesignIcons
+          name={icon}
+          size={moderateScale(18)}
+          color={iconColor ? iconColor : theme.colors.common.white}
+          style={globalStyles.mR10}
+        />
+      ) : null}
       {loading ? (
         <ActivityIndicator color="#fff" />
       ) : (

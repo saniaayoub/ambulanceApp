@@ -2,10 +2,18 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 apply plugin: "com.google.gms.google-services"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
+
+//  project.ext.envConfigFiles = [
+//     stagingdebug: ".env.staging",
+//     stagingrelease: ".env.staging",
+//     productiondebug: ".env.production",
+//     productionrelease: ".env.production",
+// ]
 react {
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '../..'
@@ -76,7 +84,7 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
-
+    flavorDimensions "environment"
     namespace "com.ambulanceapp"
     defaultConfig {
         applicationId "com.ambulanceapp"
@@ -105,6 +113,20 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+ 
+
+// productFlavors {
+//     staging {
+//         dimension "environment"
+//         applicationIdSuffix ".staging"
+//         resValue "string", "build_config_package", "com.myapp.staging"
+//     }
+
+//     production {
+//         dimension "environment"
+//         resValue "string", "build_config_package", "com.myapp"
+//     }
+// }
 }
 
 dependencies {

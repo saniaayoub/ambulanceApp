@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { Pressable, Text, View } from 'react-native';
-import MaterialIcons from '@react-native-vector-icons/material-design-icons';
-import { useGlobalStyles } from '../styles/globalStyles';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
+import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
 import { useAuth } from '../hooks/useAuth';
+import theme from '../styles/theme';
+import AppButton from './AppButton';
 
 const DRAWER_ITEMS = [
   { route: 'Home', label: 'Home', icon: 'home' },
@@ -23,15 +25,21 @@ const CustomDrawerContent: FC<any> = props => {
   return (
     <DrawerContentScrollView
       {...props}
-      contentContainerStyle={styles.drawerContainer}
+      contentContainerStyle={[
+        globalStyles.flex,
+        styles.buttonCard,
+        globalStyles.padding20,
+      ]}
     >
-      <View style={styles.drawerHeaderRow}>
-        <View style={styles.drawerAvatar}>
-          <Text style={styles.drawerAvatarText}>DA</Text>
+      <View
+        style={[globalStyles.row, globalStyles.alignCenter, globalStyles.mV20]}
+      >
+        <View style={[styles.listItem, styles.border]}>
+          <Text style={[styles.h4, styles.white]}>DA</Text>
         </View>
         <View>
-          <Text style={styles.drawerTitle}>Dr. Ashraf</Text>
-          <Text style={styles.drawerSubtitle}>+92 300 0000000</Text>
+          <Text style={[styles.h4, styles.white]}>Dr. Ashraf</Text>
+          <Text style={[styles.h5, styles.white]}>+92 300 0000000</Text>
         </View>
       </View>
 
@@ -41,33 +49,27 @@ const CustomDrawerContent: FC<any> = props => {
           <Pressable
             key={item.route}
             onPress={() => props.navigation.navigate(item.route)}
-            style={[styles.drawerItem, isActive && styles.drawerItemActive]}
+            style={[styles.listItem, isActive && styles.opacitylow]}
             android_ripple={{ color: '#00000005' }}
           >
-            <MaterialIcons
+            <MaterialDesignIcons
               name={item.icon}
               size={22}
-              color={isActive ? '#D32F2F' : '#333333'}
-              style={styles.drawerItemIcon}
+              color={isActive ? theme.colors.dark : theme.colors.common.primary}
             />
-            <Text style={styles.drawerItemLabel}>{item.label}</Text>
+            <Text style={[globalStyles.mL10, styles.text, styles.white]}>
+              {item.label}
+            </Text>
           </Pressable>
         );
       })}
 
-      <View style={styles.drawerSeparator} />
-
-      <Pressable
-        onPress={() => {
-          clearToken();
-          props.navigation.closeDrawer();
-        }}
-        style={styles.drawerLogoutButton}
-        android_ripple={{ color: '#FFFFFF20' }}
-      >
-        <MaterialIcons name="logout" size={20} color="#FFFFFF" />
-        <Text style={styles.drawerLogoutText}>Logout</Text>
-      </Pressable>
+      <View style={styles.separator} />
+      <AppButton
+        title="Logout"
+        icon={'logout'}
+        style={globalStyles.flexStart}
+      />
     </DrawerContentScrollView>
   );
 };

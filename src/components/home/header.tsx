@@ -40,7 +40,7 @@ const HomeHeader: FC<Props> = ({
           color="#212121"
         />
       </Pressable>
-      <View style={globalStyles.flex1}>
+      <View style={globalStyles.flex}>
         <Text style={styles.h4}>Dr. Ashraf</Text>
         <Pressable
           style={[

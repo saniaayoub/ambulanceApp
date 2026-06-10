@@ -29,11 +29,13 @@ export type MainStackParamList = {
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
 export default function MainStack() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(false);
   const token = useAuthStore(state => state.token);
 
   useEffect(() => {
     const init = async () => {
+      setShowSplash(false);
+
       try {
         // Hide native splash
         await RNBootSplash.hide({ fade: true });
@@ -85,14 +87,14 @@ export default function MainStack() {
     <SafeAreaView style={{ flex: 1 }}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {showSplash && (
+          {showSplash ? (
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
-          )}
-          {token ? (
+          ) : token ? (
             <Stack.Screen name="App" component={DrawerNavigator} />
           ) : (
             <Stack.Screen name="AuthStack" component={AuthStack} />
           )}
+
           {/* <Stack.Screenå
             name="SettingsScreen"
             component={SettingsScreen}

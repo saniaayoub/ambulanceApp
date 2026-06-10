@@ -15,6 +15,7 @@ import {
 } from '../../../stores/bookingStore';
 import { useLocation } from '../../../hooks/useLocation';
 import { useLocationStore } from '../../../stores/locationStore';
+import { moderateScale } from 'react-native-size-matters';
 
 const ambulanceCards = [
   {
@@ -71,18 +72,20 @@ const Home: FC = ({ navigation }: any) => {
         // locationLabel={currentLocation?.toString()}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.homeBanner}>
-          <Text style={styles.homeBannerText}>Emergency medical transport</Text>
-          <Text style={styles.homeBannerSubtext}>
+        <View style={styles.banner}>
+          <Text style={[styles.h4, styles.white, globalStyles.mB10]}>
+            Emergency medical transport
+          </Text>
+          <Text style={[[styles.lightText, styles.white, globalStyles.mB10]]}>
             Book a premium ambulance with trained staff and real-time support.
           </Text>
-          <Pressable style={styles.homeBannerCTA} onPress={() => {}}>
-            <Text style={styles.homeBannerCTAText}>Emergency SOS</Text>
+          <Pressable style={styles.bannerbutton} onPress={() => {}}>
+            <Text style={styles.h5}>Emergency SOS</Text>
           </Pressable>
         </View>
 
         <View style={[globalStyles.mV10]}>
-          <Text style={styles.homeSectionTitle}>Ambulance types</Text>
+          <Text style={styles.h4}>Ambulance types</Text>
           {/* <Text style={styles.homeSectionAction}>View all</Text> */}
         </View>
 
@@ -104,39 +107,42 @@ const Home: FC = ({ navigation }: any) => {
             globalStyles.mB10,
           ]}
         >
-          <Text style={styles.homeSectionTitle}>Nearby hospitals</Text>
-          <Text style={styles.homeSectionAction}>See map</Text>
+          <Text style={styles.h5}>Nearby hospitals</Text>
+          <Text style={[styles.h6, styles.link]}>See map</Text>
         </View>
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={styles.homeHospitalScroll}
+          style={globalStyles.mB20}
         >
           {hospitals.map(hospital => (
             <View
               key={hospital.name}
-              style={[styles.homeHospitalCard, styles.homeHospitalCardSpacing]}
+              style={[
+                styles.border,
+                globalStyles.padding10,
+                { minWidth: moderateScale(160) },
+                globalStyles.mR10,
+              ]}
             >
-              <Text style={styles.homeHospitalName}>{hospital.name}</Text>
-              <Text style={styles.homeHospitalDistance}>
-                {hospital.distance}
-              </Text>
+              <Text style={styles.h5}>{hospital.name}</Text>
+              <Text style={styles.text}>{hospital.distance}</Text>
             </View>
           ))}
         </ScrollView>
       </ScrollView>
       {/* 
-      <View style={styles.homeFabContainer}>
+      <View style={styles.fabContainer}>
         <Pressable
-          style={[styles.homeFabButton, styles.homeFabHelpline]}
+          style={[styles.fabButton, styles.link]}
           onPress={() => {}}
           accessibilityLabel="Call Helpline"
         >
           <MaterialIcons name={'phone'} size={24} color={'#FFFFFF'} />
         </Pressable>
         <Pressable
-          style={[styles.homeFabButton, styles.homeFabSos]}
+          style={[styles.fabButton, styles.link]}
           onPress={() => {}}
           accessibilityLabel="SOS"
         >

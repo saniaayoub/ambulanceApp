@@ -7,22 +7,18 @@ import {
   ForgotPasswordScreen,
   GetStartedScreen,
   LoginScreen,
-  OtpResetPasswordScreen,
+  OTPScreen,
   ResetPasswordScreen,
   SignUpScreen,
 } from '../screens/Auth';
 
-export type AppMode = 'driver' | 'patient';
-
 export type AuthStackParamList = {
   SplashScreen: undefined;
   GetStarted: undefined;
-  Login: {
-    type: AppMode;
-  };
+  Login: undefined;
   SignUp: undefined;
   ForgotPassword: undefined;
-  OtpResetPassword: {
+  OTPScreen: {
     email: string;
   };
   ResetPassword: {
@@ -57,8 +53,8 @@ const authScreens: AuthScreenItem[] = [
     component: ForgotPasswordScreen,
   },
   {
-    name: 'OtpResetPassword',
-    component: OtpResetPasswordScreen,
+    name: 'OTPScreen',
+    component: OTPScreen,
   },
   {
     name: 'ResetPassword',

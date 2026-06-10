@@ -16,7 +16,6 @@ export const phoneLoginSchema = yup.object({
 
 export const registerSchema = yup.object({
   fullName: yup.string().required('Full name is required'),
-  email,
   phone: yup
     .string()
     .required('Phone number is required')
@@ -26,6 +25,7 @@ export const registerSchema = yup.object({
     .string()
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Confirm password is required'),
+  role: yup.string().oneOf(['USER', 'DRIVER']),
 });
 
 export const forgotPasswordSchema = yup.object({

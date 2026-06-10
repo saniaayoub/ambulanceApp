@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDH8-hvX4ys38xm8bKQeihbIvfIIJrJymc</string>
+	<string>AIzaSyDWVqZcQcDYC--jazfr2XRogWb1-NZ3_1M</string>
 	<key>GCM_SENDER_ID</key>
-	<string>513321677509</string>
+	<string>759870024660</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.Ambulanceapp</string>
+	<string>com.ambulanceapp</string>
 	<key>PROJECT_ID</key>
-	<string>ambulanceapp-23a0b</string>
+	<string>fireapp-5fc58</string>
 	<key>STORAGE_BUCKET</key>
-	<string>ambulanceapp-23a0b.firebasestorage.app</string>
+	<string>fireapp-5fc58.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:513321677509:ios:32f5a7f952c28af32c36ac</string>
+	<string>1:759870024660:ios:83b6fd17a39059f2ce0441</string>
 </dict>
 </plist>

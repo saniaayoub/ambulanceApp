@@ -1,9 +1,14 @@
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialIcons from '@react-native-vector-icons/material-design-icons';
 import React, { useCallback, useState, type FC } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
+import theme from '../../styles/theme';
 import AppButton from '../AppButton';
-import { useGlobalStyles } from '../../styles/globalStyles';
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import BookingStepIndicator from './BookingStepIndicator';
+import { moderateScale } from 'react-native-size-matters';
+
+import { bookingSteps } from '../../hooks/useBookingSheetContent';
 
 type Location = {
   id: string;
@@ -18,6 +23,7 @@ type Props = {
   currentLocation?: string;
   title?: string;
   subtitle?: string;
+  bookingStep: string;
 };
 
 const recentLocations: Location[] = [
@@ -54,15 +60,20 @@ const recentLocations: Location[] = [
 const LocationSheet: FC<Props> = ({
   onSelectLocation,
   currentLocation,
-  title = 'Pick up location',
-  subtitle = 'Select where you want to pick up',
+  bookingStep,
 }) => {
   const styles = useGlobalStyles();
-  const [searchText, setSearchText] = useState('');
   const [selectedLocation, setSelectedLocation] = useState<string>(
     currentLocation || '',
   );
-
+  const tabStyle = [
+    globalStyles.flexStart,
+    globalStyles.mB10,
+    globalStyles.mT0,
+    styles.border,
+    styles.text,
+    styles.card,
+  ];
   const handleSelectLocation = useCallback((location: string) => {
     setSelectedLocation(location);
   }, []);
@@ -78,19 +89,27 @@ const LocationSheet: FC<Props> = ({
     <Pressable
       key={location.id}
       style={({ pressed }) => [
-        styles.pickupLocationItem,
-        selectedLocation === location.address &&
-          styles.pickupLocationItemSelected,
-        pressed && styles.pickupLocationItemPressed,
+        globalStyles.row,
+        globalStyles.alignCenter,
+        globalStyles.padding5,
+        globalStyles.mB10,
+        styles.card,
+        styles.border,
+        selectedLocation === location.address && [styles.border, styles.card],
+        pressed && styles.opacitylow,
       ]}
       onPress={() => handleSelectLocation(location.address)}
     >
-      <View style={styles.pickupLocationItemIcon}>
-        <MaterialIcons name={location.icon as any} size={22} color="#D32F2F" />
+      <View style={styles.iconStyle40}>
+        <MaterialIcons
+          name={location.icon as any}
+          size={moderateScale(20)}
+          color={theme.colors.common.primary}
+        />
       </View>
-      <View style={styles.pickupLocationItemText}>
-        <Text style={styles.pickupLocationItemName}>{location.name}</Text>
-        <Text style={styles.pickupLocationItemAddress}>{location.address}</Text>
+      <View style={globalStyles.flex}>
+        <Text style={styles.h6}>{location.name}</Text>
+        <Text style={styles.lightText}>{location.address}</Text>
       </View>
       {selectedLocation === location.address && (
         <MaterialIcons name="check-circle" size={24} color="#D32F2F" />
@@ -102,59 +121,44 @@ const LocationSheet: FC<Props> = ({
     <BottomSheetScrollView
       scrollEnabled={true}
       showsVerticalScrollIndicator={false}
-      style={styles.bookingSheetContent}
+      style={globalStyles.padding15}
     >
-      {/* <View style={styles.bookingSheetHandle} /> */}
+      <BookingStepIndicator currentStep={bookingStep} steps={bookingSteps} />
 
-      <View style={styles.pickupHeaderContainer}>
-        <Text style={styles.pickupHeaderTitle}>{title}</Text>
-        <Text style={styles.pickupHeaderSubtitle}>{subtitle}</Text>
-      </View>
+      <Text style={[styles.h6, globalStyles.mV10]}> Healthy smile clinic</Text>
 
-      <View style={styles.pickupSearchContainer}>
-        <MaterialIcons name="magnify" size={20} color="#999" />
-        <TextInput
-          placeholder="Search locations..."
-          placeholderTextColor="#999"
-          value={searchText}
-          onChangeText={setSearchText}
-          style={styles.pickupSearchInput}
-        />
-        {searchText.length > 0 && (
-          <Pressable onPress={() => setSearchText('')}>
-            <MaterialIcons name="close" size={20} color="#999" />
-          </Pressable>
-        )}
-      </View>
-
-      <Pressable style={styles.pickupCurrentLocationButton}>
-        <MaterialIcons name="crosshairs-gps" size={20} color="#D32F2F" />
-        <Text style={styles.pickupCurrentLocationText}>
-          Use current location
-        </Text>
-      </Pressable>
+      <AppButton
+        title="Use current location"
+        icon="crosshairs-gps"
+        iconColor={theme.colors.common.primary}
+        style={tabStyle}
+        textStyle={styles.lightText}
+      />
+      <AppButton
+        title="Choose on map"
+        icon="map-marker-outline"
+        iconColor={theme.colors.common.primary}
+        style={tabStyle}
+        textStyle={styles.lightText}
+      />
 
       {savedAddresses.length > 0 && (
-        <View style={styles.pickupSectionContainer}>
-          <Text style={styles.pickupSectionTitle}>Saved addresses</Text>
+        <View style={globalStyles.mB15}>
+          <Text style={[styles.h6, globalStyles.mB10]}>Saved addresses</Text>
           {savedAddresses.map(location => renderLocationItem(location))}
         </View>
       )}
 
       {recentSearches.length > 0 && (
-        <View style={styles.pickupSectionContainer}>
-          <Text style={styles.pickupSectionTitle}>Recent locations</Text>
+        <View style={globalStyles.mB15}>
+          <Text style={[styles.h5, globalStyles.mB10]}>Recent locations</Text>
           {recentSearches.map(location => renderLocationItem(location))}
         </View>
       )}
 
-      <View style={styles.pickupButtonContainer}>
+      <View style={globalStyles.mV10}>
         <AppButton
-          title={`Confirm pickup: ${
-            selectedLocation
-              ? selectedLocation.substring(0, 20)
-              : 'Select location'
-          }`}
+          title={`Confirm`}
           onPress={handleConfirm}
           disabled={!selectedLocation}
         />

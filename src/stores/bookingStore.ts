@@ -3,7 +3,7 @@ import { create } from 'zustand';
 export type BookingStep =
   | 'Pickup'
   | 'Destination'
-  | 'Ambulance Select'
+  | 'Trip Details'
   | 'Summary'
   | 'Searching'
   | 'Driver Assigned'
@@ -18,7 +18,7 @@ export type AmbulanceType =
 const bookingSteps: BookingStep[] = [
   'Pickup',
   'Destination',
-  'Ambulance Select',
+  'Trip Details',
   'Summary',
   'Searching',
   'Driver Assigned',

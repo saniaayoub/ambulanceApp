@@ -46,6 +46,7 @@ export const colors = {
     danger: '#E53935',
     ambulanceNormal: '#E53935',
     ambulanceVentilator: '#1E88E5',
+    success: '#43A047',
     ambulanceDeadBody: '#546E7A',
   },
   // Gradient colors (shared between themes)
@@ -73,17 +74,17 @@ export const typography = {
     fontSize: moderateScale(28),
     lineHeight: moderateScale(36),
   },
-    heading3: {
+  heading3: {
     fontFamily: fonts.bold,
     fontSize: moderateScale(20),
     lineHeight: moderateScale(36),
   },
-    heading4: {
+  heading4: {
     fontFamily: fonts.bold,
     fontSize: moderateScale(18),
     // lineHeight: moderateScale(36),
   },
-   heading5: {
+  heading5: {
     fontFamily: fonts.medium,
     fontSize: moderateScale(16),
     // lineHeight: moderateScale(36),
@@ -103,7 +104,7 @@ export const typography = {
     fontSize: moderateScale(15),
     // lineHeight: moderateScale(24),
   },
-   smallText: {
+  smallText: {
     fontFamily: fonts.light,
     fontSize: moderateScale(12),
     // lineHeight: moderateScale(24),

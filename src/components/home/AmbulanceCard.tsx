@@ -27,8 +27,8 @@ const AmbulanceCard: FC<Props> = ({
         globalStyles.paddingH15,
         globalStyles.mV5,
         styles.border,
-        selected && styles.ambulanceCardSelected,
-        pressed && styles.ambulanceCardPressed,
+        selected && styles.cardSelected,
+        pressed && styles.cardpressed,
       ]}
     >
       <View style={[{ width: moderateScale(80), height: moderateScale(80) }]}>

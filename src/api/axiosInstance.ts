@@ -3,7 +3,8 @@ import { useAuthStore } from '../stores/authStore';
 import { API_BASE_URL } from './environment';
 
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL, // Replace with your API base URL
+  // baseURL: API_BASE_URL, // Replace with your API base URL
+  baseURL: 'http://localhost:5000/api/', // Replace with your API base URL
   timeout: 10000,
 });
 

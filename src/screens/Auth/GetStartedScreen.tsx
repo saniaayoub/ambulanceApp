@@ -5,20 +5,20 @@ import AppButton from '../../components/AppButton';
 import AuthWrapper from '../../components/AuthWrapper';
 import { AuthStackParamList, AppMode } from '../../navigation/AuthStack';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
+import { useAuthStore } from '../../stores/authStore';
+import { Roles } from '../../utils/enums';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'GetStarted'>;
 const GetStartedScreen = ({ navigation }: Props) => {
   const styles = useGlobalStyles();
-  const handleNavigate = (type: AppMode) => {
-    navigation.navigate('Login', { type });
-  };
-  const handleNavigateToSignUp = () => {
-    navigation.navigate('SignUp');
+  const setRole=useAuthStore(state=>state.setRole)
+  const handleNavigate = (type:string) => {
+    setRole(type)
+    navigation.navigate('Login',);
   };
 
   return (
     <AuthWrapper
-      handleNavigate={handleNavigateToSignUp}
       style={globalStyles.justifyCenter}
       canGoBack={false}
     >
@@ -33,7 +33,7 @@ const GetStartedScreen = ({ navigation }: Props) => {
 
       <AppButton
         title="Continue as Driver"
-        onPress={() => handleNavigate('driver')}
+        onPress={() => handleNavigate(Roles.DRIVER)}
         variant="primary"
         size="lg"
       />
@@ -44,7 +44,7 @@ const GetStartedScreen = ({ navigation }: Props) => {
 
       <AppButton
         title="Continue as Patient"
-        onPress={() => handleNavigate('patient')}
+        onPress={() => handleNavigate(Roles.USER)}
         variant="secondary"
         size="lg"
       />

@@ -10,19 +10,21 @@ import { AuthStackParamList } from '../../navigation/AuthStack';
 import { globalStyles } from '../../styles/globalStyles';
 import { registerSchema } from '../../validation/authSchemas';
 import { useAuth } from '../../hooks/useAuth';
+import { useAuthStore } from '../../stores/authStore';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUp'>;
 
 type SignUpForm = {
   fullName: string;
-  email: string;
   phone: string;
   password: string;
   confirmPassword: string;
+  role: string;
 };
 
 const SignUpScreen = ({ navigation }: Props) => {
-  const { registerSubmit, authLoading } = useAuth();
+  const { registerSubmit, sendOtp, authLoading } = useAuth();
+  const role = useAuthStore(state => state.role);
 
   const { control, handleSubmit } = useForm<SignUpForm>({
     mode: 'onChange',
@@ -30,29 +32,34 @@ const SignUpScreen = ({ navigation }: Props) => {
     resolver: yupResolver(registerSchema),
     defaultValues: {
       fullName: '',
-      email: '',
       phone: '',
       password: '',
       confirmPassword: '',
+      role: '',
     },
   });
 
   const onSubmit = async (data: SignUpForm) => {
     const response = await registerSubmit({
       fullName: data.fullName,
-      email: data.email,
       password: data.password,
-      password_confirmation: data.confirmPassword,
       phone: data.phone,
       phone_country: null,
+      role: role,
     });
 
     if (response.success) {
-      navigation.goBack();
+      const res = await sendOtp(phone);
+      console.log(res, 'sent otp');
+      if (res) {
+        handleNavigateOTP();
+      }
+      // navigation.goBack();
     }
   };
 
-  const handleNavigate = () => navigation.navigate('OtpResetPassword');
+  const handleNavigate = () => navigation.goBack();
+  const handleNavigateOTP = () => navigation.navigate('OTPScreen');
 
   return (
     <AuthWrapper
@@ -70,25 +77,12 @@ const SignUpScreen = ({ navigation }: Props) => {
         placeholder="Enter Full Name"
       />
 
-      <FormInput
-        variant="shadowed"
-        control={control}
-        name="email"
-        label="Email"
-        placeholder="Enter Email"
-      />
       <PhoneNumberInput
+        variant="shadowed"
         control={control}
         name="phone"
         label="Phone Number"
         variant="shadowed"
-        rules={{
-          required: 'Phone number is required',
-          minLength: {
-            value: 7,
-            message: 'Invalid phone number',
-          },
-        }}
       />
 
       <FormInput

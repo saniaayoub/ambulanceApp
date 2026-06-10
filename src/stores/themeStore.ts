@@ -11,7 +11,6 @@ export const useThemeStore = create<ThemeState>()(
   persist(
     set => ({
       isDark: false,
-
       toggleTheme: () =>
         set(state => ({
           isDark: !state.isDark,

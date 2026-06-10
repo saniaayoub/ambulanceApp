@@ -8,18 +8,15 @@
 import NetInfo from '@react-native-community/netinfo';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StatusBar,
-  useColorScheme,
-} from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { KeyboardAvoidingView, Platform, StatusBar } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
+import FullScreenLoader from './src/components/FullScreenLoader';
 import './src/localization/i18n';
 import MainStack from './src/navigation/MainStack';
 import { useQueueStore } from './src/stores/queueStore';
-import Toast from 'react-native-toast-message';
-import FullScreenLoader from './src/components/FullScreenLoader';
+import { globalStyles } from './src/styles/globalStyles';
+import { useThemeStore } from './src/stores/themeStore';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,8 +28,7 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
+  const isDark = useThemeStore(state => state.isDark);
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
       if (state.isConnected) {
@@ -45,9 +41,9 @@ function App() {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        {/* <StatusBar barStyle={'dark-content'} /> */}
+        {/* <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} /> */}
         <KeyboardAvoidingView
-          style={{ flex: 1 }}
+          style={globalStyles.flex}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <MainStack />

@@ -4,8 +4,9 @@ import { useQueueStore } from '../stores/queueStore';
 
 export const apiCall = async (config: any) => {
   const netInfo = await NetInfo.fetch();
-  if (!netInfo.isConnected) {
-    // Add to queue
+
+  // Skip queueing if flagged
+  if (!netInfo.isConnected && !config.skipQueue) {
     useQueueStore.getState().addToQueue(config);
     return { offline: true, message: 'Request queued for when online' };
   }

@@ -27,41 +27,54 @@ const AuthWrapper = ({
 }: Props) => {
   const styles = useGlobalStyles();
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={[
-        globalStyles.flexgrow,
-        globalStyles.paddingB40,
-        styles.card,
-      ]}
-    >
-      {canGoBack && <BackButton />}
+    <View style={[globalStyles.flex, styles.card]}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={[
+          globalStyles.flexgrow,
+          globalStyles.paddingB40,
+          styles.card,
+        ]}
+      >
+        {canGoBack && <BackButton />}
 
-      <View style={[globalStyles.flex, globalStyles.padding20, style]}>
-        <View
-          style={[
-            styles.border,
-            globalStyles.paddingH20,
-            globalStyles.paddingV20,
-          ]}
-        >
-          <View style={[globalStyles.mB40, globalStyles.centered]}>
-            <View style={globalStyles.negmargin30}>
-              <LogoSvg width={moderateScale(200)} height={verticalScale(100)} />
+        <View style={[globalStyles.flex, globalStyles.padding20, style]}>
+          <View
+            style={[
+              styles.border,
+              globalStyles.paddingH20,
+              globalStyles.paddingV20,
+            ]}
+          >
+            <View style={[globalStyles.mB20, globalStyles.centered]}>
+              <View style={[globalStyles.negmargin30]}>
+                <LogoSvg
+                  width={moderateScale(200)}
+                  height={verticalScale(100)}
+                />
+              </View>
+              <Text
+                style={[
+                  styles.h4,
+                  globalStyles.textCenter,
+                  globalStyles.negmargin30,
+                ]}
+              >
+                {text}
+              </Text>
             </View>
-            <Text style={[styles.h4, globalStyles.negmargin30]}>{text}</Text>
+            {children}
           </View>
-          {children}
         </View>
-      </View>
-      {linkText1 && linkText2 && handleNavigate && (
-        <FooterLink
-          handleNavigate={handleNavigate}
-          text={linkText1}
-          linkText={linkText2}
-        />
-      )}
-    </ScrollView>
+        {linkText1 && linkText2 && handleNavigate && (
+          <FooterLink
+            handleNavigate={handleNavigate}
+            text={linkText1}
+            linkText={linkText2}
+          />
+        )}
+      </ScrollView>
+    </View>
   );
 };
 
