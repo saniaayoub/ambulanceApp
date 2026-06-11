@@ -17,7 +17,7 @@ import { useLocation } from '../../../hooks/useLocation';
 import { useLocationStore } from '../../../stores/locationStore';
 import { moderateScale } from 'react-native-size-matters';
 
-const ambulanceCards = [
+export const ambulanceCards = [
   {
     title: 'Normal Ambulance',
     subtitle: 'Basic transport with trained EMTs',

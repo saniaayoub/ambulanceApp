@@ -6,6 +6,10 @@ import HomeScreen from '../screens/App/Home/Home';
 import BookingScreen from '../screens/App/Booking/BookingScreen';
 
 const Drawer = createDrawerNavigator();
+export type DrawerStackParamList = {
+  Home: undefined;
+  Booking: undefined;
+};
 
 const DrawerNavigator: FC = () => {
   return (

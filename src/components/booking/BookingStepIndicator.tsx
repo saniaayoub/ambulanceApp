@@ -13,46 +13,58 @@ const BookingStepIndicator: FC<Props> = ({ currentStep, steps }) => {
 
   return (
     <View style={styles.stepIndicator}>
-      <Text style={styles.h5}>{currentStep}</Text>
       <View
-        style={[globalStyles.row, globalStyles.centered, globalStyles.mV10]}
+        style={[globalStyles.row, globalStyles.centered, globalStyles.mB10]}
       >
         {steps.slice(0, 4).map((step, index) => (
           <View
             key={step}
             style={[
-              globalStyles.row,
               globalStyles.fullWidth,
               globalStyles.flex,
-              globalStyles.alignCenter,
+              // globalStyles.alignCenter,
             ]}
           >
+            <Text style={styles.smallText}>
+              {index === currentIndex ? currentStep : ''}
+            </Text>
+
             <View
+              key={step}
               style={[
-                styles.indicatorDot,
-                index === currentIndex && styles.dotActive,
-                index < currentIndex && styles.dotCompleted,
+                globalStyles.row,
+                globalStyles.fullWidth,
+                globalStyles.flex,
+                globalStyles.alignCenter,
               ]}
             >
-              <Text
-                style={[
-                  styles.h5,
-                  index === currentIndex || index < currentIndex
-                    ? styles.white
-                    : styles.text,
-                ]}
-              >
-                {index + 1}
-              </Text>
-            </View>
-            {index < 3 && (
               <View
                 style={[
-                  styles.indicatorLine,
-                  index < currentIndex && styles.buttonCard,
+                  styles.indicatorDot,
+                  index === currentIndex && styles.dotActive,
+                  index < currentIndex && styles.dotCompleted,
                 ]}
-              />
-            )}
+              >
+                <Text
+                  style={[
+                    styles.h5,
+                    index === currentIndex || index < currentIndex
+                      ? styles.white
+                      : styles.text,
+                  ]}
+                >
+                  {index + 1}
+                </Text>
+              </View>
+              {index < 3 && (
+                <View
+                  style={[
+                    styles.indicatorLine,
+                    index < currentIndex && styles.buttonCard,
+                  ]}
+                />
+              )}
+            </View>
           </View>
         ))}
       </View>

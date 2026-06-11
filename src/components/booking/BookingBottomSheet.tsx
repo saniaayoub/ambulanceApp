@@ -1,26 +1,25 @@
-import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import React, { forwardRef, useCallback, useState, type FC } from 'react';
-import { ScrollView, Image, Text, TouchableOpacity, View } from 'react-native';
-import AppButton from '../../components/AppButton';
-import { BookingStep } from '../../stores/bookingStore';
-import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
+import React, { useState, type FC } from 'react';
+import { Alert, TouchableOpacity, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import theme from '../../styles/theme';
 import { VentilatorAmbulance } from '../../assets/images/pngs';
-import BookingStepIndicator from './BookingStepIndicator';
+import AppButton from '../../components/AppButton';
 import { bookingSteps } from '../../hooks/useBookingSheetContent';
-import {
-  ClockSvg,
-  DistanceSvg,
-  FareSvg,
-  NearbySvg,
-} from '../../assets/images/svgs';
+import { ambulanceCards } from '../../screens/App/Home/Home';
+import { AmbulanceType, BookingStep } from '../../stores/bookingStore';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
+import theme from '../../styles/theme';
+import AmbulanceCard from '../home/AmbulanceCard';
+import BookingStepIndicator from './BookingStepIndicator';
+import DetailColumnComp from './DetailColumnComp';
+import InfoCard from './InfoCard';
 
 type Props = {
   currentStep: BookingStep;
   steps: BookingStep[];
   selectedAmbulance: string;
+  setSelectedAmbulance: (type: AmbulanceType) => void;
   pickupLocation: string;
   destinationLocation: string;
   onAdvance: () => void;
@@ -28,73 +27,19 @@ type Props = {
 
 const BookingBottomSheetContent: FC<Props> = ({
   currentStep,
-  steps,
+  // steps,
   selectedAmbulance,
-  pickupLocation,
-  destinationLocation,
+  setSelectedAmbulance,
+  // pickupLocation,
+  // destinationLocation,
   onAdvance,
 }) => {
   const styles = useGlobalStyles();
-  const currentIndex = steps.indexOf(currentStep);
-  const nextLabel =
-    currentIndex < steps.length - 1 ? steps[currentIndex + 1] : 'Completed';
-  const [sheetMode, setSheetMode] = useState<'summary' | 'payment'>('summary');
-
-  const DetailCard = useCallback(
-    ({ title1, text1, text2, title2, style }: any) => {
-      return (
-        <View
-          style={[
-            globalStyles.padding10,
-            globalStyles.row,
-            styles.border,
-            globalStyles.spaceBetween,
-            globalStyles.mB10,
-            style,
-          ]}
-        >
-          <View style={styles.statBox}>
-            <View style={[globalStyles.row]}>
-              {title1 === 'Distance' ? (
-                <DistanceSvg
-                  width={moderateScale(25)}
-                  height={moderateScale(25)}
-                />
-              ) : (
-                <FareSvg width={moderateScale(25)} height={moderateScale(25)} />
-              )}
-
-              <Text style={[globalStyles.mL10, styles.smallText]}>
-                {title1}
-              </Text>
-            </View>
-            <Text style={styles.h6}>{text1}</Text>
-          </View>
-          <View style={styles.verticalLine} />
-          <View style={styles.statBox}>
-            <View style={[globalStyles.row]}>
-              {title2 === 'Duration' ? (
-                <ClockSvg
-                  width={moderateScale(25)}
-                  height={moderateScale(25)}
-                />
-              ) : (
-                <NearbySvg
-                  width={moderateScale(25)}
-                  height={moderateScale(25)}
-                />
-              )}
-              <Text style={[globalStyles.mL10, styles.smallText]}>
-                {title2}
-              </Text>
-            </View>
-            <Text style={styles.h6}>{text2}</Text>
-          </View>
-        </View>
-      );
-    },
-    [],
-  );
+  // const currentIndex = steps.indexOf(currentStep);
+  // const nextLabel =
+  //   currentIndex < steps.length - 1 ? steps[currentIndex + 1] : 'Completed';
+  // const [sheetMode, setSheetMode] = useState<'summary' | 'payment'>('summary');
+  const [showAmbulance, setShowAmbulance] = useState(false);
 
   return (
     <BottomSheetScrollView
@@ -102,37 +47,38 @@ const BookingBottomSheetContent: FC<Props> = ({
       style={globalStyles.padding15}
     >
       <BookingStepIndicator currentStep={currentStep} steps={bookingSteps} />
-
-      <View
-        style={[
-          styles.border,
-          globalStyles.paddingH20,
-          globalStyles.paddingV10,
-          globalStyles.mT10,
-        ]}
-      >
+      <DetailColumnComp
+        title1={'Pickup'}
+        title2={'Destination'}
+        text1={'Healthy Smile Clinic'}
+        text2={'Jinnah Hospital'}
+        style={globalStyles.mT10}
+      />
+      <InfoCard
+        image={VentilatorAmbulance}
+        name={selectedAmbulance}
+        rightActionText="Change"
+        onPressRightAction={() => {
+          setShowAmbulance(prev => !prev);
+        }}
+        footerText="ETA 6 min"
+      />
+      {showAmbulance && (
         <View
-          style={[
-            globalStyles.row,
-            globalStyles.spaceBetween,
-            globalStyles.alignCenter,
-          ]}
+          style={[styles.border, globalStyles.mT10, globalStyles.padding10]}
         >
-          <View style={[globalStyles.row, globalStyles.centered]}>
-            <Image
-              source={VentilatorAmbulance}
-              resizeMode="contain"
-              style={{ width: moderateScale(50), height: moderateScale(50) }}
+          {ambulanceCards.map(card => (
+            <AmbulanceCard
+              card={card}
+              key={card.title}
+              selected={card.title === selectedAmbulance}
+              onPress={() => setSelectedAmbulance(card.title as AmbulanceType)}
             />
-            <Text style={[styles.h6, globalStyles.mL20]}>
-              {selectedAmbulance}
-            </Text>
-          </View>
-          <Text style={styles.link}>Change</Text>
+          ))}
         </View>
-        <Text style={styles.smallText}>ETA 6 min</Text>
-      </View>
-      <DetailCard
+      )}
+
+      <DetailColumnComp
         title1={'Distance'}
         title2={'Duration'}
         text1={'8.2 km'}
@@ -140,17 +86,28 @@ const BookingBottomSheetContent: FC<Props> = ({
         style={globalStyles.mT10}
       />
 
-      <DetailCard
+      <DetailColumnComp
         title1={'Fare'}
         title2={'Nearby'}
         text1={'Rs. 2000'}
         text2={'3 Vehicles'}
       />
 
+      <InfoCard
+        icon={'cash'}
+        name={'Payment Method'}
+        rightActionText="Cash"
+        onPressRightAction={() => {}}
+      />
       <View style={[globalStyles.row, globalStyles.centered]}>
         <TouchableOpacity
-          style={[globalStyles.centered, styles.border, globalStyles.padding10]}
-          // onPress={() => setShowPaymentMethods(true)}
+          style={[
+            globalStyles.centered,
+            styles.border,
+            styles.round,
+            globalStyles.padding10,
+          ]}
+          onPress={() => Alert.alert('Payment method Cash Only')}
         >
           <MaterialDesignIcons
             name="cash"
@@ -167,13 +124,4 @@ const BookingBottomSheetContent: FC<Props> = ({
   );
 };
 
-const BookingBottomSheet = forwardRef<BottomSheet, Props>((props, ref) => {
-  const styles = useGlobalStyles();
-  const snapPoints = [200, 400, '70%'];
-
-  return <BookingBottomSheetContent {...props} />;
-});
-
-BookingBottomSheet.displayName = 'BookingBottomSheet';
-
-export default React.memo(BookingBottomSheet);
+export default React.memo(BookingBottomSheetContent);

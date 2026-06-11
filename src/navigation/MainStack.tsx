@@ -7,7 +7,6 @@ import RNBootSplash from 'react-native-bootsplash';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SettingsScreen from '../screens/App/Settings';
 import { SplashScreen } from '../screens/Auth';
-import DetailsScreen from '../screens/DetailsScreen';
 import {
   getFCMToken,
   requestNotificationPermission,
@@ -94,18 +93,6 @@ export default function MainStack() {
           ) : (
             <Stack.Screen name="AuthStack" component={AuthStack} />
           )}
-
-          {/* <Stack.Screenå
-            name="SettingsScreen"
-            component={SettingsScreen}
-            options={{ title: 'SettingsScreen' }}
-          />
-
-          <Stack.Screen
-            name="Details"
-            component={DetailsScreen}
-            options={{ title: 'Details' }}
-          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

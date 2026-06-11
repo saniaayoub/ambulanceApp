@@ -10,8 +10,22 @@ export const globalStyles = StyleSheet.create({
     bottom: verticalScale(20),
     alignSelf: 'center',
   },
+  width120: {
+    width: moderateScale(150),
+  },
   justifyBetween: {
     justifyContent: 'space-between',
+  },
+  size80: {
+    width: moderateScale(80),
+    height: moderateScale(80),
+  },
+  size100: {
+    width: moderateScale(100),
+    height: moderateScale(100),
+  },
+  textAlignRight: {
+    textAlign: 'right',
   },
   textCenter: {
     textAlign: 'center',
@@ -39,6 +53,14 @@ export const globalStyles = StyleSheet.create({
   },
   width90: {
     width: '90%',
+  },
+  size50: {
+    width: moderateScale(50),
+    height: moderateScale(50),
+  },
+  size120: {
+    width: moderateScale(120),
+    height: moderateScale(80),
   },
   halfwidth: {
     width: '48%',
@@ -85,6 +107,9 @@ export const globalStyles = StyleSheet.create({
   negmargin60: {
     marginTop: moderateScale(-60),
   },
+  mL5: {
+    marginLeft: moderateScale(5),
+  },
   mV10: {
     marginVertical: moderateScale(10),
   },
@@ -99,6 +124,12 @@ export const globalStyles = StyleSheet.create({
   },
   mR10: {
     marginRight: moderateScale(10),
+  },
+  mB5: {
+    marginBottom: moderateScale(5),
+  },
+  mT5: {
+    marginTop: moderateScale(5),
   },
   mT10: {
     marginTop: moderateScale(10),
@@ -143,6 +174,9 @@ export const globalStyles = StyleSheet.create({
 
   negmargin: {
     marginTop: moderateScale(-10),
+  },
+  paddingV5: {
+    padding: moderateScale(5),
   },
   padding10: {
     padding: moderateScale(10),
@@ -199,6 +233,12 @@ export const globalStyles = StyleSheet.create({
 export const useGlobalStyles = () => {
   return useThemedStyles(({ colors, typography, radius }) => ({
     // Home Screen Styles
+    borderDark: {
+      borderColor: colors.text,
+    },
+    round: {
+      borderRadius: radius.round,
+    },
     opacitylow: {
       opacity: 0.7,
     },

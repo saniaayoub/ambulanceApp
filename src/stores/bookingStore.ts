@@ -4,9 +4,9 @@ export type BookingStep =
   | 'Pickup'
   | 'Destination'
   | 'Trip Details'
-  | 'Summary'
   | 'Searching'
   | 'Driver Assigned'
+  | 'Cancelled'
   | 'Tracking'
   | 'Completed';
 
@@ -19,9 +19,9 @@ const bookingSteps: BookingStep[] = [
   'Pickup',
   'Destination',
   'Trip Details',
-  'Summary',
   'Searching',
   'Driver Assigned',
+  'Cancelled',
   'Tracking',
   'Completed',
 ];

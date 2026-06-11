@@ -2,13 +2,12 @@ import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialIcons from '@react-native-vector-icons/material-design-icons';
 import React, { useCallback, useState, type FC } from 'react';
 import { Pressable, Text, View } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
+import { bookingSteps } from '../../hooks/useBookingSheetContent';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import AppButton from '../AppButton';
 import BookingStepIndicator from './BookingStepIndicator';
-import { moderateScale } from 'react-native-size-matters';
-
-import { bookingSteps } from '../../hooks/useBookingSheetContent';
 
 type Location = {
   id: string;
@@ -23,7 +22,7 @@ type Props = {
   currentLocation?: string;
   title?: string;
   subtitle?: string;
-  bookingStep: string;
+  currentStep: string;
 };
 
 const recentLocations: Location[] = [
@@ -60,7 +59,7 @@ const recentLocations: Location[] = [
 const LocationSheet: FC<Props> = ({
   onSelectLocation,
   currentLocation,
-  bookingStep,
+  currentStep,
 }) => {
   const styles = useGlobalStyles();
   const [selectedLocation, setSelectedLocation] = useState<string>(
@@ -123,7 +122,7 @@ const LocationSheet: FC<Props> = ({
       showsVerticalScrollIndicator={false}
       style={globalStyles.padding15}
     >
-      <BookingStepIndicator currentStep={bookingStep} steps={bookingSteps} />
+      <BookingStepIndicator currentStep={currentStep} steps={bookingSteps} />
 
       <Text style={[styles.h6, globalStyles.mV10]}> Healthy smile clinic</Text>
 

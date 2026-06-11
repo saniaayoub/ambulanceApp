@@ -7,7 +7,6 @@ export const bookingSteps: BookingStep[] = [
   'Pickup',
   'Destination',
   'Trip Details',
-  'Summary',
   'Searching',
   'Driver Assigned',
   'Tracking',

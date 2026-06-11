@@ -21,7 +21,7 @@ type LoginForm = {
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
-const LoginScreen = ({ navigation, route }: Props) => {
+const LoginScreen = ({ navigation }: Props) => {
   const styles = useGlobalStyles();
 
   const { loginSubmit, authLoading, setToken } = useAuth();

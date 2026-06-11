@@ -13,7 +13,6 @@ const DRAWER_ITEMS = [
   { route: 'Hospitals', label: 'Hospitals', icon: 'local-hospital' },
   { route: 'Notifications', label: 'Notifications', icon: 'notifications' },
   { route: 'Profile', label: 'Profile', icon: 'person' },
-  { route: 'BecomePartner', label: 'Become Partner', icon: 'support-agent' },
   { route: 'HelpSupport', label: 'Help & Support', icon: 'help-outline' },
 ];
 

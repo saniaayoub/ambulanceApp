@@ -10,11 +10,20 @@ import { View } from 'react-native';
 import BackButton from '../../../components/BackButton';
 import BookingBottomSheet from '../../../components/booking/BookingBottomSheet';
 import { bookingSteps } from '../../../hooks/useBookingSheetContent';
+import SearchingSheet from '../../../components/booking/SearchingSheet';
+import DriverAssignedSheet from '../../../components/booking/DriverAssignedSheet';
+import { DrawerStackParamList } from '../../../navigation/DrawerNavigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import CancelRideBottomSheet from '../../../components/booking/CancelRideBottomSheet';
+import DriverDetailsSheet from '../../../components/booking/DriverDetailsSheet';
+import RideCompletedSheet from '../../../components/booking/RideCompletedSheet';
+type Props = NativeStackScreenProps<DrawerStackParamList, 'Booking'>;
 
-const BookingScreen = () => {
+const BookingScreen = ({ navigation }: Props) => {
   const styles = useGlobalStyles();
-  const [show, setShow] = useState(true);
+  // const [show, setShow] = useState(true);
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const { selectedAmbulance, setSelectedAmbulance } = useBookingStore();
   const {
     bookingStep,
     pickupLocation,
@@ -53,7 +62,7 @@ const BookingScreen = () => {
             currentLocation={pickupLocation}
             title="Pick up location"
             subtitle="Select where you want to pick up"
-            bookingStep={bookingStep}
+            currentStep={bookingStep}
           />
         );
       case 'Destination':
@@ -63,18 +72,96 @@ const BookingScreen = () => {
             currentLocation={destinationLocation}
             title="Drop-off location"
             subtitle="Select where you want to be dropped off"
-            bookingStep={bookingStep}
+            currentStep={bookingStep}
           />
         );
+      case 'Trip Details':
+        return (
+          <BookingBottomSheet
+            currentStep={bookingStep}
+            steps={bookingSteps}
+            selectedAmbulance={selectedAmbulance}
+            pickupLocation="here"
+            destinationLocation="hhyuy"
+            onAdvance={advanceStep}
+            setSelectedAmbulance={setSelectedAmbulance}
+          />
+        );
+      case 'Searching':
+        return (
+          <SearchingSheet
+            nearbyCount={3}
+            estimatedTime="10 - 15 sec"
+            currentStep={bookingStep}
+            onCancel={advanceStep}
+          />
+        );
+
+      case 'Driver Assigned':
+        return (
+          <DriverAssignedSheet
+            driverData={{
+              driverImage: require('../../../assets/images/pngs/Mortuary.png'),
+              driverName: 'Sheikh Abdul',
+              driverRating: 4,
+            }}
+            currentStep={bookingStep}
+            nextStep={advanceStep}
+            destination={destinationLocation}
+            selectedAmbulance={selectedAmbulance}
+          />
+        );
+
+      case 'Cancelled':
+        return (
+          <RideCompletedSheet
+            driverData={{
+              driverImage: require('../../../assets/images/pngs/Mortuary.png'),
+              driverName: 'Sheikh Abdul',
+              driverRating: 4,
+            }}
+            ambulanceType={selectedAmbulance}
+            distance={'12 km'}
+            duration={'1 hour'}
+            fare={'Rs. 2000'}
+            vehicleNumber={'No.'}
+            paymentMethod={'Cash'}
+            pickupLocation={'Location'}
+            destinationLocation={destinationLocation}
+            onSubmitReview={() => {}}
+          />
+        );
+
+      // case 'Driver Details':
+      //   return (
+      //     <DriverDetailsSheet
+      //       driverData={{
+      //         driverImage: require('../../../assets/images/pngs/Mortuary.png'),
+      //         driverName: 'Sheikh Abdul',
+      //         driverRating: 4,
+      //       }}
+      //       selectedAmbulance={selectedAmbulance}
+      //     />
+      //   );
+
+      // case 'Cancelled':
+      //   return (
+      //     <CancelRideBottomSheet
+      //       onCancelBooking={() => {}}
+      //       onKeepBooking={() => {}}
+      //     />
+      //   );
+
       default:
         return (
           <BookingBottomSheet
             currentStep={bookingStep}
             steps={bookingSteps}
-            selectedAmbulance="Ventilator Ambulance"
+            selectedAmbulance={selectedAmbulance}
             pickupLocation="here"
             destinationLocation="hhyuy"
             onAdvance={advanceStep}
+            setSelectedAmbulance={setSelectedAmbulance}
           />
         );
     }
