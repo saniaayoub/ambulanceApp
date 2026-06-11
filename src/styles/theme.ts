@@ -48,6 +48,7 @@ export const colors = {
     ambulanceVentilator: '#1E88E5',
     success: '#43A047',
     ambulanceDeadBody: '#546E7A',
+    lightgrey: '#F7F7F7',
   },
   // Gradient colors (shared between themes)
   gradients: {

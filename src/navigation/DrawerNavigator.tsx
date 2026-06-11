@@ -4,11 +4,37 @@ import CustomDrawerContent from '../components/CustomDrawer';
 import DrawerPlaceholder from '../screens/DrawerPlaceholder';
 import HomeScreen from '../screens/App/Home/Home';
 import BookingScreen from '../screens/App/Booking/BookingScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import RideHistoryScreen from '../screens/App/History/RideHistoryScreen';
+import RideDetailScreen from '../screens/App/History/RideDetailScreen';
 
-const Drawer = createDrawerNavigator();
 export type DrawerStackParamList = {
   Home: undefined;
-  Booking: undefined;
+  BookingScreen: undefined;
+  RideHistory: undefined;
+};
+const Drawer = createDrawerNavigator<DrawerStackParamList>();
+
+const RideStackNavigator = createNativeStackNavigator();
+
+const RideStack = () => {
+  return (
+    <RideStackNavigator.Navigator
+      initialRouteName="RideHistoryScreen"
+      screenOptions={() => ({
+        headerShown: false,
+      })}
+    >
+      <RideStackNavigator.Screen
+        name={'RideHistoryScreen'}
+        component={RideHistoryScreen}
+      />
+      <RideStackNavigator.Screen
+        name={'RideDetailScreen'}
+        component={RideDetailScreen}
+      />
+    </RideStackNavigator.Navigator>
+  );
 };
 
 const DrawerNavigator: FC = () => {
@@ -19,11 +45,7 @@ const DrawerNavigator: FC = () => {
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="BookingScreen" component={BookingScreen} />
-      <Drawer.Screen
-        name="RideHistory"
-        component={DrawerPlaceholder}
-        initialParams={{ title: 'Ride History' }}
-      />
+      <Drawer.Screen name="RideHistory" component={RideStack} />
       <Drawer.Screen
         name="Hospitals"
         component={DrawerPlaceholder}
@@ -39,11 +61,7 @@ const DrawerNavigator: FC = () => {
         component={DrawerPlaceholder}
         initialParams={{ title: 'Profile' }}
       />
-      <Drawer.Screen
-        name="BecomePartner"
-        component={DrawerPlaceholder}
-        initialParams={{ title: 'Become Partner' }}
-      />
+
       <Drawer.Screen
         name="HelpSupport"
         component={DrawerPlaceholder}

@@ -58,6 +58,10 @@ export const globalStyles = StyleSheet.create({
     width: moderateScale(50),
     height: moderateScale(50),
   },
+  size40: {
+    width: moderateScale(40),
+    height: moderateScale(40),
+  },
   size120: {
     width: moderateScale(120),
     height: moderateScale(80),
@@ -193,6 +197,7 @@ export const globalStyles = StyleSheet.create({
   padding5: {
     padding: moderateScale(5),
   },
+
   paddingH20: {
     paddingHorizontal: moderateScale(20),
   },
@@ -258,6 +263,9 @@ export const useGlobalStyles = () => {
     greyCard: {
       backgroundColor: colors.textSecondary,
     },
+    lightGreyCard: {
+      backgroundColor: colors.common.lightgrey,
+    },
     shadow: {
       // iOS Shadow
       shadowColor: '#000',
@@ -318,6 +326,10 @@ export const useGlobalStyles = () => {
     },
     lightText: {
       ...typography.lightText,
+      color: colors.text,
+    },
+    normalText: {
+      ...typography.label,
       color: colors.text,
     },
     smallText: {

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 
 import AppButton from '../../components/AppButton';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
@@ -32,6 +32,13 @@ type Props = {
   onSubmitReview: (rating: number) => void;
 };
 
+export const renderRow = (label: string, value: string, styles: any) => (
+  <View style={[globalStyles.row, globalStyles.spaceBetween, globalStyles.mB5]}>
+    <Text style={styles.lightText}>{label}</Text>
+    <Text style={styles.h6}>{value}</Text>
+  </View>
+);
+
 const RideCompletedSheet = ({
   driverData,
   ambulanceType,
@@ -48,15 +55,6 @@ const RideCompletedSheet = ({
 
   const [rating, setRating] = useState(0);
 
-  const renderRow = (label: string, value: string) => (
-    <View
-      style={[globalStyles.row, globalStyles.spaceBetween, globalStyles.mB5]}
-    >
-      <Text style={styles.lightText}>{label}</Text>
-      <Text style={styles.h6}>{value}</Text>
-    </View>
-  );
-
   return (
     <BottomSheetScrollView
       showsVerticalScrollIndicator={false}
@@ -64,7 +62,7 @@ const RideCompletedSheet = ({
     >
       <View>
         <View style={[globalStyles.alignCenter, globalStyles.mB10]}>
-          <MaterialCommunityIcons
+          <MaterialDesignIcons
             name="check-circle"
             size={moderateScale(40)}
             color={theme.colors.common.success}
@@ -119,17 +117,17 @@ const RideCompletedSheet = ({
         >
           <Text style={[styles.h5, globalStyles.mB15]}>Trip Details</Text>
 
-          {renderRow('Distance', distance)}
-          {renderRow('Duration', duration)}
-          {renderRow('Fare', fare)}
-          {renderRow('Vehicle', vehicleNumber)}
-          {renderRow('Payment', paymentMethod)}
+          {renderRow('Distance', distance, styles)}
+          {renderRow('Duration', duration, styles)}
+          {renderRow('Fare', fare, styles)}
+          {renderRow('Vehicle', vehicleNumber, styles)}
+          {renderRow('Payment', paymentMethod, styles)}
 
           <View style={styles.separator} />
 
-          {renderRow('Pickup', pickupLocation)}
+          {renderRow('Pickup', pickupLocation, styles)}
 
-          {renderRow('Destination', destinationLocation)}
+          {renderRow('Destination', destinationLocation, styles)}
         </View>
       </View>
       <AppButton title="Submit Review" onPress={() => onSubmitReview(rating)} />
