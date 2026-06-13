@@ -2,21 +2,21 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 // import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import LocationSheet from '../../../components/booking/PickupLocationSheet';
-import { useBookingStore } from '../../../stores/bookingStore';
-import { globalStyles, useGlobalStyles } from '../../../styles/globalStyles';
+import LocationSheet from '../../../../components/booking/PickupLocationSheet';
+import { useBookingStore } from '../../../../stores/bookingStore';
+import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
-import BackButton from '../../../components/BackButton';
-import BookingBottomSheet from '../../../components/booking/BookingBottomSheet';
-import { bookingSteps } from '../../../hooks/useBookingSheetContent';
-import SearchingSheet from '../../../components/booking/SearchingSheet';
-import DriverAssignedSheet from '../../../components/booking/DriverAssignedSheet';
-import { DrawerStackParamList } from '../../../navigation/DrawerNavigator';
+import BackButton from '../../../../components/BackButton';
+import BookingBottomSheet from '../../../../components/booking/BookingBottomSheet';
+import { bookingSteps } from '../../../../hooks/useBookingSheetContent';
+import SearchingSheet from '../../../../components/booking/SearchingSheet';
+import DriverAssignedSheet from '../../../../components/booking/DriverAssignedSheet';
+import { DrawerStackParamList } from '../../../../navigation/DriverDrawer';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import CancelRideBottomSheet from '../../../components/booking/CancelRideBottomSheet';
-import DriverDetailsSheet from '../../../components/booking/DriverDetailsSheet';
-import RideCompletedSheet from '../../../components/booking/RideCompletedSheet';
+import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
+import DriverDetailsSheet from '../../../../components/booking/DriverDetailsSheet';
+import RideCompletedSheet from '../../../../components/booking/RideCompletedSheet';
 type Props = NativeStackScreenProps<DrawerStackParamList, 'Booking'>;
 
 const BookingScreen = ({ navigation }: Props) => {
@@ -101,7 +101,7 @@ const BookingScreen = ({ navigation }: Props) => {
         return (
           <DriverAssignedSheet
             driverData={{
-              driverImage: require('../../../assets/images/pngs/Mortuary.png'),
+              driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
               driverName: 'Sheikh Abdul',
               driverRating: 4,
             }}
@@ -116,7 +116,7 @@ const BookingScreen = ({ navigation }: Props) => {
         return (
           <RideCompletedSheet
             driverData={{
-              driverImage: require('../../../assets/images/pngs/Mortuary.png'),
+              driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
               driverName: 'Sheikh Abdul',
               driverRating: 4,
             }}
@@ -136,7 +136,7 @@ const BookingScreen = ({ navigation }: Props) => {
       //   return (
       //     <DriverDetailsSheet
       //       driverData={{
-      //         driverImage: require('../../../assets/images/pngs/Mortuary.png'),
+      //         driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
       //         driverName: 'Sheikh Abdul',
       //         driverRating: 4,
       //       }}

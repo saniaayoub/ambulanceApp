@@ -23,14 +23,8 @@ export type ForgotPasswordPayload = {
 };
 
 export type ResetPasswordPayload = {
-  email: string;
-  token: string;
-  password: string;
-  password_confirmation: string;
-  auth_field?: 'email' | 'phone';
-  phone?: string | null;
-  phone_country?: string | null;
-  captcha_key?: string;
+  idToken: string;
+  role: string;
 };
 
 export type AuthResponse<T = any> =
@@ -80,6 +74,12 @@ export const resetPassword = async (payload: ResetPasswordPayload) =>
     method: 'post',
     url: ENDPOINTS.AUTH.RESET_PASSWORD,
     data: payload,
+  });
+
+export const logout = async () =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.AUTH.LOGOUT,
   });
 export const verifyOtp = async (payload: ResetPasswordPayload) =>
   handleResponse({

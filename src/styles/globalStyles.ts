@@ -5,6 +5,13 @@ import theme from './theme';
 
 export const globalStyles = StyleSheet.create({
   flexgrow: { flexGrow: 1 },
+  absPosition: {
+    position: 'absolute',
+    top: moderateScale(5),
+  },
+  greaterzIndex: {
+    zIndex: 1000,
+  },
   absBottomTxt: {
     position: 'absolute',
     bottom: verticalScale(20),
@@ -69,11 +76,17 @@ export const globalStyles = StyleSheet.create({
   halfwidth: {
     width: '48%',
   },
+  width30: {
+    width: '30%',
+  },
   spaceBetween: {
     justifyContent: 'space-between',
   },
   flexStart: {
     justifyContent: 'flex-start',
+  },
+  flexEnd: {
+    alignItems: 'flex-end',
   },
   justifyCenter: {
     justifyContent: 'center',
@@ -126,6 +139,7 @@ export const globalStyles = StyleSheet.create({
   mV5: {
     marginVertical: moderateScale(5),
   },
+  paddingTB5: { paddingTop: 5, paddingBottom: 5 },
   mR10: {
     marginRight: moderateScale(10),
   },
@@ -185,6 +199,16 @@ export const globalStyles = StyleSheet.create({
   padding10: {
     padding: moderateScale(10),
   },
+  paddingL10: {
+    paddingLeft: moderateScale(10),
+  },
+  paddingL20: {
+    paddingLeft: moderateScale(20),
+  },
+  paddingL40: {
+    paddingLeft: moderateScale(40),
+  },
+
   padding30: {
     padding: moderateScale(30),
   },
@@ -418,7 +442,7 @@ export const useGlobalStyles = () => {
     separator: {
       height: 1,
       backgroundColor: colors.border,
-      marginVertical: moderateScale(14),
+      marginVertical: moderateScale(10),
     },
 
     iconStyle40: {

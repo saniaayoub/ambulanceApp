@@ -11,6 +11,7 @@ import { globalStyles } from '../../styles/globalStyles';
 import { registerSchema } from '../../validation/authSchemas';
 import { useAuth } from '../../hooks/useAuth';
 import { useAuthStore } from '../../stores/authStore';
+import { formatPhoneNumber } from '../../utils/phoneFormatter';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUp'>;
 
@@ -24,9 +25,16 @@ type SignUpForm = {
 
 const SignUpScreen = ({ navigation }: Props) => {
   const { registerSubmit, sendOtp, authLoading } = useAuth();
+  const { selectedCountry } = useAuthStore();
+
   const role = useAuthStore(state => state.role);
 
-  const { control, handleSubmit } = useForm<SignUpForm>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+    reset,
+  } = useForm<SignUpForm>({
     mode: 'onChange',
     reValidateMode: 'onChange',
     resolver: yupResolver(registerSchema),
@@ -35,31 +43,23 @@ const SignUpScreen = ({ navigation }: Props) => {
       phone: '',
       password: '',
       confirmPassword: '',
-      role: '',
+      role: role,
     },
   });
 
   const onSubmit = async (data: SignUpForm) => {
-    const response = await registerSubmit({
+    await registerSubmit({
       fullName: data.fullName,
       password: data.password,
-      phone: data.phone,
+      phone: formatPhoneNumber(data.phone, selectedCountry?.dialCode),
       phone_country: null,
       role: role,
+    }).then(res => {
+      reset();
     });
-
-    if (response.success) {
-      const res = await sendOtp(phone);
-      console.log(res, 'sent otp');
-      if (res) {
-        handleNavigateOTP();
-      }
-      // navigation.goBack();
-    }
   };
 
   const handleNavigate = () => navigation.goBack();
-  const handleNavigateOTP = () => navigation.navigate('OTPScreen');
 
   return (
     <AuthWrapper
@@ -102,6 +102,7 @@ const SignUpScreen = ({ navigation }: Props) => {
 
       <AppButton
         title="Sign Up"
+        disabled={!isValid}
         onPress={handleSubmit(onSubmit)}
         variant="primary"
         size="lg"

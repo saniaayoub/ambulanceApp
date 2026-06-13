@@ -12,9 +12,9 @@ import { AuthStackParamList } from '../../navigation/AuthStack';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import { phoneLoginSchema } from '../../validation/authSchemas';
 import { useAuthStore } from '../../stores/authStore';
+import { formatPhoneNumber } from '../../utils/phoneFormatter';
 
 type LoginForm = {
-  email: string;
   phone: string;
   password: string;
 };
@@ -25,28 +25,29 @@ const LoginScreen = ({ navigation }: Props) => {
   const styles = useGlobalStyles();
 
   const { loginSubmit, authLoading, setToken } = useAuth();
-  const role = useAuthStore(state => state.role);
+  const { role, selectedCountry } = useAuthStore();
+
   const currentSchema = phoneLoginSchema;
 
-  const { control, handleSubmit } = useForm<LoginForm>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<LoginForm>({
     mode: 'onChange',
     reValidateMode: 'onChange',
     resolver: yupResolver<LoginForm, any, any>(currentSchema as any) as any,
     defaultValues: {
       phone: '',
       password: '',
-      // phone_country: '',
     },
   });
 
   const onSubmit = async (data: LoginForm) => {
-    // await loginSubmit({
-    //   phone: data.phone,
-    //   password: data.password,
-    //   phone_country: null,
-    // });
-    console.log('Login data:', data);
-    setToken('dummy_token');
+    await loginSubmit({
+      phone: formatPhoneNumber(data.phone, selectedCountry?.dialCode),
+      password: data.password,
+    });
   };
 
   const handleNavigate = () => navigation.navigate('SignUp');
@@ -84,17 +85,17 @@ const LoginScreen = ({ navigation }: Props) => {
         secureTextEntry
       />
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={handleNavigateForgotPassword}
         style={[globalStyles.mB20]}
       >
         <Text style={styles.lightText}>Forget your password?</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <AppButton
         title="Log In"
-        // onPress={handleSubmit(onSubmit)}
-        onPress={onSubmit}
+        disabled={!isValid}
+        onPress={handleSubmit(onSubmit)}
         variant="primary"
         size="lg"
         loading={authLoading}

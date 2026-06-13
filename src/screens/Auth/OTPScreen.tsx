@@ -21,6 +21,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'OTPScreen'>;
 
 const OTPScreen = ({ navigation, route }: Props) => {
   const email = route.params?.email ?? '';
+  const { verifyOtp } = useAuth();
   const styles = useGlobalStyles();
   const [code, setCode] = useState<string[]>(Array(OTP_LENGTH).fill(''));
   const { forgotPassword } = useAuth();
@@ -72,16 +73,17 @@ const OTPScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (otpValue.length !== OTP_LENGTH) {
       toastError('Enter the 6-digit code');
       return;
     }
-
-    navigation.navigate('ResetPassword', {
-      email,
-      code: otpValue,
-    });
+    console.log('otp', otpValue);
+    await verifyOtp(otpValue);
+    // navigation.navigate('ResetPassword', {
+    //   email,
+    //   code: otpValue,
+    // });
   };
 
   const handleResend = async () => {
@@ -127,14 +129,15 @@ const OTPScreen = ({ navigation, route }: Props) => {
         ))}
       </View>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={handleResend}
         style={[globalStyles.alignSelfCenter, globalStyles.mB20]}
       >
         <Text style={styles.lightText}>Resend code</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <AppButton
+        disabled={otpValue.length !== OTP_LENGTH}
         title="Verify code"
         onPress={handleVerify}
         variant="primary"

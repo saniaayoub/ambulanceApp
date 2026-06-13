@@ -14,7 +14,8 @@ import {
 } from '../services/notification';
 import { useAuthStore } from '../stores/authStore';
 import AuthStack from './AuthStack';
-import DrawerNavigator from './DrawerNavigator';
+import DrawerNavigator from './DriverDrawer';
+import RootNavigator from './RootNavigator';
 
 export type MainStackParamList = {
   SplashScreen: undefined;
@@ -89,7 +90,7 @@ export default function MainStack() {
           {showSplash ? (
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
           ) : token ? (
-            <Stack.Screen name="App" component={DrawerNavigator} />
+            <Stack.Screen name="App" component={RootNavigator} />
           ) : (
             <Stack.Screen name="AuthStack" component={AuthStack} />
           )}

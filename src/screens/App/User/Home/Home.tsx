@@ -4,17 +4,17 @@ import {
   DeadBodyAmbulance,
   NormalAmbulance,
   VentilatorAmbulance,
-} from '../../../assets/images/pngs';
-import AmbulanceCard from '../../../components/home/AmbulanceCard';
-import HomeHeader from '../../../components/home/header';
-import { globalStyles, useGlobalStyles } from '../../../styles/globalStyles';
-import AppButton from '../../../components/AppButton';
+} from '../../../../assets/images/pngs';
+import AmbulanceCard from '../../../../components/home/AmbulanceCard';
+import HomeHeader from '../../../../components/home/header';
+import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
+import AppButton from '../../../../components/AppButton';
 import {
   useBookingStore,
   type AmbulanceType,
-} from '../../../stores/bookingStore';
-import { useLocation } from '../../../hooks/useLocation';
-import { useLocationStore } from '../../../stores/locationStore';
+} from '../../../../stores/bookingStore';
+import { useLocation } from '../../../../hooks/useLocation';
+import { useLocationStore } from '../../../../stores/locationStore';
 import { moderateScale } from 'react-native-size-matters';
 
 export const ambulanceCards = [

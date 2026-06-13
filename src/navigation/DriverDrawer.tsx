@@ -2,16 +2,23 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import React, { FC } from 'react';
 import CustomDrawerContent from '../components/CustomDrawer';
 import DrawerPlaceholder from '../screens/DrawerPlaceholder';
-import HomeScreen from '../screens/App/Home/Home';
-import BookingScreen from '../screens/App/Booking/BookingScreen';
+import DriverHomeScreen from '../screens/App/Driver/Home/DriverHomeScreen';
+import EarningsScreen from '../screens/App/Driver/Earnings/EarningsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import RideHistoryScreen from '../screens/App/History/RideHistoryScreen';
-import RideDetailScreen from '../screens/App/History/RideDetailScreen';
+import RideHistoryScreen from '../screens/App/Shared/History/RideHistoryScreen';
+import RideDetailScreen from '../screens/App/Shared/History/RideDetailScreen';
+import Notifications from '../screens/App/Shared/Notifications';
+import ProfileSettings from '../screens/App/Shared/ProfileSettings';
+import BookingScreen from '../screens/App/Driver/Booking/BookingScreen';
 
 export type DrawerStackParamList = {
   Home: undefined;
-  BookingScreen: undefined;
+  Booking: undefined;
+  Earnings: undefined;
   RideHistory: undefined;
+  Notifications: undefined;
+  Profile: undefined;
+  HelpSupport: undefined;
 };
 const Drawer = createDrawerNavigator<DrawerStackParamList>();
 
@@ -37,38 +44,21 @@ const RideStack = () => {
   );
 };
 
-const DrawerNavigator: FC = () => {
+const DriverDrawer: FC = () => {
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent}
       screenOptions={{ headerShown: false, drawerType: 'slide' }}
     >
-      <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="BookingScreen" component={BookingScreen} />
+      <Drawer.Screen name="Home" component={DriverHomeScreen} />
+      <Drawer.Screen name="Booking" component={BookingScreen} />
+      <Drawer.Screen name="Earnings" component={EarningsScreen} />
       <Drawer.Screen name="RideHistory" component={RideStack} />
-      <Drawer.Screen
-        name="Hospitals"
-        component={DrawerPlaceholder}
-        initialParams={{ title: 'Hospitals' }}
-      />
-      <Drawer.Screen
-        name="Notifications"
-        component={DrawerPlaceholder}
-        initialParams={{ title: 'Notifications' }}
-      />
-      <Drawer.Screen
-        name="Profile"
-        component={DrawerPlaceholder}
-        initialParams={{ title: 'Profile' }}
-      />
-
-      <Drawer.Screen
-        name="HelpSupport"
-        component={DrawerPlaceholder}
-        initialParams={{ title: 'Help & Support' }}
-      />
+      <Drawer.Screen name="Notifications" component={Notifications} />
+      <Drawer.Screen name="Profile" component={ProfileSettings} />
+      <Drawer.Screen name="HelpSupport" component={DrawerPlaceholder} />
     </Drawer.Navigator>
   );
 };
 
-export default DrawerNavigator;
+export default DriverDrawer;

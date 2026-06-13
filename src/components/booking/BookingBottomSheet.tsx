@@ -6,7 +6,7 @@ import { moderateScale } from 'react-native-size-matters';
 import { VentilatorAmbulance } from '../../assets/images/pngs';
 import AppButton from '../../components/AppButton';
 import { bookingSteps } from '../../hooks/useBookingSheetContent';
-import { ambulanceCards } from '../../screens/App/Home/Home';
+import { ambulanceCards } from '../../screens/App/User/Home/Home';
 import { AmbulanceType, BookingStep } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';

@@ -11,19 +11,20 @@ import {
   forgotPassword as authForgotPassword,
   resetPassword as authResetPassword,
   verifyOtp as authVerifyOtp,
+  logout as authLogout,
 } from '../services/authService';
 import auth from '@react-native-firebase/auth';
-import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const getErrorMessage = (error: any) =>
   error?.response?.data?.message || error?.message || 'Something went wrong';
 
 export const useAuth = () => {
-  const { token, setToken, clearToken } = useAuthStore();
+  const navigation = useNavigation();
+  const { token, setToken, clearToken, role, setOTPResult, otpResult } =
+    useAuthStore();
   const { showLoader, hideLoader, isLoading } = useLoaderStore();
 
-  const [confirmResult, setConfirmResult] = useState(null);
-  const [message, setMessage] = useState('');
   const login = async (payload: LoginPayload) => {
     const response = await authLogin(payload);
 
@@ -37,17 +38,13 @@ export const useAuth = () => {
   const loginSubmit = async (payload: LoginPayload) => {
     showLoader();
     try {
-      const response = await login({
-        ...payload,
-        phone: payload.phone ?? null,
-        phone_country: payload.phone_country ?? null,
-      });
+      const response = await login(payload);
 
       if (!response.success) {
         toastError(getErrorMessage(response.error));
         return response;
       }
-
+      setToken(response.data.data.token);
       toastSuccess('Logged in successfully');
       return response;
     } finally {
@@ -57,11 +54,6 @@ export const useAuth = () => {
 
   const register = async (payload: RegisterPayload) => {
     const response = await authRegister(payload);
-
-    if (response.success && response.data?.token) {
-      setToken(response.data.token);
-    }
-
     return response;
   };
 
@@ -75,7 +67,8 @@ export const useAuth = () => {
         return response;
       }
 
-      toastSuccess('Account created successfully');
+      // toastSuccess('Account created successfully');
+      await sendOtp(payload.phone);
       return response;
     } finally {
       hideLoader();
@@ -83,43 +76,47 @@ export const useAuth = () => {
   };
   // 1️⃣ Send OTP
   const sendOtp = async (phoneNumber: string) => {
+    showLoader();
+
     try {
       const result = await auth().signInWithPhoneNumber(phoneNumber);
       console.log(result, 'result otp');
 
-      if (!result?.success) {
-        toastError(getErrorMessage(result?.error));
-        return result;
-      }
-      setConfirmResult(result);
-      setMessage('OTP sent!');
-      // toastSuccess('Account created successfully');
-      toastSuccess('OTP sent!');
+      setOTPResult(result);
+      navigation.navigate('OTPScreen');
+      toastSuccess(
+        'OTP sent! Please enter the 6 digit code sent to your phone number',
+      );
       return result;
     } catch (err) {
-      console.log(err);
-
-      setMessage('Failed to send OTP');
+      console.log(err, 'firebasse error');
+      toastError('Failed to send OTP');
+    } finally {
+      hideLoader();
     }
   };
 
   // 2️⃣ Verify OTP locally first
   const verifyOtp = async (otp: string) => {
-    if (confirmResult && otp.length) {
+    console.log(otpResult, otp);
+    if (otpResult && otp.length) {
       try {
-        const userCredential = await confirmResult.confirm(otp);
+        const userCredential = await otpResult.confirm(otp);
         const idToken = await userCredential.user.getIdToken(); // Firebase ID token
         console.log('Firebase ID Token:', idToken);
 
         // Send this token to your backend for verification
-        const response = await authVerifyOtp(idToken);
+        const response = await authVerifyOtp({ idToken: idToken, role: role });
         if (!response.success) {
           toastError(getErrorMessage(response.error));
           return response;
         }
-        toastSuccess('Password reset link sent');
+        toastSuccess('Account registered successfully');
+        setToken(response.data.data.token);
         return response;
       } catch (err) {
+        toastError('Failed to verify OTP');
+
         console.log(err);
         // setMessage('Invalid OTP');
       }
@@ -160,6 +157,22 @@ export const useAuth = () => {
     }
   };
 
+  const logout = async () => {
+    showLoader();
+    try {
+      const response = await authLogout();
+
+      if (!response.success) {
+        toastError(getErrorMessage(response.error));
+        return response;
+      }
+      clearToken();
+      return response;
+    } finally {
+      hideLoader();
+    }
+  };
+
   return {
     token,
     setToken,
@@ -173,5 +186,6 @@ export const useAuth = () => {
     sendOtp,
     verifyOtp,
     authLoading: isLoading,
+    logout,
   };
 };

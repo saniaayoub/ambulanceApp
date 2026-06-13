@@ -6,21 +6,32 @@ import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
 import { useAuth } from '../hooks/useAuth';
 import theme from '../styles/theme';
 import AppButton from './AppButton';
-
-const DRAWER_ITEMS = [
-  { route: 'Home', label: 'Home', icon: 'home' },
-  { route: 'RideHistory', label: 'Ride History', icon: 'history' },
-  { route: 'Hospitals', label: 'Hospitals', icon: 'local-hospital' },
-  { route: 'Notifications', label: 'Notifications', icon: 'notifications' },
-  { route: 'Profile', label: 'Profile', icon: 'person' },
-  { route: 'HelpSupport', label: 'Help & Support', icon: 'help-outline' },
-];
+import { moderateScale } from 'react-native-size-matters';
+import { useAuthStore } from '../stores/authStore';
+import { Roles } from '../utils/enums';
 
 const CustomDrawerContent: FC<any> = props => {
   const styles = useGlobalStyles();
-  const { clearToken } = useAuth();
+  const { clearToken, logout } = useAuth();
+  const role = useAuthStore(state => state.role);
+  console.log(role);
   const activeRoute = props.state.routeNames[props.state.index];
+  const DRAWER_ITEMS = [
+    { route: 'Home', label: 'Home', icon: 'home' },
+    { route: 'RideHistory', label: 'Ride History', icon: 'history' },
 
+    ...(role === Roles.DRIVER
+      ? [{ route: 'Earnings', label: 'Earnings', icon: 'cash' }]
+      : []),
+
+    ...(role === Roles.USER
+      ? [{ route: 'Hospitals', label: 'Hospitals', icon: 'hospital' }]
+      : []),
+
+    { route: 'Notifications', label: 'Notifications', icon: 'bell' },
+    { route: 'Profile', label: 'Profile', icon: 'face-man-profile' },
+    { route: 'HelpSupport', label: 'Help & Support', icon: 'phone' },
+  ];
   return (
     <DrawerContentScrollView
       {...props}
@@ -33,7 +44,7 @@ const CustomDrawerContent: FC<any> = props => {
       <View
         style={[globalStyles.row, globalStyles.alignCenter, globalStyles.mV20]}
       >
-        <View style={[styles.listItem, styles.border]}>
+        <View style={[styles.listItem, globalStyles.mR20, styles.border]}>
           <Text style={[styles.h4, styles.white]}>DA</Text>
         </View>
         <View>
@@ -48,15 +59,25 @@ const CustomDrawerContent: FC<any> = props => {
           <Pressable
             key={item.route}
             onPress={() => props.navigation.navigate(item.route)}
-            style={[styles.listItem, isActive && styles.opacitylow]}
-            android_ripple={{ color: '#00000005' }}
+            style={[
+              styles.listItem,
+              isActive ? styles.border : styles.opacitylow,
+            ]}
+            android_ripple={{ color: theme.colors.common.white }}
           >
             <MaterialDesignIcons
               name={item.icon}
-              size={22}
-              color={isActive ? theme.colors.dark : theme.colors.common.primary}
+              size={moderateScale(20)}
+              color={theme.colors.common.white}
             />
-            <Text style={[globalStyles.mL10, styles.text, styles.white]}>
+            <Text
+              style={[
+                globalStyles.mL10,
+                styles.text,
+                styles.white,
+                !isActive && styles.opacitylow,
+              ]}
+            >
               {item.label}
             </Text>
           </Pressable>
@@ -68,6 +89,7 @@ const CustomDrawerContent: FC<any> = props => {
         title="Logout"
         icon={'logout'}
         style={globalStyles.flexStart}
+        onPress={logout}
       />
     </DrawerContentScrollView>
   );

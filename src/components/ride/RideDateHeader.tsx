@@ -13,7 +13,7 @@ const RideDateHeader = ({ title }: Props) => {
 
   return (
     <View style={[globalStyles.paddingV10]}>
-      <Text style={styles.h6}>{title}</Text>
+      <Text style={[styles.h6]}>{title}</Text>
     </View>
   );
 };

@@ -4,7 +4,7 @@ import { API_BASE_URL } from './environment';
 
 const axiosInstance = axios.create({
   // baseURL: API_BASE_URL, // Replace with your API base URL
-  baseURL: 'http://localhost:5000/api/', // Replace with your API base URL
+  baseURL: 'http://192.168.1.2:5000/api/', // Replace with your API base URL
   timeout: 10000,
 });
 
@@ -14,6 +14,7 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    console.log(config, 'con');
     return config;
   },
   error => Promise.reject(error),

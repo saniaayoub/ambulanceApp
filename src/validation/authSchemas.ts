@@ -19,7 +19,8 @@ export const registerSchema = yup.object({
   phone: yup
     .string()
     .required('Phone number is required')
-    .min(10, 'Invalid phone number'),
+    .min(10, 'Invalid phone number')
+    .max(10, 'Invalid phone number'),
   password,
   confirmPassword: yup
     .string()

@@ -10,6 +10,7 @@ import {
 import { moderateScale, verticalScale } from 'react-native-size-matters';
 import { useThemedStyles } from '../styles/createThemedStyles';
 import { globalStyles } from '../styles/globalStyles';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 
 export type Variant = 'outlined' | 'filled' | 'shadowed' | 'blank';
 
@@ -19,23 +20,47 @@ interface AppInputProps extends TextInputProps {
   variant?: Variant;
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
+  leftIcon?: string;
 }
 
 const AppInput = forwardRef<TextInput, AppInputProps>(
   (
-    { label, error, variant = 'outlined', containerStyle, inputStyle, ...rest },
+    {
+      label,
+      error,
+      variant = 'outlined',
+      containerStyle,
+      inputStyle,
+      leftIcon,
+      ...rest
+    },
     ref,
   ) => {
     const styles = useStyles(variant);
-    console.log('gu', label);
 
     return (
       <View style={[globalStyles.fullWidth, globalStyles.mB10, containerStyle]}>
         {!!label && <Text style={styles.label}>{label}</Text>}
+        {leftIcon ? (
+          <View
+            style={[
+              globalStyles.absPosition,
+              globalStyles.paddingL10,
+              globalStyles.greaterzIndex,
+              globalStyles.mT5,
+            ]}
+          >
+            <MaterialDesignIcons name={leftIcon} size={22} color="#999" />
+          </View>
+        ) : null}
 
         <TextInput
           ref={ref}
-          style={[styles.input, inputStyle]}
+          style={[
+            styles.input,
+            leftIcon && globalStyles.paddingL40,
+            inputStyle,
+          ]}
           placeholderTextColor={styles.placeholder.color}
           secureTextEntry={rest.secureTextEntry}
           {...rest}

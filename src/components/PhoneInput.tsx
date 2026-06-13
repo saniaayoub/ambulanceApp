@@ -13,8 +13,9 @@ import { moderateScale, verticalScale } from 'react-native-size-matters';
 import { useThemedStyles } from '../styles/createThemedStyles';
 import AppButton from './AppButton';
 import AppInput, { Variant } from './AppInput';
+import { useAuthStore } from '../stores/authStore';
 
-interface CountryData {
+export interface CountryData {
   iso2: string;
   dialCode: string;
   label: string;
@@ -29,7 +30,7 @@ interface Props {
   variant?: Variant;
 }
 
-const getFlagEmoji = (iso2: string) =>
+export const getFlagEmoji = (iso2: string) =>
   iso2
     .toUpperCase()
     .replace(/./g, char => String.fromCodePoint(127397 + char.charCodeAt(0)));
@@ -42,14 +43,10 @@ const PhoneNumberInput: React.FC<Props> = ({
   variant = 'outlined',
 }) => {
   const phoneRef = useRef<any>(null);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [search, setSearch] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState<CountryData>({
-    iso2: 'pk',
-    dialCode: '+92',
-    label: 'Pakistan',
-    flag: getFlagEmoji('pk'),
-  });
+  const { selectedCountry, setSelectedCountry } = useAuthStore();
   const styles = useStyles(variant);
 
   return (
