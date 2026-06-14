@@ -1,17 +1,16 @@
-import React from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import AppButton from '../../components/AppButton';
 import AuthWrapper from '../../components/AuthWrapper';
 import FormInput from '../../components/FormInput';
 import PhoneNumberInput from '../../components/PhoneInput';
+import { useAuth } from '../../hooks/useAuth';
 import { AuthStackParamList } from '../../navigation/AuthStack';
+import { useAuthStore } from '../../stores/authStore';
 import { globalStyles } from '../../styles/globalStyles';
 import { registerSchema } from '../../validation/authSchemas';
-import { useAuth } from '../../hooks/useAuth';
-import { useAuthStore } from '../../stores/authStore';
-import { formatPhoneNumber } from '../../utils/phoneFormatter';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUp'>;
 
@@ -24,8 +23,7 @@ type SignUpForm = {
 };
 
 const SignUpScreen = ({ navigation }: Props) => {
-  const { registerSubmit, sendOtp, authLoading } = useAuth();
-  const { selectedCountry } = useAuthStore();
+  const { registerSubmit, authLoading } = useAuth();
 
   const role = useAuthStore(state => state.role);
 
@@ -37,7 +35,7 @@ const SignUpScreen = ({ navigation }: Props) => {
   } = useForm<SignUpForm>({
     mode: 'onChange',
     reValidateMode: 'onChange',
-    resolver: yupResolver(registerSchema),
+    resolver: yupResolver<SignUpForm, any, any>(registerSchema as any) as any,
     defaultValues: {
       fullName: '',
       phone: '',
@@ -48,15 +46,8 @@ const SignUpScreen = ({ navigation }: Props) => {
   });
 
   const onSubmit = async (data: SignUpForm) => {
-    await registerSubmit({
-      fullName: data.fullName,
-      password: data.password,
-      phone: formatPhoneNumber(data.phone, selectedCountry?.dialCode),
-      phone_country: null,
-      role: role,
-    }).then(res => {
-      reset();
-    });
+    await registerSubmit(data);
+    reset();
   };
 
   const handleNavigate = () => navigation.goBack();
@@ -82,7 +73,6 @@ const SignUpScreen = ({ navigation }: Props) => {
         control={control}
         name="phone"
         label="Phone Number"
-        variant="shadowed"
       />
 
       <FormInput

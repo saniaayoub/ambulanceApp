@@ -1,21 +1,21 @@
 import React, { useEffect, type FC } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 import {
   DeadBodyAmbulance,
   NormalAmbulance,
   VentilatorAmbulance,
 } from '../../../../assets/images/pngs';
+import AppButton from '../../../../components/AppButton';
 import AmbulanceCard from '../../../../components/home/AmbulanceCard';
 import HomeHeader from '../../../../components/home/header';
-import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
-import AppButton from '../../../../components/AppButton';
+import { useLocation } from '../../../../hooks/useLocation';
+import { useAuthStore } from '../../../../stores/authStore';
 import {
   useBookingStore,
   type AmbulanceType,
 } from '../../../../stores/bookingStore';
-import { useLocation } from '../../../../hooks/useLocation';
-import { useLocationStore } from '../../../../stores/locationStore';
-import { moderateScale } from 'react-native-size-matters';
+import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 
 export const ambulanceCards = [
   {
@@ -48,12 +48,13 @@ const Home: FC = ({ navigation }: any) => {
   const styles = useGlobalStyles();
   const { selectedAmbulance, setSelectedAmbulance, startBooking } =
     useBookingStore();
-
-  const { fetchLocation } = useLocation();
-  const currentLocation = useLocationStore(state => state.currentLocation);
+  const { userData } = useAuthStore();
+  const { fetchLocation, currentLocation } = useLocation();
 
   useEffect(() => {
-    // fetchLocation();
+    if (currentLocation) {
+      fetchLocation();
+    }
   }, []);
 
   const openDrawer = () => {
@@ -64,12 +65,17 @@ const Home: FC = ({ navigation }: any) => {
     startBooking();
     navigation.navigate('BookingScreen');
   };
+  const handleLocationSelect = () => {
+    navigation.navigate('LocationScreen', { mode: 'currentLoc' });
+  };
 
   return (
     <View style={[globalStyles.flex, globalStyles.padding15, styles.card]}>
       <HomeHeader
         onOpenMenu={openDrawer}
-        // locationLabel={currentLocation?.toString()}
+        name={userData?.fullName}
+        locationLabel={currentLocation?.name}
+        handleLocationPress={handleLocationSelect}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.banner}>
@@ -108,7 +114,7 @@ const Home: FC = ({ navigation }: any) => {
           ]}
         >
           <Text style={styles.h5}>Nearby hospitals</Text>
-          <Text style={[styles.h6, styles.link]}>See map</Text>
+          <Text style={[styles.h6, styles.link]}>See All</Text>
         </View>
 
         <ScrollView

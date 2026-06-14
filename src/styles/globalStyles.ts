@@ -9,6 +9,12 @@ export const globalStyles = StyleSheet.create({
     position: 'absolute',
     top: moderateScale(5),
   },
+  absPosition2: {
+    position: 'absolute',
+    bottom: 30,
+    left: 20,
+    right: 20,
+  },
   greaterzIndex: {
     zIndex: 1000,
   },

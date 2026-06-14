@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { Location } from './locationStore';
 
 export type BookingStep =
   | 'Pickup'
@@ -28,13 +29,13 @@ const bookingSteps: BookingStep[] = [
 
 interface BookingState {
   selectedAmbulance: AmbulanceType;
-  pickupLocation: string;
-  destinationLocation: string;
+  pickupLocation: Location;
+  destinationLocation: Location;
   bookingStep: BookingStep;
   isBookingActive: boolean;
   setSelectedAmbulance: (value: AmbulanceType) => void;
-  setPickupLocation: (value: string) => void;
-  setDestinationLocation: (value: string) => void;
+  setPickupLocation: (value: Location) => void;
+  setDestinationLocation: (value: Location) => void;
   advanceStep: () => void;
   resetBooking: () => void;
   startBooking: () => void;
@@ -42,8 +43,8 @@ interface BookingState {
 
 export const useBookingStore = create<BookingState>(set => ({
   selectedAmbulance: 'Normal Ambulance',
-  pickupLocation: 'Current location',
-  destinationLocation: 'Enter destination',
+  pickupLocation: { latitude: 1234, longitude: 12233, name: 'Abc' },
+  destinationLocation: { latitude: 1234, longitude: 12233, name: 'Abc' },
   bookingStep: 'Pickup',
   isBookingActive: false,
   setSelectedAmbulance: selectedAmbulance => set({ selectedAmbulance }),

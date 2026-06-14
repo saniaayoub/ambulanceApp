@@ -2,32 +2,26 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Text, TouchableOpacity } from 'react-native';
 import AppButton from '../../components/AppButton';
 import AuthWrapper from '../../components/AuthWrapper';
 import FormInput from '../../components/FormInput';
 import PhoneNumberInput from '../../components/PhoneInput';
 import { useAuth } from '../../hooks/useAuth';
 import { AuthStackParamList } from '../../navigation/AuthStack';
-import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
-import { phoneLoginSchema } from '../../validation/authSchemas';
 import { useAuthStore } from '../../stores/authStore';
-import { formatPhoneNumber } from '../../utils/phoneFormatter';
+import { phoneLoginSchema } from '../../validation/authSchemas';
 
 type LoginForm = {
   phone: string;
   password: string;
+  role: string;
 };
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 const LoginScreen = ({ navigation }: Props) => {
-  const styles = useGlobalStyles();
-
-  const { loginSubmit, authLoading, setToken } = useAuth();
-  const { role, selectedCountry } = useAuthStore();
-
-  const currentSchema = phoneLoginSchema;
+  const { loginSubmit, authLoading } = useAuth();
+  const { role } = useAuthStore();
 
   const {
     control,
@@ -36,23 +30,17 @@ const LoginScreen = ({ navigation }: Props) => {
   } = useForm<LoginForm>({
     mode: 'onChange',
     reValidateMode: 'onChange',
-    resolver: yupResolver<LoginForm, any, any>(currentSchema as any) as any,
+    resolver: yupResolver<LoginForm, any, any>(phoneLoginSchema as any) as any,
     defaultValues: {
       phone: '',
       password: '',
+      role: role,
     },
   });
 
-  const onSubmit = async (data: LoginForm) => {
-    await loginSubmit({
-      phone: formatPhoneNumber(data.phone, selectedCountry?.dialCode),
-      password: data.password,
-    });
-  };
-
   const handleNavigate = () => navigation.navigate('SignUp');
-  const handleNavigateForgotPassword = () =>
-    navigation.navigate('ForgotPassword');
+  // const handleNavigateForgotPassword = () =>
+  //   navigation.navigate('ForgotPassword');
 
   return (
     <AuthWrapper
@@ -95,7 +83,7 @@ const LoginScreen = ({ navigation }: Props) => {
       <AppButton
         title="Log In"
         disabled={!isValid}
-        onPress={handleSubmit(onSubmit)}
+        onPress={handleSubmit(loginSubmit)}
         variant="primary"
         size="lg"
         loading={authLoading}

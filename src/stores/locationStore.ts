@@ -1,6 +1,7 @@
-type Location = {
+export type Location = {
   latitude: number;
   longitude: number;
+  name: string;
 };
 
 interface LocationState {

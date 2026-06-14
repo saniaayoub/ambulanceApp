@@ -13,18 +13,18 @@ import { Roles } from '../utils/enums';
 const CustomDrawerContent: FC<any> = props => {
   const styles = useGlobalStyles();
   const { clearToken, logout } = useAuth();
-  const role = useAuthStore(state => state.role);
-  console.log(role);
+  const { userData } = useAuthStore();
+
   const activeRoute = props.state.routeNames[props.state.index];
   const DRAWER_ITEMS = [
     { route: 'Home', label: 'Home', icon: 'home' },
     { route: 'RideHistory', label: 'Ride History', icon: 'history' },
 
-    ...(role === Roles.DRIVER
+    ...(userData?.role === Roles.DRIVER
       ? [{ route: 'Earnings', label: 'Earnings', icon: 'cash' }]
       : []),
 
-    ...(role === Roles.USER
+    ...(userData?.role === Roles.USER
       ? [{ route: 'Hospitals', label: 'Hospitals', icon: 'hospital' }]
       : []),
 
@@ -48,8 +48,8 @@ const CustomDrawerContent: FC<any> = props => {
           <Text style={[styles.h4, styles.white]}>DA</Text>
         </View>
         <View>
-          <Text style={[styles.h4, styles.white]}>Dr. Ashraf</Text>
-          <Text style={[styles.h5, styles.white]}>+92 300 0000000</Text>
+          <Text style={[styles.h4, styles.white]}>{userData?.fullName}</Text>
+          <Text style={[styles.h5, styles.white]}>{userData?.phone}</Text>
         </View>
       </View>
 

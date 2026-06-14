@@ -7,7 +7,7 @@ import theme from '../styles/theme';
 import { useThemeStore } from '../stores/themeStore';
 import { useNavigation } from '@react-navigation/native';
 
-const BackButton = ({ title }: { title?: string }) => {
+const BackButton = ({ title, style }: { title?: string; style?: object }) => {
   const isDark = useThemeStore(state => state.isDark);
   const styles = useGlobalStyles();
   const navigation = useNavigation();
@@ -19,6 +19,7 @@ const BackButton = ({ title }: { title?: string }) => {
         globalStyles.paddingH15,
         globalStyles.alignCenter,
         styles.card,
+        style,
       ]}
     >
       <TouchableOpacity onPress={() => navigation.goBack()}>

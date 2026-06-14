@@ -1,201 +1,220 @@
 import BottomSheet from '@gorhom/bottom-sheet';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-// import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import LocationSheet from '../../../../components/booking/PickupLocationSheet';
-import { useBookingStore } from '../../../../stores/bookingStore';
-import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
-// import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
 import BackButton from '../../../../components/BackButton';
+import BaseMap from '../../../../components/map/BaseMap';
+
+import LocationSheet from '../../../../components/booking/PickupLocationSheet';
 import BookingBottomSheet from '../../../../components/booking/BookingBottomSheet';
-import { bookingSteps } from '../../../../hooks/useBookingSheetContent';
 import SearchingSheet from '../../../../components/booking/SearchingSheet';
 import DriverAssignedSheet from '../../../../components/booking/DriverAssignedSheet';
-import { DrawerStackParamList } from '../../../../navigation/DriverDrawer';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
-import DriverDetailsSheet from '../../../../components/booking/DriverDetailsSheet';
 import RideCompletedSheet from '../../../../components/booking/RideCompletedSheet';
+
+import { DrawerStackParamList } from '../../../../navigation/DriverDrawer';
+import { bookingSteps } from '../../../../hooks/useBookingSheetContent';
+
+import { useBookingStore } from '../../../../stores/bookingStore';
+import { useLocationStore } from '../../../../stores/locationStore';
+
+import { globalStyles } from '../../../../styles/globalStyles';
+import { Region } from 'react-native-maps';
+
 type Props = NativeStackScreenProps<DrawerStackParamList, 'Booking'>;
 
 const BookingScreen = ({ navigation }: Props) => {
-  const styles = useGlobalStyles();
-  // const [show, setShow] = useState(true);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { selectedAmbulance, setSelectedAmbulance } = useBookingStore();
+
+  const { currentLocation } = useLocationStore();
+
   const {
     bookingStep,
     pickupLocation,
     destinationLocation,
+    selectedAmbulance,
     setPickupLocation,
     setDestinationLocation,
+    setSelectedAmbulance,
     advanceStep,
   } = useBookingStore();
 
   useEffect(() => {
     bottomSheetRef.current?.expand();
+    setPickupLocation(currentLocation);
   }, []);
 
-  const handleSelectPickup = useCallback(
-    (location: string) => {
-      setPickupLocation(location);
-      advanceStep();
-    },
-    [setPickupLocation, advanceStep],
-  );
+  const [region, setRegion] = useState<Region>({
+    latitude: currentLocation?.latitude,
+    longitude: currentLocation?.longitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  });
 
-  const handleSelectDestination = useCallback(
-    (location: string) => {
-      setDestinationLocation(location);
-      advanceStep();
+  const nearbyDrivers = [
+    {
+      id: '1',
+      lat: 24.865,
+      lng: 67.01,
     },
-    [setDestinationLocation, advanceStep],
-  );
+    {
+      id: '2',
+      lat: 24.862,
+      lng: 67.005,
+    },
+    {
+      id: '3',
+      lat: 24.859,
+      lng: 67.015,
+    },
+  ];
+
+  const markers = [
+    ...(pickupLocation
+      ? [
+          {
+            id: 'pickup',
+            latitude: pickupLocation.latitude,
+            longitude: pickupLocation.longitude,
+            type: 'pickup' as const,
+          },
+        ]
+      : []),
+
+    ...(destinationLocation
+      ? [
+          {
+            id: 'destination',
+            latitude: destinationLocation.latitude,
+            longitude: destinationLocation.longitude,
+            type: 'destination' as const,
+          },
+        ]
+      : []),
+
+    ...(bookingStep === 'Searching'
+      ? nearbyDrivers.map(driver => ({
+          id: driver.id,
+          latitude: driver.lat,
+          longitude: driver.lng,
+          type: 'driver' as const,
+        }))
+      : []),
+  ];
 
   const renderSheetContent = () => {
     switch (bookingStep) {
       case 'Pickup':
         return (
           <LocationSheet
-            onSelectLocation={handleSelectPickup}
+            title="Pick Up Location"
+            subtitle="Select pickup location"
             currentLocation={pickupLocation}
-            title="Pick up location"
-            subtitle="Select where you want to pick up"
             currentStep={bookingStep}
+            onSelectLocation={location => {
+              setPickupLocation(location);
+              advanceStep();
+            }}
           />
         );
+
       case 'Destination':
         return (
           <LocationSheet
-            onSelectLocation={handleSelectDestination}
+            title="Destination"
+            subtitle="Select destination"
             currentLocation={destinationLocation}
-            title="Drop-off location"
-            subtitle="Select where you want to be dropped off"
             currentStep={bookingStep}
+            onSelectLocation={location => {
+              setDestinationLocation(location);
+              advanceStep();
+            }}
           />
         );
+
       case 'Trip Details':
         return (
           <BookingBottomSheet
             currentStep={bookingStep}
             steps={bookingSteps}
             selectedAmbulance={selectedAmbulance}
-            pickupLocation="here"
-            destinationLocation="hhyuy"
-            onAdvance={advanceStep}
+            pickupLocation={pickupLocation?.address}
+            destinationLocation={destinationLocation?.address}
             setSelectedAmbulance={setSelectedAmbulance}
+            onAdvance={advanceStep}
           />
         );
+
       case 'Searching':
         return (
           <SearchingSheet
-            nearbyCount={3}
-            estimatedTime="10 - 15 sec"
+            nearbyCount={nearbyDrivers.length}
+            estimatedTime="10-15 sec"
             currentStep={bookingStep}
-            onCancel={advanceStep}
+            onCancel={() => {}}
           />
         );
 
       case 'Driver Assigned':
         return (
           <DriverAssignedSheet
+            currentStep={bookingStep}
+            destination={destinationLocation?.address}
+            selectedAmbulance={selectedAmbulance}
+            nextStep={advanceStep}
             driverData={{
               driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
-              driverName: 'Sheikh Abdul',
-              driverRating: 4,
+              driverName: 'Ahmed Khan',
+              driverRating: 4.8,
             }}
-            currentStep={bookingStep}
-            nextStep={advanceStep}
-            destination={destinationLocation}
-            selectedAmbulance={selectedAmbulance}
           />
         );
 
-      case 'Cancelled':
+      case 'Completed':
         return (
           <RideCompletedSheet
+            ambulanceType={selectedAmbulance}
+            fare="Rs. 2500"
+            distance="12 km"
+            duration="35 mins"
+            vehicleNumber="ABC-123"
+            paymentMethod="Cash"
+            pickupLocation={pickupLocation?.address}
+            destinationLocation={destinationLocation?.address}
+            onSubmitReview={() => {}}
             driverData={{
               driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
-              driverName: 'Sheikh Abdul',
-              driverRating: 4,
+              driverName: 'Ahmed Khan',
+              driverRating: 4.8,
             }}
-            ambulanceType={selectedAmbulance}
-            distance={'12 km'}
-            duration={'1 hour'}
-            fare={'Rs. 2000'}
-            vehicleNumber={'No.'}
-            paymentMethod={'Cash'}
-            pickupLocation={'Location'}
-            destinationLocation={destinationLocation}
-            onSubmitReview={() => {}}
           />
         );
-
-      // case 'Driver Details':
-      //   return (
-      //     <DriverDetailsSheet
-      //       driverData={{
-      //         driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
-      //         driverName: 'Sheikh Abdul',
-      //         driverRating: 4,
-      //       }}
-      //       selectedAmbulance={selectedAmbulance}
-      //     />
-      //   );
-
-      // case 'Cancelled':
-      //   return (
-      //     <CancelRideBottomSheet
-      //       onCancelBooking={() => {}}
-      //       onKeepBooking={() => {}}
-      //     />
-      //   );
 
       default:
-        return (
-          <BookingBottomSheet
-            currentStep={bookingStep}
-            steps={bookingSteps}
-            selectedAmbulance={selectedAmbulance}
-            pickupLocation="here"
-            destinationLocation="hhyuy"
-            onAdvance={advanceStep}
-            setSelectedAmbulance={setSelectedAmbulance}
-          />
-        );
+        return null;
     }
   };
 
-  //   const showSheet = bookingStep === 'Pickup' || bookingStep === 'Destination';
+  const showCenterPin =
+    bookingStep === 'Pickup' || bookingStep === 'Destination';
 
   return (
     <View style={globalStyles.flex}>
-      {/* <MapView
-        provider={PROVIDER_GOOGLE}
-        style={styles.absoluteFill}
-        initialRegion={{
-          latitude: 24.7136,
-          longitude: 46.6753,
-          latitudeDelta: 0.012,
-          longitudeDelta: 0.012,
-        }}
-      >
-        <Marker
-          coordinate={{ latitude: 24.7136, longitude: 46.6753 }}
-          title="Pickup"
-          description={pickupLocation}
-        />
-      </MapView> */}
+      {/* {pickupLocation?.latitude ? ( */}
+      <BaseMap
+        initialRegion={region}
+        markers={markers}
+        showCenterPin={showCenterPin}
+        title={'Booking Ambulance'}
+      />
+      {/* ) : null} */}
 
-      <BackButton title={'Book Ambulance'} />
+      {/* <BackButton title="Book Ambulance" /> */}
 
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={[200, 400, '70%']}
+        snapPoints={['35%', '60%', '90%']}
         enablePanDownToClose={false}
-        handleIndicatorStyle={styles.greyCard}
-        backgroundStyle={styles.card}
       >
         {renderSheetContent()}
       </BottomSheet>

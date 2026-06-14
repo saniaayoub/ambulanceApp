@@ -15,14 +15,23 @@ import {
 } from '../services/authService';
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import { formatPhoneNumber } from '../utils/functions';
 
 const getErrorMessage = (error: any) =>
   error?.response?.data?.message || error?.message || 'Something went wrong';
 
 export const useAuth = () => {
   const navigation = useNavigation();
-  const { token, setToken, clearToken, role, setOTPResult, otpResult } =
-    useAuthStore();
+  const {
+    token,
+    selectedCountry,
+    setToken,
+    clearToken,
+    role,
+    setOTPResult,
+    otpResult,
+    setUserData,
+  } = useAuthStore();
   const { showLoader, hideLoader, isLoading } = useLoaderStore();
 
   const login = async (payload: LoginPayload) => {
@@ -38,13 +47,21 @@ export const useAuth = () => {
   const loginSubmit = async (payload: LoginPayload) => {
     showLoader();
     try {
-      const response = await login(payload);
+      const response = await login({
+        ...payload,
+        phone: formatPhoneNumber(
+          payload?.phone || '',
+          selectedCountry?.dialCode,
+        ),
+      });
 
       if (!response.success) {
         toastError(getErrorMessage(response.error));
         return response;
       }
       setToken(response.data.data.token);
+      setUserData(response.data.data.user);
+
       toastSuccess('Logged in successfully');
       return response;
     } finally {
@@ -60,7 +77,13 @@ export const useAuth = () => {
   const registerSubmit = async (payload: RegisterPayload) => {
     showLoader();
     try {
-      const response = await register(payload);
+      const response = await register({
+        ...payload,
+        phone: formatPhoneNumber(
+          payload?.phone || '',
+          selectedCountry?.dialCode,
+        ),
+      });
 
       if (!response.success) {
         toastError(getErrorMessage(response.error));
@@ -69,7 +92,7 @@ export const useAuth = () => {
 
       // toastSuccess('Account created successfully');
       await sendOtp(payload.phone);
-      return response;
+      // return response;
     } finally {
       hideLoader();
     }

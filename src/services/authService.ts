@@ -5,13 +5,13 @@ export type LoginPayload = {
   password: string;
   phone: string | null;
   phone_country?: string | null;
+  role: string;
 };
 
 export type RegisterPayload = {
   fullName: string;
   password: string;
   phone: string | null;
-  phone_country: string | null;
   role: string;
   cnic?: string;
   licenseNumber?: string;

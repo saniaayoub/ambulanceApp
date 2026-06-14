@@ -10,6 +10,7 @@ import RideDetailScreen from '../screens/App/Shared/History/RideDetailScreen';
 import Notifications from '../screens/App/Shared/Notifications';
 import HospitalsScreen from '../screens/App/User/Hospital';
 import ProfileSettings from '../screens/App/Shared/ProfileSettings';
+import LocationPickerScreen from '../screens/App/Shared/Map/LocationPickerScreen';
 
 export type DrawerStackParamList = {
   Home: undefined;
@@ -18,6 +19,7 @@ export type DrawerStackParamList = {
   Notifications: undefined;
   Hospitals: undefined;
   Profile: undefined;
+  LocationScreen: undefined;
 };
 const Drawer = createDrawerNavigator<DrawerStackParamList>();
 
@@ -51,11 +53,12 @@ const UserDrawer: FC = () => {
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="BookingScreen" component={BookingScreen} />
-      <Drawer.Screen name="RideHistory" component={RideStack} />
+      <Drawer.Screen name="LocationScreen" component={LocationPickerScreen} />
+      {/* <Drawer.Screen name="RideHistory" component={RideStack} />
       <Drawer.Screen name="Hospitals" component={HospitalsScreen} />
       <Drawer.Screen name="Notifications" component={Notifications} />
       <Drawer.Screen name="Profile" component={ProfileSettings} />
-      <Drawer.Screen name="HelpSupport" component={DrawerPlaceholder} />
+      <Drawer.Screen name="HelpSupport" component={DrawerPlaceholder} /> */}
     </Drawer.Navigator>
   );
 };

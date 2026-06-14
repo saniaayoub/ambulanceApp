@@ -11,12 +11,14 @@ type Props = {
   onOpenMenu?: () => void;
   locationLabel?: string;
   handleLocationPress?: () => void;
+  name?: string;
 };
 
 const HomeHeader: FC<Props> = ({
   onOpenMenu,
   handleLocationPress,
   locationLabel = 'Sector 5, Lahore',
+  name,
 }) => {
   const styles = useGlobalStyles();
 
@@ -41,7 +43,7 @@ const HomeHeader: FC<Props> = ({
         />
       </Pressable>
       <View style={globalStyles.flex}>
-        <Text style={styles.h4}>Dr. Ashraf</Text>
+        <Text style={styles.h4}>{name}</Text>
         <Pressable
           style={[
             globalStyles.row,

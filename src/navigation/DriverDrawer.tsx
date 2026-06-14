@@ -51,12 +51,12 @@ const DriverDrawer: FC = () => {
       screenOptions={{ headerShown: false, drawerType: 'slide' }}
     >
       <Drawer.Screen name="Home" component={DriverHomeScreen} />
-      <Drawer.Screen name="Booking" component={BookingScreen} />
+      {/* <Drawer.Screen name="Booking" component={BookingScreen} />
       <Drawer.Screen name="Earnings" component={EarningsScreen} />
       <Drawer.Screen name="RideHistory" component={RideStack} />
       <Drawer.Screen name="Notifications" component={Notifications} />
       <Drawer.Screen name="Profile" component={ProfileSettings} />
-      <Drawer.Screen name="HelpSupport" component={DrawerPlaceholder} />
+      <Drawer.Screen name="HelpSupport" component={DrawerPlaceholder} /> */}
     </Drawer.Navigator>
   );
 };

@@ -12,6 +12,7 @@ export const phoneLoginSchema = yup.object({
     .required('Phone number is required')
     .min(10, 'Invalid phone number'),
   password,
+  role: yup.string().oneOf(['USER', 'DRIVER']),
 });
 
 export const registerSchema = yup.object({
