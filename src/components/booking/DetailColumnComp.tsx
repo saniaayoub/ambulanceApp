@@ -17,6 +17,7 @@ type DetailCardProps = {
   title2: string;
   text2: string;
   style?: object;
+  textStyle?: object;
 };
 
 const DetailCard: FC<DetailCardProps> = ({
@@ -25,6 +26,7 @@ const DetailCard: FC<DetailCardProps> = ({
   text2,
   title2,
   style,
+  textStyle,
 }: DetailCardProps) => {
   const styles = useGlobalStyles();
   return (
@@ -38,7 +40,7 @@ const DetailCard: FC<DetailCardProps> = ({
         style,
       ]}
     >
-      <Pressable style={styles.statBox}>
+      <Pressable style={[styles.statBox]}>
         <View style={[globalStyles.row]}>
           {title1 === 'Distance' ? (
             <DistanceSvg width={moderateScale(25)} height={moderateScale(25)} />
@@ -50,7 +52,7 @@ const DetailCard: FC<DetailCardProps> = ({
 
           <Text style={[globalStyles.mL10, styles.smallText]}>{title1}</Text>
         </View>
-        <Text style={styles.h6}>{text1}</Text>
+        <Text style={[styles.h6, textStyle]}>{text1}</Text>
       </Pressable>
       <View style={styles.verticalLine} />
       <Pressable style={styles.statBox}>
@@ -67,7 +69,7 @@ const DetailCard: FC<DetailCardProps> = ({
           )}
           <Text style={[globalStyles.mL10, styles.smallText]}>{title2}</Text>
         </View>
-        <Text style={styles.h6}>{text2}</Text>
+        <Text style={[styles.h6, textStyle]}>{text2}</Text>
       </Pressable>
     </View>
   );

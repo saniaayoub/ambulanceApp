@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import {
   Text,
   TextInput,
@@ -6,11 +6,13 @@ import {
   View,
   type ViewStyle,
   type TextStyle,
+  TouchableOpacity,
 } from 'react-native';
 import { moderateScale, verticalScale } from 'react-native-size-matters';
 import { useThemedStyles } from '../styles/createThemedStyles';
 import { globalStyles } from '../styles/globalStyles';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
+import theme from '../styles/theme';
 
 export type Variant = 'outlined' | 'filled' | 'shadowed' | 'blank';
 
@@ -21,6 +23,8 @@ interface AppInputProps extends TextInputProps {
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
   leftIcon?: string;
+  rightIcon?: string;
+  onPressRightIcon?: () => void;
 }
 
 const AppInput = forwardRef<TextInput, AppInputProps>(
@@ -32,10 +36,15 @@ const AppInput = forwardRef<TextInput, AppInputProps>(
       containerStyle,
       inputStyle,
       leftIcon,
+      rightIcon,
+      onPressRightIcon,
       ...rest
     },
     ref,
   ) => {
+    const [hidePassword, setHidePassword] = useState(
+      rest.secureTextEntry ?? false,
+    );
     const styles = useStyles(variant);
 
     return (
@@ -50,7 +59,11 @@ const AppInput = forwardRef<TextInput, AppInputProps>(
               globalStyles.mT5,
             ]}
           >
-            <MaterialDesignIcons name={leftIcon} size={22} color="#999" />
+            <MaterialDesignIcons
+              name={leftIcon}
+              size={moderateScale(20)}
+              color={theme.colors.common.primary}
+            />
           </View>
         ) : null}
 
@@ -62,11 +75,52 @@ const AppInput = forwardRef<TextInput, AppInputProps>(
             inputStyle,
           ]}
           placeholderTextColor={styles.placeholder.color}
-          secureTextEntry={rest.secureTextEntry}
+          secureTextEntry={hidePassword}
           {...rest}
         />
 
         {!!error && <Text style={styles.error}>{error}</Text>}
+
+        {rest.secureTextEntry ? (
+          <TouchableOpacity
+            onPress={() => setHidePassword(prev => !prev)}
+            style={[
+              globalStyles.absPosition,
+              globalStyles.greaterzIndex,
+              {
+                right: moderateScale(10),
+                top: moderateScale(10),
+              },
+            ]}
+          >
+            <MaterialDesignIcons
+              name={hidePassword ? 'eye-off' : 'eye'}
+              size={moderateScale(20)}
+              color={theme.colors.common.primary}
+            />
+          </TouchableOpacity>
+        ) : rightIcon ? (
+          <TouchableOpacity
+            onPress={onPressRightIcon}
+            style={[
+              globalStyles.absPosition,
+              globalStyles.row,
+              globalStyles.greaterzIndex,
+              {
+                right: moderateScale(10),
+                top: moderateScale(10),
+              },
+            ]}
+          >
+            <MaterialDesignIcons
+              name={rightIcon}
+              size={moderateScale(20)}
+              color={theme.colors.common.primary}
+            />
+
+            <Text style={[globalStyles.mL5]}>Map</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
     );
   },

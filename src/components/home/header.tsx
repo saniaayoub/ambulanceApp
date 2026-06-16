@@ -17,7 +17,7 @@ type Props = {
 const HomeHeader: FC<Props> = ({
   onOpenMenu,
   handleLocationPress,
-  locationLabel = 'Sector 5, Lahore',
+  locationLabel,
   name,
 }) => {
   const styles = useGlobalStyles();

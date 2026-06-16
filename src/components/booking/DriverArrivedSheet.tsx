@@ -2,10 +2,10 @@ import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React from 'react';
 import { Text } from 'react-native';
 import AppButton from '../AppButton';
-import { bookingSteps } from '../../hooks/useBookingSheetContent';
+import { bookingSteps } from '../../hooks/useBookingData';
 import { BookingStep } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
-import { DetailCard } from './BookingBottomSheet';
+import { DetailCard } from './TripDetailsSheet';
 import BookingStepIndicator from './BookingStepIndicator';
 
 type Props = {

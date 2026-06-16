@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
-import BaseMap from '../../../../components/map/BaseMap';
+import React, { useState } from 'react';
+import { View } from 'react-native';
 import { Region } from 'react-native-maps';
-import { useBookingStore } from '../../../../stores/bookingStore';
-import { globalStyles } from '../../../../styles/globalStyles';
 import AppButton from '../../../../components/AppButton';
-import { useLocationStore } from '../../../../stores/locationStore';
+import BaseMap from '../../../../components/map/BaseMap';
 import { useLocation } from '../../../../hooks/useLocation';
-import { toastSuccess } from '../../../../services/toast';
+import { useBookingStore } from '../../../../stores/bookingStore';
 import { useLoaderStore } from '../../../../stores/loaderStore';
-import BackButton from '../../../../components/BackButton';
+import { globalStyles } from '../../../../styles/globalStyles';
 
 const LocationPickerScreen = ({ route, navigation }: any) => {
   const { mode } = route.params; // pickup / destination / current
   const { showLoader, hideLoader } = useLoaderStore();
 
-  const { setPickupLocation, setDestinationLocation } = useBookingStore();
-  const { fetchLocation, currentLocation, changeLocation } = useLocation();
-
-  const [loading, setLoading] = useState(true);
+  const { setDestinationLocation } = useBookingStore();
+  const { currentLocation, changeLocation } = useLocation();
 
   const [region, setRegion] = useState<Region>({
     latitude: currentLocation?.latitude,
@@ -41,14 +35,6 @@ const LocationPickerScreen = ({ route, navigation }: any) => {
     hideLoader();
     navigation.goBack();
   };
-
-  // if (loading) {
-  //   return (
-  //     <View style={{ flex: 1, justifyContent: 'center' }}>
-  //       <ActivityIndicator />
-  //     </View>
-  //   );
-  // }
 
   return (
     <View style={globalStyles.flex}>

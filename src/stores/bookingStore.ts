@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Location } from './locationStore';
+import { AmbulanceType } from '../components/home/AmbulanceCard';
 
 export type BookingStep =
   | 'Pickup'
@@ -10,11 +11,6 @@ export type BookingStep =
   | 'Cancelled'
   | 'Tracking'
   | 'Completed';
-
-export type AmbulanceType =
-  | 'Normal Ambulance'
-  | 'Ventilator Ambulance'
-  | 'Dead Body Ambulance';
 
 const bookingSteps: BookingStep[] = [
   'Pickup',
@@ -36,36 +32,59 @@ interface BookingState {
   setSelectedAmbulance: (value: AmbulanceType) => void;
   setPickupLocation: (value: Location) => void;
   setDestinationLocation: (value: Location) => void;
-  advanceStep: () => void;
+  setStep: (step: BookingStep) => void;
   resetBooking: () => void;
   startBooking: () => void;
+  homeData: object | null;
 }
 
 export const useBookingStore = create<BookingState>(set => ({
-  selectedAmbulance: 'Normal Ambulance',
-  pickupLocation: { latitude: 1234, longitude: 12233, name: 'Abc' },
-  destinationLocation: { latitude: 1234, longitude: 12233, name: 'Abc' },
+  selectedAmbulance: {
+    type: 'NORMAL',
+    label: 'Normal Ambulance',
+    baseFare: 900,
+    perKm: 125,
+  },
+
+  homeData: null,
+  pickupLocation: {
+    latitude: 1234,
+    longitude: 12233,
+    name: 'Current Location',
+  },
+  destinationLocation: {
+    latitude: 1234,
+    longitude: 12233,
+    name: 'Add Destination Location',
+  },
   bookingStep: 'Pickup',
   isBookingActive: false,
   setSelectedAmbulance: selectedAmbulance => set({ selectedAmbulance }),
   setPickupLocation: pickupLocation => set({ pickupLocation }),
   setDestinationLocation: destinationLocation => set({ destinationLocation }),
-  advanceStep: () =>
-    set(state => {
-      const currentIndex = bookingSteps.indexOf(state.bookingStep);
-      const nextIndex = Math.min(currentIndex + 1, bookingSteps.length - 1);
-      return {
-        bookingStep: bookingSteps[nextIndex],
-        isBookingActive:
-          bookingSteps[nextIndex] !== 'Completed' &&
-          bookingSteps[nextIndex] !== 'Pickup',
-      };
+  setStep: (step: BookingStep) =>
+    set({
+      bookingStep: step,
+      isBookingActive: step !== 'Pickup' && step !== 'Completed',
     }),
   resetBooking: () =>
     set({
-      selectedAmbulance: 'Normal Ambulance',
-      pickupLocation: 'Current location',
-      destinationLocation: 'Enter destination',
+      selectedAmbulance: {
+        type: 'NORMAL',
+        label: 'Normal Ambulance',
+        baseFare: 900,
+        perKm: 125,
+      },
+      pickupLocation: {
+        latitude: 1234,
+        longitude: 12233,
+        name: 'Current Location',
+      },
+      destinationLocation: {
+        latitude: 1234,
+        longitude: 12233,
+        name: 'Add Destination Location',
+      },
       bookingStep: 'Pickup',
       isBookingActive: false,
     }),

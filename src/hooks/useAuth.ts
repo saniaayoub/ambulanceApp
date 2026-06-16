@@ -59,8 +59,9 @@ export const useAuth = () => {
         toastError(getErrorMessage(response.error));
         return response;
       }
-      setToken(response.data.data.token);
-      setUserData(response.data.data.user);
+      console.log('hi', response);
+      setToken(response.data.token);
+      setUserData(response.data.user);
 
       toastSuccess('Logged in successfully');
       return response;
@@ -135,7 +136,7 @@ export const useAuth = () => {
           return response;
         }
         toastSuccess('Account registered successfully');
-        setToken(response.data.data.token);
+        setToken(response.data.token);
         return response;
       } catch (err) {
         toastError('Failed to verify OTP');

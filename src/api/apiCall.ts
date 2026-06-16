@@ -4,8 +4,6 @@ import { useQueueStore } from '../stores/queueStore';
 
 export const apiCall = async (config: any) => {
   const netInfo = await NetInfo.fetch();
-  console.log(netInfo, 'api');
-
   // Skip queueing if flagged
   if (!netInfo.isConnected && !config.skipQueue) {
     useQueueStore.getState().addToQueue(config);
@@ -17,7 +15,7 @@ export const apiCall = async (config: any) => {
     console.log(config, response, 'api response');
     return response.data;
   } catch (error) {
-    console.log(config, error.message, 'api error');
+    console.log(config, error, 'api error');
     throw error;
   }
 };

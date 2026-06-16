@@ -1,25 +1,25 @@
 import BottomSheet from '@gorhom/bottom-sheet';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
-import BackButton from '../../../../components/BackButton';
+import React, { useEffect, useRef, useState } from 'react';
+import { View } from 'react-native';
 import BaseMap from '../../../../components/map/BaseMap';
 
-import LocationSheet from '../../../../components/booking/PickupLocationSheet';
-import BookingBottomSheet from '../../../../components/booking/BookingBottomSheet';
-import SearchingSheet from '../../../../components/booking/SearchingSheet';
+import TripDetailsSheet from '../../../../components/booking/TripDetailsSheet';
 import DriverAssignedSheet from '../../../../components/booking/DriverAssignedSheet';
+import LocationSheet from '../../../../components/booking/LocationSheet';
 import RideCompletedSheet from '../../../../components/booking/RideCompletedSheet';
+import SearchingSheet from '../../../../components/booking/SearchingSheet';
 
+import { bookingSteps, useBookingData } from '../../../../hooks/useBookingData';
 import { DrawerStackParamList } from '../../../../navigation/DriverDrawer';
-import { bookingSteps } from '../../../../hooks/useBookingSheetContent';
 
 import { useBookingStore } from '../../../../stores/bookingStore';
-import { useLocationStore } from '../../../../stores/locationStore';
+import { Location, useLocationStore } from '../../../../stores/locationStore';
 
-import { globalStyles } from '../../../../styles/globalStyles';
 import { Region } from 'react-native-maps';
+import AppButton from '../../../../components/AppButton';
+import { useLocation } from '../../../../hooks/useLocation';
+import { globalStyles } from '../../../../styles/globalStyles';
 
 type Props = NativeStackScreenProps<DrawerStackParamList, 'Booking'>;
 
@@ -27,6 +27,8 @@ const BookingScreen = ({ navigation }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const { currentLocation } = useLocationStore();
+  const { getEstimate } = useBookingData();
+  const { getLocationWithName } = useLocation();
 
   const {
     bookingStep,
@@ -36,13 +38,8 @@ const BookingScreen = ({ navigation }: Props) => {
     setPickupLocation,
     setDestinationLocation,
     setSelectedAmbulance,
-    advanceStep,
+    setStep,
   } = useBookingStore();
-
-  useEffect(() => {
-    bottomSheetRef.current?.expand();
-    setPickupLocation(currentLocation);
-  }, []);
 
   const [region, setRegion] = useState<Region>({
     latitude: currentLocation?.latitude,
@@ -50,6 +47,9 @@ const BookingScreen = ({ navigation }: Props) => {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
+
+  const [selected, setSelected] = useState(region);
+  const [estimate, setEstimate] = useState(null);
 
   const nearbyDrivers = [
     {
@@ -107,13 +107,19 @@ const BookingScreen = ({ navigation }: Props) => {
       case 'Pickup':
         return (
           <LocationSheet
-            title="Pick Up Location"
-            subtitle="Select pickup location"
-            currentLocation={pickupLocation}
+            pickupLocation={pickupLocation}
             currentStep={bookingStep}
+            onCurrentLocationPress={() => {
+              if (!currentLocation) return;
+              setPickupLocation(currentLocation);
+              setStep('Destination');
+            }}
+            onPressChangeonMap={() => {
+              bottomSheetRef.current?.close();
+            }}
             onSelectLocation={location => {
               setPickupLocation(location);
-              advanceStep();
+              setStep('Destination');
             }}
           />
         );
@@ -121,27 +127,49 @@ const BookingScreen = ({ navigation }: Props) => {
       case 'Destination':
         return (
           <LocationSheet
-            title="Destination"
-            subtitle="Select destination"
+            pickupLocation={pickupLocation}
+            destinationLocation={destinationLocation}
+            currentStep={bookingStep}
+            onSelectLocation={handleDestinationNext}
+            onPressChangeonMap={() => {
+              bottomSheetRef.current?.close();
+            }}
+          />
+        );
+
+      case 'Pickup Again':
+        return (
+          <LocationSheet
+            title="Pick Up Location"
+            subtitle="Select pickup location"
+            currentLocation={pickupLocation}
             currentLocation={destinationLocation}
             currentStep={bookingStep}
             onSelectLocation={location => {
               setDestinationLocation(location);
-              advanceStep();
+              setStep('');
             }}
           />
         );
 
       case 'Trip Details':
         return (
-          <BookingBottomSheet
+          <TripDetailsSheet
             currentStep={bookingStep}
             steps={bookingSteps}
+            bookingData={estimate}
             selectedAmbulance={selectedAmbulance}
-            pickupLocation={pickupLocation?.address}
-            destinationLocation={destinationLocation?.address}
+            pickupLocation={pickupLocation?.name}
+            destinationLocation={destinationLocation?.name}
             setSelectedAmbulance={setSelectedAmbulance}
-            onAdvance={advanceStep}
+            onNext={async () => {
+              let data = await getEstimate({
+                pickupLocation: pickupLocation,
+                destination: destinationLocation,
+                ambulanceType: selectedAmbulance?.type,
+              });
+              // setStep('Searching')
+            }}
           />
         );
 
@@ -161,7 +189,7 @@ const BookingScreen = ({ navigation }: Props) => {
             currentStep={bookingStep}
             destination={destinationLocation?.address}
             selectedAmbulance={selectedAmbulance}
-            nextStep={advanceStep}
+            nextStep={setStep}
             driverData={{
               driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
               driverName: 'Ahmed Khan',
@@ -195,6 +223,40 @@ const BookingScreen = ({ navigation }: Props) => {
     }
   };
 
+  const onConfirmPickUp = async () => {
+    let location = await getLocationWithName(
+      selected?.latitude,
+      selected?.longitude,
+    );
+    if (location) {
+      await setPickupLocation(location);
+      bottomSheetRef.current?.expand();
+    }
+  };
+
+  const onConfirmDestination = async () => {
+    let location = await getLocationWithName(
+      selected?.latitude,
+      selected?.longitude,
+    );
+    if (location) {
+      await setDestinationLocation(location);
+      bottomSheetRef.current?.expand();
+    }
+  };
+
+  const handleDestinationNext = async (location: Location) => {
+    console.log(location, 'dest next');
+    setDestinationLocation(location);
+    let data = await getEstimate({
+      pickupLocation: pickupLocation,
+      destination: destinationLocation,
+      ambulanceType: selectedAmbulance?.type,
+    });
+    await setEstimate(data);
+    setStep('Trip Details');
+  };
+
   const showCenterPin =
     bookingStep === 'Pickup' || bookingStep === 'Destination';
 
@@ -206,14 +268,24 @@ const BookingScreen = ({ navigation }: Props) => {
         markers={markers}
         showCenterPin={showCenterPin}
         title={'Booking Ambulance'}
-      />
+        onRegionChangeComplete={setSelected}
+      >
+        <AppButton
+          title="Confirm Location"
+          style={globalStyles.absBottomTxt}
+          onPress={
+            bookingStep === 'Pickup' ? onConfirmPickUp : onConfirmDestination
+          }
+        />
+      </BaseMap>
       {/* ) : null} */}
 
       {/* <BackButton title="Book Ambulance" /> */}
 
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['35%', '60%', '90%']}
+        index={0}
+        snapPoints={['40%', '60%', '90%']}
         enablePanDownToClose={false}
       >
         {renderSheetContent()}

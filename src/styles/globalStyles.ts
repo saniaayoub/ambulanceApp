@@ -271,6 +271,9 @@ export const useGlobalStyles = () => {
     borderDark: {
       borderColor: colors.text,
     },
+    mdroundBorder: {
+      borderRadius: radius.base,
+    },
     round: {
       borderRadius: radius.round,
     },

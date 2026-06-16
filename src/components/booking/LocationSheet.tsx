@@ -1,15 +1,17 @@
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialIcons from '@react-native-vector-icons/material-design-icons';
-import React, { useCallback, useState, type FC } from 'react';
+import React, { useCallback, useEffect, useState, type FC } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { bookingSteps } from '../../hooks/useBookingSheetContent';
+import { bookingSteps } from '../../hooks/useBookingData';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import AppButton from '../AppButton';
 import BookingStepIndicator from './BookingStepIndicator';
+import { Location } from '../../stores/locationStore';
+import AppInput from '../AppInput';
 
-type Location = {
+type LocationItem = {
   id: string;
   name: string;
   address: string;
@@ -18,14 +20,16 @@ type Location = {
 };
 
 type Props = {
-  onSelectLocation: (location: string) => void;
-  currentLocation?: string;
-  title?: string;
-  subtitle?: string;
+  onSelectLocation: (location: Location) => void;
+  onCurrentLocationPress?: () => void;
+  onPressChangeonMap: () => void;
+  currentLocation?: Location;
+  pickupLocation?: Location;
+  destinationLocation?: Location;
   currentStep: string;
 };
 
-const recentLocations: Location[] = [
+const recentLocations: LocationItem[] = [
   {
     id: '1',
     name: 'Home',
@@ -60,10 +64,14 @@ const LocationSheet: FC<Props> = ({
   onSelectLocation,
   currentLocation,
   currentStep,
+  pickupLocation,
+  destinationLocation,
+  onPressChangeonMap,
+  onCurrentLocationPress,
 }) => {
   const styles = useGlobalStyles();
-  const [selectedLocation, setSelectedLocation] = useState<string>(
-    currentLocation || '',
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null,
   );
   const tabStyle = [
     globalStyles.flexStart,
@@ -73,13 +81,30 @@ const LocationSheet: FC<Props> = ({
     styles.text,
     styles.card,
   ];
-  const handleSelectLocation = useCallback((location: string) => {
-    setSelectedLocation(location);
-  }, []);
+  useEffect(() => {
+    if (pickupLocation) {
+      setSelectedLocation(pickupLocation);
+    }
+  }, [pickupLocation]);
 
-  const handleConfirm = useCallback(() => {
+  useEffect(() => {
+    if (destinationLocation) {
+      setSelectedLocation(destinationLocation);
+    }
+  }, [destinationLocation]);
+
+  // useEffect(() => {
+  //   setSelectedLocation(null);
+  // }, [currentStep]);
+
+  const handleSelectLocation = (location: Location) => {
+    setSelectedLocation(location);
+  };
+
+  const handleConfirm = () => {
+    if (!selectedLocation) return;
     onSelectLocation(selectedLocation);
-  }, [selectedLocation, onSelectLocation]);
+  };
 
   const savedAddresses = recentLocations.filter(loc => loc.isSaved);
   const recentSearches = recentLocations.filter(loc => !loc.isSaved);
@@ -116,6 +141,7 @@ const LocationSheet: FC<Props> = ({
     </Pressable>
   );
 
+  // console.log('hi', destinationLocation, pickupLocation);
   return (
     <BottomSheetScrollView
       scrollEnabled={true}
@@ -123,24 +149,58 @@ const LocationSheet: FC<Props> = ({
       style={globalStyles.padding15}
     >
       <BookingStepIndicator currentStep={currentStep} steps={bookingSteps} />
+      {pickupLocation?.name ? (
+        <Text style={[styles.smallText, globalStyles.mV10]}>
+          Pick Up:{' '}
+          <Text style={[styles.h6, globalStyles.mB10]}>
+            {pickupLocation?.name}
+          </Text>
+        </Text>
+      ) : null}
 
-      <Text style={[styles.h6, globalStyles.mV10]}> Healthy smile clinic</Text>
+      {destinationLocation?.name ? (
+        <Text style={[styles.smallText, globalStyles.mB10]}>
+          Destination:{' '}
+          <Text style={[styles.h6, globalStyles.mB10]}>
+            {destinationLocation?.name}
+          </Text>
+        </Text>
+      ) : null}
+      {currentStep === 'Pickup' ? (
+        <>
+          <AppButton
+            title="Choose on map"
+            icon="map-marker-outline"
+            iconColor={theme.colors.common.primary}
+            style={tabStyle}
+            textStyle={styles.lightText}
+            onPress={onPressChangeonMap}
+          />
+          <AppButton
+            title={'Use current location'}
+            icon={'crosshairs-gps'}
+            iconColor={theme.colors.common.primary}
+            style={tabStyle}
+            textStyle={styles.lightText}
+            onPress={onCurrentLocationPress}
+          />
+        </>
+      ) : (
+        <AppInput
+          leftIcon="magnify"
+          placeholder="Search"
+          inputStyle={styles.mdroundBorder}
+          rightIcon="map"
+          onPressRightIcon={onPressChangeonMap}
+        />
+      )}
 
       <AppButton
-        title="Use current location"
-        icon="crosshairs-gps"
-        iconColor={theme.colors.common.primary}
-        style={tabStyle}
-        textStyle={styles.lightText}
+        title={`Confirm`}
+        onPress={handleConfirm}
+        // disabled={!selectedLocation}
       />
-      <AppButton
-        title="Choose on map"
-        icon="map-marker-outline"
-        iconColor={theme.colors.common.primary}
-        style={tabStyle}
-        textStyle={styles.lightText}
-      />
-
+      {/* 
       {savedAddresses.length > 0 && (
         <View style={globalStyles.mB15}>
           <Text style={[styles.h6, globalStyles.mB10]}>Saved addresses</Text>
@@ -153,15 +213,7 @@ const LocationSheet: FC<Props> = ({
           <Text style={[styles.h5, globalStyles.mB10]}>Recent locations</Text>
           {recentSearches.map(location => renderLocationItem(location))}
         </View>
-      )}
-
-      <View style={globalStyles.mV10}>
-        <AppButton
-          title={`Confirm`}
-          onPress={handleConfirm}
-          disabled={!selectedLocation}
-        />
-      </View>
+      )} */}
     </BottomSheetScrollView>
   );
 };

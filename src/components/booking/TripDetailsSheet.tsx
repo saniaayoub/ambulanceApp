@@ -3,43 +3,50 @@ import MaterialDesignIcons from '@react-native-vector-icons/material-design-icon
 import React, { useState, type FC } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { VentilatorAmbulance } from '../../assets/images/pngs';
-import AppButton from '../../components/AppButton';
-import { bookingSteps } from '../../hooks/useBookingSheetContent';
-import { ambulanceCards } from '../../screens/App/User/Home/Home';
-import { AmbulanceType, BookingStep } from '../../stores/bookingStore';
+import { bookingSteps } from '../../hooks/useBookingData';
+import { BookingStep } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
-import AmbulanceCard from '../home/AmbulanceCard';
+import { ambulanceImages } from '../../utils/constants';
+import AppButton from '../AppButton';
+import { AmbulanceType } from '../home/AmbulanceCard';
+import AmbulanceCategories from './AmbulanceCategories';
 import BookingStepIndicator from './BookingStepIndicator';
 import DetailColumnComp from './DetailColumnComp';
 import InfoCard from './InfoCard';
+import { useHomeData } from '../../hooks/useHomeData';
 
 type Props = {
   currentStep: BookingStep;
   steps: BookingStep[];
-  selectedAmbulance: string;
+  bookingData: any;
+  selectedAmbulance: AmbulanceType;
   setSelectedAmbulance: (type: AmbulanceType) => void;
   pickupLocation: string;
   destinationLocation: string;
-  onAdvance: () => void;
+  onNext: () => void;
 };
 
-const BookingBottomSheetContent: FC<Props> = ({
+const TripDetailsSheet: FC<Props> = ({
   currentStep,
   // steps,
+  bookingData,
   selectedAmbulance,
   setSelectedAmbulance,
-  // pickupLocation,
-  // destinationLocation,
-  onAdvance,
+  pickupLocation,
+  destinationLocation,
+  onNext,
 }) => {
   const styles = useGlobalStyles();
+  const { data, isLoading } = useHomeData();
   // const currentIndex = steps.indexOf(currentStep);
   // const nextLabel =
   //   currentIndex < steps.length - 1 ? steps[currentIndex + 1] : 'Completed';
   // const [sheetMode, setSheetMode] = useState<'summary' | 'payment'>('summary');
   const [showAmbulance, setShowAmbulance] = useState(false);
+  const handleShowAmbulance = () => {
+    setShowAmbulance(!showAmbulance);
+  };
 
   return (
     <BottomSheetScrollView
@@ -50,32 +57,25 @@ const BookingBottomSheetContent: FC<Props> = ({
       <DetailColumnComp
         title1={'Pickup'}
         title2={'Destination'}
-        text1={'Healthy Smile Clinic'}
-        text2={'Jinnah Hospital'}
+        text1={pickupLocation}
+        text2={destinationLocation}
         style={globalStyles.mT10}
+        textStyle={styles.smallText}
       />
       <InfoCard
-        image={VentilatorAmbulance}
-        name={selectedAmbulance}
+        image={ambulanceImages[selectedAmbulance?.type]}
+        name={selectedAmbulance?.label}
         rightActionText="Change"
-        onPressRightAction={() => {
-          setShowAmbulance(prev => !prev);
-        }}
+        onPressRightAction={handleShowAmbulance}
         footerText="ETA 6 min"
       />
       {showAmbulance && (
-        <View
-          style={[styles.border, globalStyles.mT10, globalStyles.padding10]}
-        >
-          {ambulanceCards.map(card => (
-            <AmbulanceCard
-              card={card}
-              key={card.title}
-              selected={card.title === selectedAmbulance}
-              onPress={() => setSelectedAmbulance(card.title as AmbulanceType)}
-            />
-          ))}
-        </View>
+        <AmbulanceCategories
+          selectedAmbulance={selectedAmbulance}
+          setSelectedAmbulance={setSelectedAmbulance}
+          data={data}
+          isLoading={isLoading}
+        />
       )}
 
       <DetailColumnComp
@@ -117,11 +117,11 @@ const BookingBottomSheetContent: FC<Props> = ({
         </TouchableOpacity>
 
         <View style={styles.primaryFlexButton}>
-          <AppButton title="Find Ambulance" onPress={onAdvance} />
+          <AppButton title="Find Ambulance" onPress={onNext} />
         </View>
       </View>
     </BottomSheetScrollView>
   );
 };
 
-export default React.memo(BookingBottomSheetContent);
+export default React.memo(TripDetailsSheet);

@@ -2,7 +2,7 @@ import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React from 'react';
 import { Text } from 'react-native';
 import AppButton from '../../components/AppButton';
-import { bookingSteps } from '../../hooks/useBookingSheetContent';
+import { bookingSteps } from '../../hooks/useBookingData';
 import { BookingStep } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import BookingStepIndicator from './BookingStepIndicator';

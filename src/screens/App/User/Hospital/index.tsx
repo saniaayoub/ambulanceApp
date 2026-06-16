@@ -1,6 +1,6 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
-import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, Linking, Text, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FlatList, Linking, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import AppInput from '../../../../components/AppInput';
 import BackButton from '../../../../components/BackButton';
@@ -9,6 +9,16 @@ import ListEmptyComp from '../../../../components/ListEmptyComp';
 import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import theme from '../../../../styles/theme';
 import AppButton from '../../../../components/AppButton';
+import {
+  useHomeData,
+  useHospitalDetails,
+  useHospitalsData,
+} from '../../../../hooks/useHomeData';
+import { useLocation } from '../../../../hooks/useLocation';
+import { getHospitalDetails } from '../../../../services/bookingService';
+import { useMutation } from '@tanstack/react-query';
+import { useBookingStore } from '../../../../stores/bookingStore';
+import { useHospitalActions } from '../../../../hooks/useHospitalActions';
 
 const FILTERS = ['All', 'Emergency', 'Private', 'Government'];
 
@@ -47,33 +57,39 @@ const HOSPITALS = [
   },
 ];
 
-const HospitalsScreen = () => {
+const HospitalsScreen = ({ navigation }: any) => {
   const styles = useGlobalStyles();
+  const { currentLocation } = useLocation();
+  const { startHospitalBooking, callHospital } = useHospitalActions(navigation);
+  const { data } = useHospitalsData(
+    currentLocation?.latitude,
+    currentLocation?.longitude,
+  );
+  const nearbyHospitals = useMemo(
+    () => data?.data || { nearbyHospitals: [] },
+    [data],
+  );
 
   const [search, setSearch] = useState('');
+
   const [selectedFilter, setSelectedFilter] = useState('All');
-  const [nearestHospital, setNearestHospital] = useState({
-    hospitalName: 'Agha Khan',
-    hospitalDistance: '12 km',
-  });
+  // const [nearestHospital, setNearestHospital] = useState({
+  //   hospitalName: 'Agha Khan',
+  //   hospitalDistance: '12 km',
+  // });
 
   const filteredHospitals = useMemo(() => {
-    return HOSPITALS.filter(item => {
-      const filterMatch =
-        selectedFilter === 'All' ? true : item.type === selectedFilter;
-
-      const searchMatch = item.name
-        .toLowerCase()
+    return nearbyHospitals.filter(item => {
+      const searchMatch = item?.name
+        ?.toLowerCase()
         .includes(search.toLowerCase());
-
-      return filterMatch && searchMatch;
+      return searchMatch;
     });
-  }, [search, selectedFilter]);
+  }, [search, nearbyHospitals]);
 
   const renderHospital = useCallback(
     ({ item }: any) => (
-      <TouchableOpacity
-        activeOpacity={0.8}
+      <View
         style={[
           styles.card,
           styles.border,
@@ -83,13 +99,13 @@ const HospitalsScreen = () => {
       >
         <View style={[globalStyles.row, globalStyles.spaceBetween]}>
           <View style={[globalStyles.flex]}>
-            <Text style={styles.h6}>{item.name}</Text>
+            <Text style={styles.h6}>{item?.name}</Text>
 
-            <Text style={[styles.smallText]}>{item.address}</Text>
+            <Text style={[styles.smallText]}>{item?.address}</Text>
           </View>
 
           <View style={[globalStyles.flexEnd]}>
-            <Text style={styles.h6}>{item.distance}</Text>
+            <Text style={styles.h6}>{item?.distanceKm} km</Text>
             <View
               style={[
                 styles.lightGreyCard,
@@ -98,7 +114,7 @@ const HospitalsScreen = () => {
                 styles.round,
               ]}
             >
-              <Text style={[styles.smallText]}>{item.type}</Text>
+              <Text style={[styles.smallText]}>{item?.type}</Text>
             </View>
           </View>
         </View>
@@ -118,6 +134,7 @@ const HospitalsScreen = () => {
               globalStyles.paddingTB5,
             ]}
             textStyle={styles.text}
+            onPress={() => callHospital(item?.placeId)}
           />
           <AppButton
             icon={'map-marker'}
@@ -128,51 +145,54 @@ const HospitalsScreen = () => {
               globalStyles.mT10,
               globalStyles.paddingTB5,
             ]}
+            onPress={() => {
+              startHospitalBooking(item);
+            }}
           />
         </View>
-      </TouchableOpacity>
+      </View>
     ),
     [selectedFilter],
   );
 
-  const NearestHospital = useCallback(() => {
-    return (
-      <TouchableOpacity
-        style={[
-          styles.card,
-          styles.border,
-          globalStyles.padding15,
-          globalStyles.mB10,
-          styles.lightGreyCard,
-        ]}
-      >
-        <View style={[globalStyles.row, globalStyles.alignCenter]}>
-          <MaterialDesignIcons
-            name="hospital"
-            size={moderateScale(20)}
-            color={theme.colors.common.primary}
-          />
-          <Text style={styles.h6}>Nearest Emergency Hospital</Text>
-        </View>
+  // const NearestHospital = useCallback(() => {
+  //   return (
+  //     <TouchableOpacity
+  //       style={[
+  //         styles.card,
+  //         styles.border,
+  //         globalStyles.padding15,
+  //         globalStyles.mB10,
+  //         styles.lightGreyCard,
+  //       ]}
+  //     >
+  //       <View style={[globalStyles.row, globalStyles.alignCenter]}>
+  //         <MaterialDesignIcons
+  //           name="hospital"
+  //           size={moderateScale(20)}
+  //           color={theme.colors.common.primary}
+  //         />
+  //         <Text style={styles.h6}>Nearest Emergency Hospital</Text>
+  //       </View>
 
-        <View
-          style={[
-            globalStyles.row,
-            globalStyles.alignCenter,
-            globalStyles.justifyBetween,
-          ]}
-        >
-          <Text style={[styles.h6, globalStyles.mT10]}>
-            {nearestHospital.hospitalName}
-          </Text>
+  //       <View
+  //         style={[
+  //           globalStyles.row,
+  //           globalStyles.alignCenter,
+  //           globalStyles.justifyBetween,
+  //         ]}
+  //       >
+  //         <Text style={[styles.h6, globalStyles.mT10]}>
+  //           {nearestHospital.hospitalName}
+  //         </Text>
 
-          <Text style={[styles.smallText, globalStyles.mT10]}>
-            {nearestHospital.hospitalDistance} away
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  }, [nearestHospital]);
+  //         <Text style={[styles.smallText, globalStyles.mT10]}>
+  //           {nearestHospital.hospitalDistance} away
+  //         </Text>
+  //       </View>
+  //     </TouchableOpacity>
+  //   );
+  // }, [nearestHospital]);
 
   return (
     <View style={[globalStyles.flex, styles.card]}>
@@ -180,7 +200,7 @@ const HospitalsScreen = () => {
       <FlatList
         contentContainerStyle={globalStyles.padding15}
         data={filteredHospitals}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.placeId}
         renderItem={renderHospital}
         ListHeaderComponent={
           <>
@@ -188,14 +208,16 @@ const HospitalsScreen = () => {
               placeholder="Search"
               leftIcon={'magnify'}
               variant="shadowed"
+              value={search}
+              onChangeText={setSearch}
             />
 
-            <Filters
+            {/* <Filters
               FILTERS={FILTERS}
               setSelectedFilter={setSelectedFilter}
               selectedFilter={selectedFilter}
             />
-            <NearestHospital />
+            <NearestHospital /> */}
           </>
         }
         ListEmptyComponent={
@@ -204,50 +226,6 @@ const HospitalsScreen = () => {
       />
     </View>
   );
-};
-
-const localStyles = {
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: moderateScale(12),
-    paddingHorizontal: moderateScale(12),
-    height: moderateScale(50),
-  },
-
-  input: {
-    flex: 1,
-    marginLeft: moderateScale(10),
-  },
-
-  filterChip: {
-    borderWidth: 1,
-    borderColor: '#E53935',
-    paddingHorizontal: moderateScale(16),
-    paddingVertical: moderateScale(8),
-    borderRadius: moderateScale(30),
-    marginRight: moderateScale(10),
-  },
-
-  selectedChip: {
-    backgroundColor: '#E53935',
-  },
-
-  actionButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: moderateScale(12),
-    borderRadius: moderateScale(12),
-  },
-
-  typeChip: {
-    paddingHorizontal: moderateScale(10),
-    paddingVertical: moderateScale(4),
-    borderRadius: moderateScale(20),
-    marginTop: moderateScale(8),
-  },
 };
 
 export default HospitalsScreen;

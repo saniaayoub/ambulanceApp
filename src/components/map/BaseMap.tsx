@@ -37,7 +37,6 @@ const BaseMap = ({
   children,
   title = '',
 }: BaseMapProps) => {
-  console.log(initialRegion, 'j');
   return (
     <View style={globalStyles.flex}>
       <MapView
@@ -49,7 +48,6 @@ const BaseMap = ({
         showsMyLocationButton
         // region={region}
         onRegionChangeComplete={region => {
-          console.log(region, 'abc');
           onRegionChangeComplete?.(region);
         }}
       />

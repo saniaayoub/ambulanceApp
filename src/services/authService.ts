@@ -27,14 +27,12 @@ export type ResetPasswordPayload = {
   role: string;
 };
 
-export type AuthResponse<T = any> =
-  | { success: true; data: T }
-  | { success: false; error: any };
+export type Response<T = any> = T | { success: false; error: any };
 
-export const handleResponse = async (config: any): Promise<AuthResponse> => {
+export const handleResponse = async (config: any): Promise<Response> => {
   try {
     const data = await apiCall({ ...config, skipQueue: true });
-    return { success: true, data };
+    return data;
   } catch (error) {
     return { success: false, error };
   }

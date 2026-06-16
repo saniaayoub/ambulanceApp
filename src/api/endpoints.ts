@@ -26,9 +26,21 @@ export const ENDPOINTS = {
 
   // Home/Dashboard Endpoints
   HOME: {
-    DASHBOARD: '/home/dashboard',
-    FEED: '/home/feed',
-    NOTIFICATIONS: '/home/notifications',
+    DASHBOARD: '/booking/home',
+    // FEED: '/home/feed',
+    // NOTIFICATIONS: '/home/notifications',
+  },
+  HOSPITALS: {
+    NEARBYHOSPITALS: '/hospitals/nearbyHospitals',
+    DETAILS: (placeId: string) => `/hospitals/${placeId}`,
+    // FEED: '/home/feed',
+    // NOTIFICATIONS: '/home/notifications',
+  },
+
+  BOOKING: {
+    ESTIMATE: '/booking/estimate',
+    // FEED: '/home/feed',
+    // NOTIFICATIONS: '/home/notifications',
   },
 
   // Details/Items Endpoints
