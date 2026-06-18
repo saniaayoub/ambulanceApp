@@ -1,7 +1,47 @@
 import Geolocation from '@react-native-community/geolocation';
 import { PermissionsAndroid, Platform } from 'react-native';
 import Config from 'react-native-config';
+import polyline from '@mapbox/polyline';
+import { Location } from '../stores/locationStore';
+import axios from 'axios';
+import { apiCall } from '../api/apiCall';
+import { handleResponse } from './authService';
+import { getDistance } from 'geolib';
 
+export const getNearbyDrivers = async (drivers: any[], pickup: Location) => {
+  const nearbyDrivers = drivers.map(item => ({
+    ...item,
+    distance: getDistance(
+      { lat: pickup?.latitude, lng: pickup?.longitude },
+      {
+        lat: item.driver.currentLocation.lat,
+        lng: item.driver.currentLocation.lng,
+      },
+    ),
+  }));
+  return nearbyDrivers;
+};
+export const fetchRoute = async (pickup: Location, destination: Location) => {
+  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${pickup.latitude},${pickup.longitude}&destination=${destination.latitude},${destination.longitude}&key=${Config.API_KEY}`;
+  try {
+    const res = await handleResponse({
+      method: 'get',
+      url: url,
+    });
+
+    const points = polyline.decode(res.routes[0].overview_polyline.points);
+
+    const coords = points.map(([lat, lng]) => ({
+      latitude: lat,
+      longitude: lng,
+    }));
+
+    return coords;
+  } catch (error) {
+    // console.log(error, 'polyline error');
+    return [];
+  }
+};
 export const getCurrentLocation = async () =>
   new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(

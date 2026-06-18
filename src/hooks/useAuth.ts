@@ -17,7 +17,7 @@ import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { formatPhoneNumber } from '../utils/functions';
 
-const getErrorMessage = (error: any) =>
+export const getErrorMessage = (error: any) =>
   error?.response?.data?.message || error?.message || 'Something went wrong';
 
 export const useAuth = () => {
@@ -59,7 +59,6 @@ export const useAuth = () => {
         toastError(getErrorMessage(response.error));
         return response;
       }
-      console.log('hi', response);
       setToken(response.data.token);
       setUserData(response.data.user);
 
@@ -104,7 +103,6 @@ export const useAuth = () => {
 
     try {
       const result = await auth().signInWithPhoneNumber(phoneNumber);
-      console.log(result, 'result otp');
 
       setOTPResult(result);
       navigation.navigate('OTPScreen');
@@ -113,7 +111,6 @@ export const useAuth = () => {
       );
       return result;
     } catch (err) {
-      console.log(err, 'firebasse error');
       toastError('Failed to send OTP');
     } finally {
       hideLoader();
@@ -122,12 +119,10 @@ export const useAuth = () => {
 
   // 2️⃣ Verify OTP locally first
   const verifyOtp = async (otp: string) => {
-    console.log(otpResult, otp);
     if (otpResult && otp.length) {
       try {
         const userCredential = await otpResult.confirm(otp);
         const idToken = await userCredential.user.getIdToken(); // Firebase ID token
-        console.log('Firebase ID Token:', idToken);
 
         // Send this token to your backend for verification
         const response = await authVerifyOtp({ idToken: idToken, role: role });

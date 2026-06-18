@@ -24,21 +24,25 @@ const bookingSteps: BookingStep[] = [
 ];
 
 interface BookingState {
+  trip: object | null;
   selectedAmbulance: AmbulanceType;
   pickupLocation: Location;
   destinationLocation: Location;
   bookingStep: BookingStep;
   isBookingActive: boolean;
+  homeData: object | null;
+
   setSelectedAmbulance: (value: AmbulanceType) => void;
   setPickupLocation: (value: Location) => void;
   setDestinationLocation: (value: Location) => void;
   setStep: (step: BookingStep) => void;
   resetBooking: () => void;
   startBooking: () => void;
-  homeData: object | null;
+  setTrip: (trip: object) => void;
 }
 
 export const useBookingStore = create<BookingState>(set => ({
+  trip: null,
   selectedAmbulance: {
     type: 'NORMAL',
     label: 'Normal Ambulance',
@@ -59,6 +63,8 @@ export const useBookingStore = create<BookingState>(set => ({
   },
   bookingStep: 'Pickup',
   isBookingActive: false,
+  setTrip: trip => set({ trip }),
+
   setSelectedAmbulance: selectedAmbulance => set({ selectedAmbulance }),
   setPickupLocation: pickupLocation => set({ pickupLocation }),
   setDestinationLocation: destinationLocation => set({ destinationLocation }),

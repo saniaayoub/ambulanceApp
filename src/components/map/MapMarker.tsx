@@ -27,7 +27,14 @@ const MapMarker = ({ type }: Props) => {
   };
   const styles = useGlobalStyles();
   return (
-    <View style={[globalStyles.size40, globalStyles.centered, styles.whiteBtn]}>
+    <View
+      style={[
+        globalStyles.size40,
+        globalStyles.centered,
+        styles.whiteBtn,
+        styles.round,
+      ]}
+    >
       <Text>{getEmoji()}</Text>
     </View>
   );

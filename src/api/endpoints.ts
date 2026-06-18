@@ -26,21 +26,23 @@ export const ENDPOINTS = {
 
   // Home/Dashboard Endpoints
   HOME: {
-    DASHBOARD: '/booking/home',
-    // FEED: '/home/feed',
-    // NOTIFICATIONS: '/home/notifications',
+    DASHBOARD: 'booking/home',
   },
+
+  DRIVER: {
+    ONLINEDRIVERS: 'driver/onlineDrivers',
+  },
+
   HOSPITALS: {
-    NEARBYHOSPITALS: '/hospitals/nearbyHospitals',
-    DETAILS: (placeId: string) => `/hospitals/${placeId}`,
-    // FEED: '/home/feed',
-    // NOTIFICATIONS: '/home/notifications',
+    NEARBYHOSPITALS: 'hospitals/nearbyHospitals',
+    DETAILS: (placeId: string) => `hospitals/${placeId}`,
   },
 
   BOOKING: {
-    ESTIMATE: '/booking/estimate',
-    // FEED: '/home/feed',
-    // NOTIFICATIONS: '/home/notifications',
+    ESTIMATE: 'booking/estimate',
+    CREATE: 'booking/create',
+    CANCEL: 'booking/cancel',
+    STATUS: (tripId: string) => `booking/status/${tripId}`,
   },
 
   // Details/Items Endpoints

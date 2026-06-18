@@ -3,7 +3,7 @@ import MaterialIcons from '@react-native-vector-icons/material-design-icons';
 import React, { useCallback, useEffect, useState, type FC } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { bookingSteps } from '../../hooks/useBookingData';
+import { bookingSteps } from '../../hooks/useBooking';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import AppButton from '../AppButton';
@@ -141,7 +141,6 @@ const LocationSheet: FC<Props> = ({
     </Pressable>
   );
 
-  // console.log('hi', destinationLocation, pickupLocation);
   return (
     <BottomSheetScrollView
       scrollEnabled={true}

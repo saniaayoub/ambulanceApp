@@ -1,6 +1,6 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import BaseMap from '../../../../components/map/BaseMap';
 
@@ -10,7 +10,7 @@ import LocationSheet from '../../../../components/booking/LocationSheet';
 import RideCompletedSheet from '../../../../components/booking/RideCompletedSheet';
 import SearchingSheet from '../../../../components/booking/SearchingSheet';
 
-import { bookingSteps, useBookingData } from '../../../../hooks/useBookingData';
+import { bookingSteps, useBooking } from '../../../../hooks/useBooking';
 import { DrawerStackParamList } from '../../../../navigation/DriverDrawer';
 
 import { useBookingStore } from '../../../../stores/bookingStore';
@@ -20,27 +20,39 @@ import { Region } from 'react-native-maps';
 import AppButton from '../../../../components/AppButton';
 import { useLocation } from '../../../../hooks/useLocation';
 import { globalStyles } from '../../../../styles/globalStyles';
+import { useIsFocused } from '@react-navigation/native';
+import { showAlert } from '../../../../utils/functions';
+import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
 
 type Props = NativeStackScreenProps<DrawerStackParamList, 'Booking'>;
 
 const BookingScreen = ({ navigation }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const [isMapLocked, setIsMapLocked] = useState(false);
+  const isFocused = useIsFocused();
 
   const { currentLocation } = useLocationStore();
-  const { getEstimate } = useBookingData();
-  const { getLocationWithName } = useLocation();
-
   const {
-    bookingStep,
-    pickupLocation,
-    destinationLocation,
-    selectedAmbulance,
-    setPickupLocation,
-    setDestinationLocation,
-    setSelectedAmbulance,
-    setStep,
-  } = useBookingStore();
+    getStatus: getTripStatus,
+    getEstimate,
+    getOnlineDriversList,
+    drivers: nearbyDrivers,
+    handleCreateBooking,
+    handleBookingCancel,
+  } = useBooking();
+  const { getLocationWithName } = useLocation();
+  const bookingStep = useBookingStore(s => s.bookingStep);
+  const setTrip = useBookingStore(s => s.setTrip);
+  const trip = useBookingStore(s => s.trip);
 
+  const pickupLocation = useBookingStore(s => s.pickupLocation);
+  const destinationLocation = useBookingStore(s => s.destinationLocation);
+  const selectedAmbulance = useBookingStore(s => s.selectedAmbulance);
+
+  const setPickupLocation = useBookingStore(s => s.setPickupLocation);
+  const setDestinationLocation = useBookingStore(s => s.setDestinationLocation);
+  const setSelectedAmbulance = useBookingStore(s => s.setSelectedAmbulance);
+  const setStep = useBookingStore(s => s.setStep);
   const [region, setRegion] = useState<Region>({
     latitude: currentLocation?.latitude,
     longitude: currentLocation?.longitude,
@@ -48,60 +60,74 @@ const BookingScreen = ({ navigation }: Props) => {
     longitudeDelta: 0.01,
   });
 
-  const [selected, setSelected] = useState(region);
+  const [selected, setSelected] = useState({
+    latitude: currentLocation?.latitude,
+    longitude: currentLocation?.longitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  });
   const [estimate, setEstimate] = useState(null);
 
-  const nearbyDrivers = [
-    {
-      id: '1',
-      lat: 24.865,
-      lng: 67.01,
-    },
-    {
-      id: '2',
-      lat: 24.862,
-      lng: 67.005,
-    },
-    {
-      id: '3',
-      lat: 24.859,
-      lng: 67.015,
-    },
-  ];
+  const markers = useMemo(
+    () => [
+      ...(pickupLocation
+        ? [
+            {
+              id: 'pickup',
+              latitude: pickupLocation.latitude,
+              longitude: pickupLocation.longitude,
+              type: 'pickup' as const,
+            },
+          ]
+        : []),
 
-  const markers = [
-    ...(pickupLocation
-      ? [
-          {
-            id: 'pickup',
-            latitude: pickupLocation.latitude,
-            longitude: pickupLocation.longitude,
-            type: 'pickup' as const,
-          },
-        ]
-      : []),
+      ...(destinationLocation
+        ? [
+            {
+              id: 'destination',
+              latitude: destinationLocation.latitude,
+              longitude: destinationLocation.longitude,
+              type: 'destination' as const,
+            },
+          ]
+        : []),
 
-    ...(destinationLocation
-      ? [
-          {
-            id: 'destination',
-            latitude: destinationLocation.latitude,
-            longitude: destinationLocation.longitude,
-            type: 'destination' as const,
-          },
-        ]
-      : []),
+      ...(bookingStep === 'Searching'
+        ? nearbyDrivers.map((item: any) => ({
+            id: item?.user?.phone, // or any unique value
+            latitude: item?.driver?.currentLocation?.lat,
+            longitude: item?.driver?.currentLocation?.lng,
+            type: 'driver' as const,
+          }))
+        : []),
+    ],
+    [pickupLocation, destinationLocation, bookingStep, nearbyDrivers],
+  );
 
-    ...(bookingStep === 'Searching'
-      ? nearbyDrivers.map(driver => ({
-          id: driver.id,
-          latitude: driver.lat,
-          longitude: driver.lng,
-          type: 'driver' as const,
-        }))
-      : []),
-  ];
+  const handleShowAlert = () => {
+    showAlert(async () => {
+      await handleBookingCancel();
+      navigation?.goBack();
+    }, 'Do you want to stop search?');
+  };
 
+  const handleRideCancel = () => {
+    showAlert(async () => {
+      setStep('Cancelled');
+    }, 'Are you sure you want to cancel this ride?');
+  };
+
+  console.log(trip, bookingStep, 'trip');
+
+  const handleSearchStart = async () => {
+    await handleCreateBooking(
+      pickupLocation,
+      destinationLocation,
+      selectedAmbulance?.type,
+    ).then(() => {
+      setStep('Searching');
+    });
+  };
   const renderSheetContent = () => {
     switch (bookingStep) {
       case 'Pickup':
@@ -157,19 +183,12 @@ const BookingScreen = ({ navigation }: Props) => {
           <TripDetailsSheet
             currentStep={bookingStep}
             steps={bookingSteps}
-            bookingData={estimate}
+            bookingData={{ ...estimate, drivers: nearbyDrivers }}
             selectedAmbulance={selectedAmbulance}
             pickupLocation={pickupLocation?.name}
             destinationLocation={destinationLocation?.name}
             setSelectedAmbulance={setSelectedAmbulance}
-            onNext={async () => {
-              let data = await getEstimate({
-                pickupLocation: pickupLocation,
-                destination: destinationLocation,
-                ambulanceType: selectedAmbulance?.type,
-              });
-              // setStep('Searching')
-            }}
+            onNext={handleSearchStart}
           />
         );
 
@@ -177,9 +196,9 @@ const BookingScreen = ({ navigation }: Props) => {
         return (
           <SearchingSheet
             nearbyCount={nearbyDrivers.length}
-            estimatedTime="10-15 sec"
+            estimatedTime="20-45 sec"
             currentStep={bookingStep}
-            onCancel={() => {}}
+            onCancel={handleShowAlert}
           />
         );
 
@@ -187,9 +206,9 @@ const BookingScreen = ({ navigation }: Props) => {
         return (
           <DriverAssignedSheet
             currentStep={bookingStep}
-            destination={destinationLocation?.address}
+            destination={destinationLocation?.name}
             selectedAmbulance={selectedAmbulance}
-            nextStep={setStep}
+            onCancel={handleRideCancel}
             driverData={{
               driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
               driverName: 'Ahmed Khan',
@@ -218,6 +237,19 @@ const BookingScreen = ({ navigation }: Props) => {
           />
         );
 
+      case 'Cancelled':
+        return (
+          <CancelRideBottomSheet
+            onKeepBooking={() => {
+              setStep('Driver Assigned');
+            }}
+            onCancelBooking={async (reason: string) => {
+              console.log('hi');
+              await handleBookingCancel(reason);
+              navigation.goBack;
+            }}
+          />
+        );
       default:
         return null;
     }
@@ -245,30 +277,66 @@ const BookingScreen = ({ navigation }: Props) => {
     }
   };
 
-  const handleDestinationNext = async (location: Location) => {
-    console.log(location, 'dest next');
-    setDestinationLocation(location);
+  useEffect(() => {
+    if (!isFocused) return;
+
+    const loadData = async () => {
+      if (bookingStep === 'Trip Details') {
+        await getEstimatedData();
+        await getOnlineDriversList(selectedAmbulance?.type, pickupLocation);
+      }
+    };
+
+    loadData();
+  }, [isFocused, bookingStep, selectedAmbulance]);
+
+  useEffect(() => {
+    if (bookingStep !== 'Searching') return;
+
+    const interval = setInterval(async () => {
+      const response = await getTripStatus();
+      if (response?.status === 'ASSIGNED') {
+        setTrip(response);
+        setStep('Driver Assigned');
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [bookingStep]);
+
+  const getEstimatedData = async () => {
     let data = await getEstimate({
       pickupLocation: pickupLocation,
       destination: destinationLocation,
       ambulanceType: selectedAmbulance?.type,
     });
-    await setEstimate(data);
+    setEstimate(data);
+  };
+
+  const handleDestinationNext = async (location: Location) => {
+    setDestinationLocation(location);
+
     setStep('Trip Details');
   };
 
   const showCenterPin =
     bookingStep === 'Pickup' || bookingStep === 'Destination';
 
+  const handleSheetChanges = (index: number) => {
+    setIsMapLocked(index === -1);
+  };
+
   return (
     <View style={globalStyles.flex}>
-      {/* {pickupLocation?.latitude ? ( */}
       <BaseMap
         initialRegion={region}
         markers={markers}
-        showCenterPin={showCenterPin}
+        step={bookingStep}
         title={'Booking Ambulance'}
-        onRegionChangeComplete={setSelected}
+        onRegionChangeComplete={isMapLocked ? () => {} : setSelected}
+        // showCenterPin={showCenterPin}
+        // selected={selected}
+        // onMarkerPress={setSelected}
       >
         <AppButton
           title="Confirm Location"
@@ -278,13 +346,11 @@ const BookingScreen = ({ navigation }: Props) => {
           }
         />
       </BaseMap>
-      {/* ) : null} */}
-
-      {/* <BackButton title="Book Ambulance" /> */}
 
       <BottomSheet
         ref={bottomSheetRef}
         index={0}
+        onChange={handleSheetChanges}
         snapPoints={['40%', '60%', '90%']}
         enablePanDownToClose={false}
       >

@@ -2,11 +2,12 @@ import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React from 'react';
 import { Text } from 'react-native';
 import AppButton from '../../components/AppButton';
-import { bookingSteps } from '../../hooks/useBookingData';
+import { bookingSteps } from '../../hooks/useBooking';
 import { BookingStep } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import BookingStepIndicator from './BookingStepIndicator';
 import DetailColumnComp from './DetailColumnComp';
+import SearchingLoader from './SearchingLoader';
 
 type Props = {
   nearbyCount?: number;
@@ -34,9 +35,7 @@ const SearchingSheet = ({
         🚑{'   '}Finding Ambulance
       </Text>
 
-      <Text style={[styles.text, globalStyles.mB20]}>
-        Searching nearby ambulances...
-      </Text>
+      {currentStep === 'Searching' && <SearchingLoader />}
 
       <DetailColumnComp
         title1="Response"

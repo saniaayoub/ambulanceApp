@@ -1,3 +1,5 @@
+import { Alert } from 'react-native';
+
 export const initials = (name: string) => {
   return name
     .split(' ')
@@ -22,4 +24,23 @@ export const formatPhoneNumber = (phoneNumber: string, countryCode: string) => {
   phone = phone.replace(/^0+/, '');
 
   return `+${code}${phone}`;
+};
+
+export const showAlert = (onConfirm: () => void, text: string) => {
+  Alert.alert(
+    'Cancel Booking',
+    text,
+    [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+        onPress: () => console.log('Cancelled'),
+      },
+      {
+        text: 'OK',
+        onPress: onConfirm,
+      },
+    ],
+    { cancelable: true },
+  );
 };

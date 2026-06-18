@@ -3,7 +3,7 @@ import MaterialDesignIcons from '@react-native-vector-icons/material-design-icon
 import React, { useState, type FC } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { bookingSteps } from '../../hooks/useBookingData';
+import { bookingSteps } from '../../hooks/useBooking';
 import { BookingStep } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
@@ -47,6 +47,10 @@ const TripDetailsSheet: FC<Props> = ({
   const handleShowAmbulance = () => {
     setShowAmbulance(!showAmbulance);
   };
+  const handleSelectAmbulance = ambulance => {
+    handleShowAmbulance();
+    setSelectedAmbulance(ambulance);
+  };
 
   return (
     <BottomSheetScrollView
@@ -72,7 +76,7 @@ const TripDetailsSheet: FC<Props> = ({
       {showAmbulance && (
         <AmbulanceCategories
           selectedAmbulance={selectedAmbulance}
-          setSelectedAmbulance={setSelectedAmbulance}
+          setSelectedAmbulance={handleSelectAmbulance}
           data={data}
           isLoading={isLoading}
         />
@@ -81,16 +85,16 @@ const TripDetailsSheet: FC<Props> = ({
       <DetailColumnComp
         title1={'Distance'}
         title2={'Duration'}
-        text1={'8.2 km'}
-        text2={'15 min'}
+        text1={`${bookingData?.distanceKm} km`}
+        text2={`${bookingData?.durationMinutes} min`}
         style={globalStyles.mT10}
       />
 
       <DetailColumnComp
         title1={'Fare'}
         title2={'Nearby'}
-        text1={'Rs. 2000'}
-        text2={'3 Vehicles'}
+        text1={`Rs. ${bookingData?.fare?.total?.toLocaleString()}`}
+        text2={`${bookingData?.drivers?.length} Ambulances`}
       />
 
       <InfoCard

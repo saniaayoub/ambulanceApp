@@ -10,6 +10,7 @@ import DetailColumnComp from './DetailColumnComp';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { moderateScale } from 'react-native-size-matters';
 import theme from '../../styles/theme';
+import { AmbulanceType } from '../home/AmbulanceCard';
 
 type DriverData = {
   driverName: string;
@@ -20,15 +21,15 @@ type DriverData = {
 type Props = {
   driverData: DriverData;
   currentStep: BookingStep;
-  nextStep: () => void;
+  onCancel: () => void;
   destination: string;
-  selectedAmbulance: string;
+  selectedAmbulance: AmbulanceType;
 };
 
 const DriverAssignedSheet: FC<Props> = ({
   driverData,
   currentStep,
-  nextStep,
+  onCancel,
   destination,
   selectedAmbulance,
 }: Props) => {
@@ -48,7 +49,7 @@ const DriverAssignedSheet: FC<Props> = ({
         ]}
       >
         <View>
-          <Text style={[styles.h5]}>{selectedAmbulance}</Text>
+          <Text style={[styles.h5]}>{selectedAmbulance?.type}</Text>
           <Text style={[styles.lightText]}>Arriving in 6 mins</Text>
           <View style={[globalStyles.row, globalStyles.alignCenter]}>
             <MaterialDesignIcons
@@ -108,7 +109,7 @@ const DriverAssignedSheet: FC<Props> = ({
         text2={`${nearbyCount} Vehicles`}
       /> */}
 
-      <AppButton title="Cancel Ride" onPress={nextStep} />
+      <AppButton title="Cancel Ride" onPress={onCancel} />
     </BottomSheetScrollView>
   );
 };
