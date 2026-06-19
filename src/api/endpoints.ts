@@ -45,6 +45,12 @@ export const ENDPOINTS = {
     STATUS: (tripId: string) => `booking/status/${tripId}`,
   },
 
+  TRIPS: {
+    LIST: 'trips',
+    LIST_FILTER: 'trips/filter',
+    DETAIL: (tripId: string) => `trips/${tripId}`,
+    DELETE: (tripId: string) => `trips/${tripId}`,
+  },
   // Details/Items Endpoints
   DETAILS: {
     ITEMS: '/items',

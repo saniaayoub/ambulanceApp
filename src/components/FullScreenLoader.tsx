@@ -1,19 +1,19 @@
 import React from 'react';
 import { ActivityIndicator, Modal, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { useLoaderStore } from '../stores/loaderStore';
+// import { useLoaderStore } from '../stores/loaderStore';
 import { useThemedStyles } from '../styles/createThemedStyles';
 
-const FullScreenLoader = () => {
-  const { isLoading } = useLoaderStore();
+const FullScreenLoader = ({ loading }: { loading: boolean }) => {
+  // const { isLoading } = useLoaderStore();
   const styles = useStyles();
 
-  if (!isLoading) {
+  if (!loading) {
     return null;
   }
 
   return (
-    <Modal transparent animationType="fade" visible={isLoading}>
+    <Modal transparent animationType="fade" visible={loading}>
       <View style={styles.overlay}>
         <View style={styles.card}>
           <ActivityIndicator size="large" color={styles.spinner.color} />

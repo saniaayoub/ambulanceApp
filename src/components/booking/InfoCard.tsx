@@ -105,7 +105,7 @@ const InfoCard = ({
               styles.round,
               globalStyles.padding10,
             ]}
-            onPress={() => Alert.alert('Payment method Cash Only')}
+            onPress={onPress}
           >
             <MaterialDesignIcons
               name="phone"

@@ -14,13 +14,13 @@ const RideStatusChip = ({ status }: Props) => {
 
   const getBg = () => {
     switch (status) {
-      case 'Completed':
+      case 'COMPLETED':
         return { backgroundColor: theme.colors.gradients.skyMedium };
 
-      case 'Cancelled':
+      case 'CANCELLED':
         return { backgroundColor: theme.colors.gradients.warmLight };
 
-      case 'Ongoing':
+      case 'STARTED':
         return { backgroundColor: theme.colors.gradients.warmLight };
 
       default:
@@ -30,20 +30,20 @@ const RideStatusChip = ({ status }: Props) => {
 
   const getText = () => {
     switch (status) {
-      case 'Completed':
+      case 'COMPLETED':
         return theme.colors.common.success;
 
-      case 'Cancelled':
+      case 'CANCELLED':
         return theme.colors.common.primary;
 
-      case 'Ongoing':
-        return theme.colors.gradients.warmPale;
+      case 'STARTED':
+        return theme.colors.common.warning;
 
       default:
         return theme.colors.common.primary;
     }
   };
-
+  console.log(status);
   return (
     <View
       style={[

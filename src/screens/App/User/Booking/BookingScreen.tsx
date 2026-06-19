@@ -25,7 +25,16 @@ import { showAlert } from '../../../../utils/functions';
 import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
 
 type Props = NativeStackScreenProps<DrawerStackParamList, 'Booking'>;
-
+const tripStatusToStep = {
+  SEARCHING: 'Searching',
+  ASSIGNED: 'Driver Assigned',
+  ARRIVED: 'Driver Arrived',
+  WAITING: 'Waiting',
+  STARTED: 'Tracking',
+  COMPLETED: 'Ride Completed',
+  PAID: 'Ride Completed',
+  CANCELLED: 'Cancelled',
+};
 const BookingScreen = ({ navigation }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [isMapLocked, setIsMapLocked] = useState(false);
@@ -117,8 +126,6 @@ const BookingScreen = ({ navigation }: Props) => {
     }, 'Are you sure you want to cancel this ride?');
   };
 
-  console.log(trip, bookingStep, 'trip');
-
   const handleSearchStart = async () => {
     await handleCreateBooking(
       pickupLocation,
@@ -163,20 +170,20 @@ const BookingScreen = ({ navigation }: Props) => {
           />
         );
 
-      case 'Pickup Again':
-        return (
-          <LocationSheet
-            title="Pick Up Location"
-            subtitle="Select pickup location"
-            currentLocation={pickupLocation}
-            currentLocation={destinationLocation}
-            currentStep={bookingStep}
-            onSelectLocation={location => {
-              setDestinationLocation(location);
-              setStep('');
-            }}
-          />
-        );
+      // case 'Pickup Again':
+      //   return (
+      //     <LocationSheet
+      //       title="Pick Up Location"
+      //       subtitle="Select pickup location"
+      //       currentLocation={pickupLocation}
+      //       currentLocation={destinationLocation}
+      //       currentStep={bookingStep}
+      //       onSelectLocation={location => {
+      //         setDestinationLocation(location);
+      //         setStep('');
+      //       }}
+      //     />
+      //   );
 
       case 'Trip Details':
         return (
@@ -205,15 +212,28 @@ const BookingScreen = ({ navigation }: Props) => {
       case 'Driver Assigned':
         return (
           <DriverAssignedSheet
-            currentStep={bookingStep}
-            destination={destinationLocation?.name}
-            selectedAmbulance={selectedAmbulance}
+            destination={destinationLocation}
+            pickupLocation={pickupLocation}
             onCancel={handleRideCancel}
-            driverData={{
-              driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
-              driverName: 'Ahmed Khan',
-              driverRating: 4.8,
-            }}
+            trip={trip}
+          />
+        );
+
+      case 'Waiting':
+        return (
+          <DriverAssignedSheet
+            destination={destinationLocation}
+            pickupLocation={pickupLocation}
+            trip={trip}
+          />
+        );
+
+      case 'Tracking':
+        return (
+          <DriverAssignedSheet
+            destination={destinationLocation}
+            pickupLocation={pickupLocation}
+            trip={trip}
           />
         );
 
@@ -291,18 +311,25 @@ const BookingScreen = ({ navigation }: Props) => {
   }, [isFocused, bookingStep, selectedAmbulance]);
 
   useEffect(() => {
-    if (bookingStep !== 'Searching') return;
-
+    if (!trip?.id && bookingStep !== 'Driver Assigned') return;
+    let i = 1;
     const interval = setInterval(async () => {
-      const response = await getTripStatus();
-      if (response?.status === 'ASSIGNED') {
+      try {
+        const response = await getTripStatus();
+        console.log(bookingStep, response, 'k');
+        if (!response) return;
+
         setTrip(response);
-        setStep('Driver Assigned');
+
+        setStep(tripStatusToStep[response?.status]);
+        i = i + 1;
+      } catch (error) {
+        console.log(error);
       }
-    }, 3000);
+    }, 3000 + i * 1000);
 
     return () => clearInterval(interval);
-  }, [bookingStep]);
+  }, [trip?.id]);
 
   const getEstimatedData = async () => {
     let data = await getEstimate({

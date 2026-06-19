@@ -1,16 +1,13 @@
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-
 import MaterialIcons from '@react-native-vector-icons/material-design-icons';
-
 import { Ride } from '../../utils/ride';
-
 import RideStatusChip from './RideStatusChip';
-
-import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
-import { VentilatorAmbulance } from '../../assets/images/pngs';
 import { moderateScale } from 'react-native-size-matters';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
+import { ambulanceImages } from '../../utils/constants';
+import { formatTripDate } from '../../utils/functions';
 
 type Props = {
   item: Ride;
@@ -35,17 +32,18 @@ const RideCard = ({ item, onPress }: Props) => {
       <View
         style={[
           globalStyles.row,
-          globalStyles.spaceBetween,
           globalStyles.alignCenter,
+          globalStyles.spaceBetween,
         ]}
       >
-        <Image
-          source={VentilatorAmbulance}
-          resizeMode="contain"
-          style={globalStyles.size40}
-        />
-        <Text style={styles.h6}>{item.ambulanceType}</Text>
-
+        <View style={[globalStyles.row, globalStyles.alignCenter]}>
+          <Image
+            source={ambulanceImages[item.ambulanceType]}
+            resizeMode="contain"
+            style={[globalStyles.size40, globalStyles.mR20]}
+          />
+          <Text style={styles.h6}>{item.ambulanceType}</Text>
+        </View>
         <RideStatusChip status={item.status} />
       </View>
 
@@ -59,11 +57,13 @@ const RideCard = ({ item, onPress }: Props) => {
 
           <Text style={styles.smallText}>
             {'  '}
-            {item.fare}PKR
+            {item?.fare?.total}PKR
           </Text>
         </View>
         <View style={[globalStyles.row]}>
-          <Text style={styles.smallText}>Fri, 30 jun 22:10</Text>
+          <Text style={styles.smallText}>
+            {formatTripDate(item?.updatedAt)}
+          </Text>
           <MaterialIcons name="chevron-right" size={moderateScale(22)} />
         </View>
       </View>

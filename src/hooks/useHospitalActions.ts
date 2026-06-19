@@ -4,6 +4,7 @@ import { useBookingStore } from '../stores/bookingStore';
 import { useLocation } from './useLocation';
 import { useMutation } from '@tanstack/react-query';
 import { getHospitalDetails } from '../services/bookingService';
+import { makeaCall } from '../utils/functions';
 
 export const useHospitalActions = (navigation?: any) => {
   const { currentLocation } = useLocation();
@@ -39,12 +40,7 @@ export const useHospitalActions = (navigation?: any) => {
    */
   const { mutate: fetchHospitalPhone } = useMutation({
     mutationFn: getHospitalDetails,
-    onSuccess: res => {
-      const phone = res?.data?.phone;
-      if (phone) {
-        Linking.openURL(`tel:${phone}`);
-      }
-    },
+    onSuccess: res => makeaCall(res?.data?.phone),
   });
 
   const callHospital = useCallback((placeId: string) => {
@@ -55,5 +51,6 @@ export const useHospitalActions = (navigation?: any) => {
   return {
     startHospitalBooking,
     callHospital,
+    makeaCall,
   };
 };

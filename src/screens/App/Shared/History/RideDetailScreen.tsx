@@ -6,48 +6,48 @@ import BackButton from '../../../../components/BackButton';
 import DetailColumnComp from '../../../../components/booking/DetailColumnComp';
 import { renderRow } from '../../../../components/booking/RideCompletedSheet';
 import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
+import { useTrip, useTripDetail } from '../../../../hooks/useRideHistory';
+import { ambulanceImages } from '../../../../utils/constants';
+import { formatTripDate } from '../../../../utils/functions';
+import FullScreenLoader from '../../../../components/FullScreenLoader';
 
-const RideDetailScreen = () => {
+const RideDetailScreen = ({ route }) => {
   const styles = useGlobalStyles();
+  const { tripId } = route?.params;
 
-  const ride = {
-    bookingId: '#AMB23423',
+  const { data, isLoading, isFetching, refetch } = useTripDetail(tripId);
+  const { handleDeleteTrip } = useTrip();
 
-    status: 'completed',
+  const trip = data?.data; // adjust if wrapper exists
+  // const ride = {
+  //   bookingId: '#AMB23423',
 
-    pickupAddress: 'Clifton Karachi',
+  //   status: 'completed',
 
-    destinationAddress: 'Jinnah Hospital Karachi',
+  //   pickupAddress: 'Clifton Karachi',
 
-    ambulanceType: 'Normal Ambulance',
+  //   destinationAddress: 'Jinnah Hospital Karachi',
 
-    fare: 1800,
+  //   ambulanceType: 'Normal Ambulance',
 
-    distance: 8.2,
+  //   fare: 1800,
 
-    duration: 15,
+  //   distance: 8.2,
 
-    driver: {
-      name: 'Ahmed Khan',
+  //   duration: 15,
 
-      phone: '+923001234567',
+  //   driver: {
+  //     name: 'Ahmed Khan',
 
-      vehicleNumber: 'KHI-786',
-    },
-  };
+  //     phone: '+923001234567',
 
-  const Row = useCallback(
-    ({ label, value }: { label: string; value: string }) => (
-      <View
-        style={[globalStyles.row, globalStyles.spaceBetween, globalStyles.mB15]}
-      >
-        <Text style={styles.text}>{label}</Text>
+  //     vehicleNumber: 'KHI-786',
+  //   },
+  // };
 
-        <Text style={styles.h6}>{value}</Text>
-      </View>
-    ),
-    [],
-  );
+  if (isLoading) {
+    return <FullScreenLoader loading={isLoading} />;
+  }
 
   return (
     <View style={[styles.card, globalStyles.flex]}>
@@ -57,7 +57,7 @@ const RideDetailScreen = () => {
           <View style={[globalStyles.centered]}>
             <View style={[globalStyles.centered, globalStyles.row]}>
               <Image
-                source={VentilatorAmbulance}
+                source={ambulanceImages[trip?.ambulanceType]}
                 resizeMode="contain"
                 style={[globalStyles.size100]}
               />
@@ -67,31 +67,47 @@ const RideDetailScreen = () => {
                 style={[globalStyles.size80, styles.border, styles.round]}
               />
             </View>
-            <Text style={styles.h5}>Ventilator, C12ji3</Text>
+            <Text style={styles.h5}>
+              {trip?.ambulanceType}, {trip?.driver?.vehicleNo ?? 'C12ji3'}
+            </Text>
             <Text style={styles.smallText}>Cancelled</Text>
           </View>
           <DetailColumnComp
             title1={'Pickup'}
             title2={'Destination'}
-            text1={'Healthy Smile Clinic'}
-            text2={'Jinnah Hospital'}
+            text1={trip?.pickupLocation?.name ?? 'Healthy Smile Clinic'}
+            text2={trip?.destination?.name ?? 'Jinnah Hospital'}
             style={[globalStyles.mT10, styles.lightGreyCard]}
           />
           <View style={[globalStyles.flex, globalStyles.justifyBetween]}>
             <Text style={[styles.h5, globalStyles.mB15]}>Trip Details</Text>
-            {renderRow('Driver', 'Mohammad Imran 4.5★', styles)}
-            {renderRow('Date', '7 Jun, Fri 22:20', styles)}
+            {renderRow(
+              'Driver',
+              trip?.driver?.name
+                ? `${trip?.driver?.name} ${trip?.driver?.rating}★`
+                : 'Mohammad Imran 4.5★',
+              styles,
+            )}
+            {renderRow(
+              'Date',
+              formatTripDate(trip?.createdAt) ?? '7 Jun, Fri 22:20',
+              styles,
+            )}
             <View style={styles.separator} />
 
             {renderRow('Payment', 'Cash', styles)}
-            {renderRow('Total', '2500PKR', styles)}
+            {renderRow(
+              'Total',
+              trip?.fare?.total?.toLocaleString() ?? '2500PKR',
+              styles,
+            )}
 
             <View style={styles.separator} />
           </View>
         </View>
         <AppButton
           title="Delete Record"
-          // onPress={() => onSubmitReview(rating)}
+          onPress={() => handleDeleteTrip(tripId)}
         />
       </ScrollView>
     </View>

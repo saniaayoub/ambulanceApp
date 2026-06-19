@@ -9,6 +9,7 @@ export type BookingStep =
   | 'Searching'
   | 'Driver Assigned'
   | 'Cancelled'
+  | 'Waiting'
   | 'Tracking'
   | 'Completed';
 

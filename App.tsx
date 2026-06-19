@@ -17,6 +17,7 @@ import MainStack from './src/navigation/MainStack';
 import { useQueueStore } from './src/stores/queueStore';
 import { globalStyles } from './src/styles/globalStyles';
 import { useThemeStore } from './src/stores/themeStore';
+import { useLoaderStore } from './src/stores/loaderStore';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,7 @@ const queryClient = new QueryClient({
 
 function App() {
   const isDark = useThemeStore(state => state.isDark);
+  const isLoading = useLoaderStore(state => state.isLoading);
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
       if (state.isConnected) {
@@ -47,7 +49,7 @@ function App() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <MainStack />
-          <FullScreenLoader />
+          <FullScreenLoader loading={isLoading} />
           <Toast />
         </KeyboardAvoidingView>
       </QueryClientProvider>

@@ -1,4 +1,4 @@
-export type RideStatus = 'Completed' | 'Cancelled' | 'Ongoing' | 'Accepted';
+export type RideStatus = 'COMPLETED' | 'CANCELLED' | 'STARTED' | 'WAITING';
 
 export interface Ride {
   _id: string;
@@ -9,13 +9,14 @@ export interface Ride {
 
   ambulanceType: string;
 
-  fare: number;
+  fare: { total: number };
   distance: number;
   duration: number;
 
   status: RideStatus;
 
   createdAt: string;
+  updatedAt: string;
 
   driver?: {
     name: string;

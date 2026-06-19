@@ -55,8 +55,8 @@ const UserDrawer: FC = () => {
       <Drawer.Screen name="BookingScreen" component={BookingScreen} />
       <Drawer.Screen name="LocationScreen" component={LocationPickerScreen} />
       <Drawer.Screen name="Hospitals" component={HospitalsScreen} />
-      {/* <Drawer.Screen name="RideHistory" component={RideStack} />
-      <Drawer.Screen name="Notifications" component={Notifications} />
+      <Drawer.Screen name="RideHistory" component={RideStack} />
+      {/* <Drawer.Screen name="Notifications" component={Notifications} />
       <Drawer.Screen name="Profile" component={ProfileSettings} />
       <Drawer.Screen name="HelpSupport" component={DrawerPlaceholder} /> */}
     </Drawer.Navigator>
