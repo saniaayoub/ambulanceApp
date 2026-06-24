@@ -65,7 +65,7 @@ const RideHistoryScreen = () => {
     [trips],
   );
   const isFirstLoading = isLoading && trips.length === 0;
-  console.log(isFirstLoading);
+
   useEffect(() => {
     if (isFirstLoading) {
       showLoader();

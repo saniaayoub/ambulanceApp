@@ -44,13 +44,32 @@ const RideStack = () => {
   );
 };
 
+const HomeStackNavigator = createNativeStackNavigator();
+
+const HomeStack = () => {
+  return (
+    <HomeStackNavigator.Navigator
+      initialRouteName="Dashboard"
+      screenOptions={() => ({
+        headerShown: false,
+      })}
+    >
+      <HomeStackNavigator.Screen
+        name={'Dashboard'}
+        component={DriverHomeScreen}
+      />
+      <HomeStackNavigator.Screen name={'Earnings'} component={EarningsScreen} />
+    </HomeStackNavigator.Navigator>
+  );
+};
+
 const DriverDrawer: FC = () => {
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent}
       screenOptions={{ headerShown: false, drawerType: 'slide' }}
     >
-      <Drawer.Screen name="Home" component={DriverHomeScreen} />
+      <Drawer.Screen name="Home" component={HomeStack} />
       {/* <Drawer.Screen name="Booking" component={BookingScreen} />
       <Drawer.Screen name="Earnings" component={EarningsScreen} />
       <Drawer.Screen name="RideHistory" component={RideStack} />

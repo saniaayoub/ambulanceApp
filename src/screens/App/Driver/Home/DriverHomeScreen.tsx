@@ -11,51 +11,109 @@ import NavigateToPickupSheet from '../../../../components/driver/NavigateToPicku
 import TripInProgressSheet from '../../../../components/driver/TripInProgressSheet';
 import TripCompletedSheet from '../../../../components/driver/TripCompletedSheet';
 import { useThemeStore } from '../../../../stores/themeStore';
-
+import { useAuthStore } from '../../../../stores/authStore';
+import { useLocation } from '../../../../hooks/useLocation';
+import OnlineToggle from '../../../../components/driver/OnlineToggle';
+import InfoCard from '../../../../components/booking/InfoCard';
+import { useDriverTracking } from '../../../../hooks/useDriverTracking';
+import { useDriver, useDriverDashboard } from '../../../../hooks/useDriver';
+import { ambulanceImages } from '../../../../utils/constants';
+import DashboardComp from '../../../../components/driver/DashboardComp';
+import ActiveTripComp from '../../../../components/driver/ActiveTrip';
+import HomeMapComp from '../../../../components/driver/HomeMapComp';
+import { socket } from '../../../../services/socketService';
 type Props = {
   navigation: any;
 };
 
 const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
   const styles = useGlobalStyles();
-  const isDark = useThemeStore(state => state.isDark);
+  const userData = useAuthStore(state => state.userData);
+  const data = useDriver(userData?.driverId);
+  console.log(data, 'k');
   const {
     isOnline,
     toggleOnline,
     tripStep,
+    incomingRequest,
     todayEarnings,
     completedTrips,
+    setIsOnline,
     setIncomingRequest,
   } = useDriverStore();
+  const { fetchLocation, currentLocation } = useLocation();
+  const driverhook = useDriverTracking(userData?.driverId, isOnline);
+  const stats = useDriverDashboard(userData?.driverId);
 
   const openDrawer = useCallback(() => {
     navigation.openDrawer();
   }, [navigation]);
 
+  // console.log(userData, 'driver');
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleIncomingTrip = (tripRequest: any) => {
+      console.log('Incoming trip:', tripRequest);
+
+      setIncomingRequest(tripRequest); // zustand
+      // setBottomSheetVisible(true);
+    };
+
+    const handleRemoveRequest = (tripRequest: any) => {
+      if (tripRequest?.tripId === incomingRequest?.tripId) {
+        console.log('request removed:', tripRequest);
+
+        setIncomingRequest(null);
+      }
+    };
+
+    socket.on('incoming_trip_request', handleIncomingTrip);
+    socket.on('trip_request_taken', handleRemoveRequest);
+
+    return () => {
+      socket.off('incoming_trip_request', handleIncomingTrip);
+      socket.off('trip_request_taken', handleRemoveRequest);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (currentLocation) {
+      fetchLocation();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (data?.isOnline !== undefined) {
+      setIsOnline(data.isOnline);
+    }
+  }, [data?.isOnline]);
+
   const navigateToEarnings = useCallback(() => {
     navigation.navigate('Earnings');
   }, [navigation]);
 
-  // Simulate an incoming request for demo
-  useEffect(() => {
-    if (isOnline && tripStep === 'idle') {
-      const timer = setTimeout(
-        () => {
-          setIncomingRequest({
-            pickupLocation: 'Healthy Smile Clinic, Main Boulevard',
-            destinationHospital: 'Jinnah Hospital, Jail Road',
-            distance: '8.2 km',
-            fareEstimate: 'Rs. 2,500',
-            patientName: 'Muhammad Ali',
-            patientPhone: '+92 300 1234567',
-            timestamp: Date.now(),
-          });
-        },
-        isOnline ? 8000 : 999999,
-      );
-      return () => clearTimeout(timer);
-    }
-  }, [isOnline, tripStep, setIncomingRequest]);
+  // // Simulate an incoming request for demo
+  // useEffect(() => {
+  //   if (isOnline && tripStep === 'idle') {
+  //     const timer = setTimeout(
+  //       () => {
+  //         setIncomingRequest({
+  //           pickupLocation: 'Healthy Smile Clinic, Main Boulevard',
+  //           destinationHospital: 'Jinnah Hospital, Jail Road',
+  //           distance: '8.2 km',
+  //           fareEstimate: 'Rs. 2,500',
+  //           patientName: 'Muhammad Ali',
+  //           patientPhone: '+92 300 1234567',
+  //           timestamp: Date.now(),
+  //         });
+  //       },
+  //       isOnline ? 8000 : 999999,
+  //     );
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [isOnline, tripStep, setIncomingRequest]);
 
   useEffect(() => {
     if (isOnline && tripStep === 'navigate_to_pickup') {
@@ -63,120 +121,50 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
     }
   }, []);
 
+  // console.log(userData);
+  // console.log(userData, 'k');
   return (
     <View style={[globalStyles.flex, globalStyles.padding15, styles.card]}>
-      <HomeHeader onOpenMenu={openDrawer} />
+      <HomeHeader
+        onOpenMenu={openDrawer}
+        name={userData?.fullName}
+        locationLabel={currentLocation?.name}
+        role={userData?.role}
+      />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Online/Offline Toggle */}
-        <View
-          style={[
-            styles.border,
-            globalStyles.padding15,
-            globalStyles.row,
-            globalStyles.alignCenter,
-            globalStyles.mB10,
-            isOnline && { borderColor: theme.colors.common.success },
-          ]}
-        >
-          <MaterialDesignIcons
-            name="car"
-            size={moderateScale(24)}
-            color={
-              isOnline ? theme.colors.common.success : theme.colors.common.black
-            }
+        {stats?.activeTrip ? (
+          <ActiveTripComp
+            activeTrip={stats?.activeTrip}
+            onPressDetails={() => navigation.navigate('TripDetails')}
+            onStartTrip={() => console.log('start')}
+            onArrived={() => console.log('arrived/accept')}
           />
-          <Text style={[styles.h6, globalStyles.mL10, globalStyles.flex]}>
-            {isOnline ? 'Online' : 'Offline'}
-          </Text>
-          <Switch
-            value={isOnline}
-            onValueChange={toggleOnline}
-            trackColor={{
-              false: isDark
-                ? theme.colors.common.black
-                : theme.colors.common.white,
-              true: theme.colors.common.success,
-            }}
-            thumbColor={theme.colors.common.white}
-          />
-        </View>
+        ) : (
+          <OnlineToggle isOnline={isOnline} toggleOnline={toggleOnline} />
+        )}
 
         {/* Driver Profile Card */}
-        <View
-          style={[
-            styles.border,
-            globalStyles.padding15,
-            globalStyles.row,
-            globalStyles.alignCenter,
-            globalStyles.mB10,
-          ]}
-        >
-          <View style={styles.avatar}>
-            <MaterialDesignIcons
-              name="account"
-              size={moderateScale(30)}
-              color={theme.colors.common.white}
-            />
-          </View>
-          <View style={[globalStyles.mL10]}>
-            <Text style={styles.h4}>Dr. Ashraf</Text>
-            <Text style={[styles.smallText, globalStyles.mT5]}>
-              Vehicle: ABC-1234
-            </Text>
-          </View>
-        </View>
+        <InfoCard
+          name={userData?.ambulanceType}
+          image={ambulanceImages[userData?.ambulanceType]}
+          text={data?.vehicleNumber}
+          label={'Rating'}
+          value={`${userData?.rating}★`}
+        />
 
         {/* Stats Row - Today's Earnings & Completed Trips */}
-        <View style={[globalStyles.row, globalStyles.spaceBetween]}>
-          <Pressable
-            onPress={navigateToEarnings}
-            style={[
-              styles.border,
-              globalStyles.padding15,
-              globalStyles.halfwidth,
-              globalStyles.mB10,
-            ]}
-          >
-            <Text style={styles.smallText}>Today's Earnings</Text>
-            <Text style={[styles.h4, globalStyles.mT5]}>
-              Rs. {todayEarnings}
-            </Text>
-            <Text style={[styles.link, styles.smallText, globalStyles.mT5]}>
-              View Details →
-            </Text>
-          </Pressable>
-
-          <View
-            style={[
-              styles.border,
-              globalStyles.padding15,
-              globalStyles.halfwidth,
-              globalStyles.mB10,
-            ]}
-          >
-            <Text style={styles.smallText}>Completed Trips</Text>
-            <Text style={[styles.h4, globalStyles.mT5]}>{completedTrips}</Text>
-          </View>
-        </View>
+        <DashboardComp
+          navigateToEarnings={navigateToEarnings}
+          todayEarnings={stats?.todayEarnings}
+          completedTrips={stats?.completedTripsToday}
+        />
 
         {/* Live Map Placeholder */}
-        <View
-          style={[
-            styles.border,
-            globalStyles.centered,
-            globalStyles.mB10,
-            { height: moderateScale(180) },
-          ]}
-        >
-          <MaterialDesignIcons
-            name="map-outline"
-            size={moderateScale(48)}
-            color={theme.colors.common.black}
-          />
-          <Text style={[styles.smallText, globalStyles.mT5]}>
-            Live Map View
-          </Text>
+
+        <View style={[globalStyles.flex, globalStyles.height200]}>
+          <HomeMapComp />
         </View>
       </ScrollView>
 

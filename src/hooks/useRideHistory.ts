@@ -9,6 +9,7 @@ import { toastError } from '../services/toast';
 import { getErrorMessage } from './useAuth';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
+import { queryClient } from '../../App';
 export const useTrips = (limit = 10, status?: string) => {
   return useInfiniteQuery({
     queryKey: ['trips', status],
@@ -45,7 +46,6 @@ export const useTripDetail = (tripId?: string) => {
 export const useTrip = () => {
   const { showLoader, hideLoader } = useLoaderStore();
   const navigation = useNavigation();
-  const queryClient = useQueryClient();
 
   const handleDeleteTrip = async (tripId: string) => {
     showLoader();

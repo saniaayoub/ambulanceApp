@@ -16,7 +16,7 @@ export type InfoCardProps = {
   image?: ImageSourcePropType;
   name: string;
   icon?: string;
-
+  text?: string;
   // existing (rating / info style)
   label?: string;
   value?: string;
@@ -36,6 +36,7 @@ const InfoCard = ({
   name,
   label,
   value,
+  text,
   onPress = false,
   rightActionText,
   onPressRightAction,
@@ -75,10 +76,20 @@ const InfoCard = ({
               style={globalStyles.size50}
             />
           )}
-
-          <Text style={[styles.h6, globalStyles.width120, globalStyles.mL20]}>
-            {name}
-          </Text>
+          <View>
+            <Text style={[styles.h6, globalStyles.width120, globalStyles.mL20]}>
+              {name}
+            </Text>
+            <Text
+              style={[
+                styles.smallText,
+                globalStyles.width120,
+                globalStyles.mL20,
+              ]}
+            >
+              {text}
+            </Text>
+          </View>
         </View>
 
         {/* RIGHT */}

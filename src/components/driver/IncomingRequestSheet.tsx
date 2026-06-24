@@ -5,6 +5,7 @@ import { useDriverStore } from '../../stores/driverStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import AppButton from '../AppButton';
 import DetailColumnComp from '../booking/DetailColumnComp';
+import { moderateScale } from 'react-native-size-matters';
 
 const COUNTDOWN_SECONDS = 15;
 
@@ -13,7 +14,7 @@ const IncomingRequestSheet: FC = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { incomingRequest, acceptRequest, declineRequest } = useDriverStore();
   const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
-
+  const request = incomingRequest?._doc;
   useEffect(() => {
     if (incomingRequest) {
       bottomSheetRef.current?.expand();
@@ -23,27 +24,28 @@ const IncomingRequestSheet: FC = () => {
     }
   }, [incomingRequest]);
 
-  useEffect(() => {
-    if (!incomingRequest) return;
-    if (countdown <= 0) {
-      declineRequest();
-      return;
-    }
-    const timer = setInterval(() => {
-      setCountdown(prev => prev - 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [countdown, incomingRequest, declineRequest]);
+  // useEffect(() => {
+  //   if (!incomingRequest) return;
+  //   if (countdown <= 0) {
+  //     declineRequest();
+  //     return;
+  //   }
+  //   const timer = setInterval(() => {
+  //     setCountdown(prev => prev - 1);
+  //   }, 1000);
+  //   return () => clearInterval(timer);
+  // }, [countdown, incomingRequest, declineRequest]);
 
   if (!incomingRequest) return null;
 
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      snapPoints={['45%']}
+      snapPoints={['50%']}
       enablePanDownToClose={false}
       handleIndicatorStyle={styles.greyCard}
-      backgroundStyle={styles.card}
+      backgroundStyle={styles.lightGreyCard}
+      style={styles.border}
     >
       <BottomSheetScrollView
         showsVerticalScrollIndicator={false}
@@ -67,23 +69,30 @@ const IncomingRequestSheet: FC = () => {
         </View>
 
         {/* Title */}
-        <Text style={[styles.h4, globalStyles.textCenter, globalStyles.mB15]}>
+        <Text
+          style={[
+            styles.h4,
+            globalStyles.textCenter,
+            globalStyles.mB15,
+            globalStyles.negmargin,
+          ]}
+        >
           New Ride Request
         </Text>
 
         {/* Details */}
         <DetailColumnComp
           title1="Pickup"
-          text1={incomingRequest.pickupLocation}
+          text1={request?.pickupLocation?.address}
           title2="Destination"
-          text2={incomingRequest.destinationHospital}
+          text2={request?.destination?.address}
         />
 
         <DetailColumnComp
           title1="Distance"
-          text1={incomingRequest.distance}
+          text1={`${request?.distanceKm} Km`}
           title2="Fare"
-          text2={incomingRequest.fareEstimate}
+          text2={`Rs. ${request?.fare?.total?.toLocaleString()}`}
         />
 
         {/* Actions */}

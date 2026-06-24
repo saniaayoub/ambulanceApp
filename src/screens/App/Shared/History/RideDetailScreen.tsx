@@ -68,7 +68,7 @@ const RideDetailScreen = ({ route }) => {
               />
             </View>
             <Text style={styles.h5}>
-              {trip?.ambulanceType}, {trip?.driver?.vehicleNo ?? 'C12ji3'}
+              {trip?.ambulanceType}, {trip?.driver?.vehicleNumber ?? 'C12ji3'}
             </Text>
             <Text style={styles.smallText}>Cancelled</Text>
           </View>

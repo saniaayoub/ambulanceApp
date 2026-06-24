@@ -32,6 +32,7 @@ interface BookingState {
   bookingStep: BookingStep;
   isBookingActive: boolean;
   homeData: object | null;
+  driverLocation: Location;
 
   setSelectedAmbulance: (value: AmbulanceType) => void;
   setPickupLocation: (value: Location) => void;
@@ -40,10 +41,12 @@ interface BookingState {
   resetBooking: () => void;
   startBooking: () => void;
   setTrip: (trip: object) => void;
+  setDriverLocation: (loc: Location) => void;
 }
 
 export const useBookingStore = create<BookingState>(set => ({
   trip: null,
+  driverLocation: null,
   selectedAmbulance: {
     type: 'NORMAL',
     label: 'Normal Ambulance',
@@ -65,7 +68,7 @@ export const useBookingStore = create<BookingState>(set => ({
   bookingStep: 'Pickup',
   isBookingActive: false,
   setTrip: trip => set({ trip }),
-
+  setDriverLocation: loc => set({ driverLocation: loc }),
   setSelectedAmbulance: selectedAmbulance => set({ selectedAmbulance }),
   setPickupLocation: pickupLocation => set({ pickupLocation }),
   setDestinationLocation: destinationLocation => set({ destinationLocation }),

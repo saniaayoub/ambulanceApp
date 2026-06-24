@@ -9,6 +9,12 @@ export const globalStyles = StyleSheet.create({
     position: 'absolute',
     top: moderateScale(5),
   },
+  height20: {
+    height: moderateScale(20),
+  },
+  height200: {
+    height: moderateScale(200),
+  },
   absPosition2: {
     position: 'absolute',
     bottom: 30,
@@ -29,9 +35,21 @@ export const globalStyles = StyleSheet.create({
   justifyBetween: {
     justifyContent: 'space-between',
   },
+  size20: {
+    width: moderateScale(20),
+    height: moderateScale(20),
+  },
   size80: {
     width: moderateScale(80),
     height: moderateScale(80),
+  },
+  size10: {
+    width: moderateScale(10),
+    height: moderateScale(10),
+  },
+  size5: {
+    width: moderateScale(5),
+    height: moderateScale(5),
   },
   size100: {
     width: moderateScale(100),
@@ -268,6 +286,17 @@ export const globalStyles = StyleSheet.create({
 export const useGlobalStyles = () => {
   return useThemedStyles(({ colors, typography, radius }) => ({
     // Home Screen Styles
+    horizontalLine: {
+      height: moderateScale(1),
+      width: '100%',
+      backgroundColor: colors.border,
+    },
+    dot: {
+      width: 4,
+      height: 4,
+      borderRadius: 2,
+      marginVertical: 2,
+    },
     borderDark: {
       borderColor: colors.text,
     },

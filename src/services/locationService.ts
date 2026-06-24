@@ -106,7 +106,7 @@ export const getLocationName = async (lat: number, lng: number) => {
 
     const res = await fetch(url);
     const data = await res.json();
-    return data.results?.[0]?.formatted;
+    return data.results?.[0]?.formatted || '';
   } catch (error) {
     console.log(error, 'inn');
     // throw error;

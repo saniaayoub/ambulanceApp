@@ -8,7 +8,12 @@
 import NetInfo from '@react-native-community/netinfo';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { KeyboardAvoidingView, Platform, StatusBar } from 'react-native';
+import {
+  AppState,
+  KeyboardAvoidingView,
+  Platform,
+  StatusBar,
+} from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import FullScreenLoader from './src/components/FullScreenLoader';
@@ -18,8 +23,9 @@ import { useQueueStore } from './src/stores/queueStore';
 import { globalStyles } from './src/styles/globalStyles';
 import { useThemeStore } from './src/stores/themeStore';
 import { useLoaderStore } from './src/stores/loaderStore';
+import { socket } from './src/services/socketService';
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
@@ -38,6 +44,23 @@ function App() {
       }
     });
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    console.log('AppState listener mounted');
+
+    const subscription = AppState.addEventListener('change', nextState => {
+      console.log(nextState, 'nextState');
+      if (nextState === 'active') {
+        if (!socket.connected) {
+          socket.connect();
+        }
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   return (

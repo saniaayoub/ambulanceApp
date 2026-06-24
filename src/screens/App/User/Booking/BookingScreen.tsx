@@ -23,6 +23,7 @@ import { globalStyles } from '../../../../styles/globalStyles';
 import { useIsFocused } from '@react-navigation/native';
 import { showAlert } from '../../../../utils/functions';
 import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
+import { socket } from '../../../../services/socketService';
 
 type Props = NativeStackScreenProps<DrawerStackParamList, 'Booking'>;
 const tripStatusToStep = {
@@ -42,12 +43,14 @@ const BookingScreen = ({ navigation }: Props) => {
 
   const { currentLocation } = useLocationStore();
   const {
+    driverLocation,
     getStatus: getTripStatus,
     getEstimate,
     getOnlineDriversList,
     drivers: nearbyDrivers,
     handleCreateBooking,
     handleBookingCancel,
+    setDriverLocation,
   } = useBooking();
   const { getLocationWithName } = useLocation();
   const bookingStep = useBookingStore(s => s.bookingStep);
@@ -330,6 +333,20 @@ const BookingScreen = ({ navigation }: Props) => {
 
     return () => clearInterval(interval);
   }, [trip?.id]);
+
+  useEffect(() => {
+    socket.on('driver_location_changed', location => {
+      setDriverLocation({
+        latitude: location.lat,
+        longitude: location.lng,
+        name: '',
+      });
+    });
+
+    return () => {
+      socket.off('driver_location_changed');
+    };
+  }, []);
 
   const getEstimatedData = async () => {
     let data = await getEstimate({

@@ -4,6 +4,7 @@ import MaterialIcons from '@react-native-vector-icons/material-design-icons';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import { moderateScale } from 'react-native-size-matters';
 import theme from '../../styles/theme';
+import { Roles } from '../../utils/enums';
 
 type IconName = React.ComponentProps<typeof MaterialIcons>['name'];
 
@@ -12,6 +13,7 @@ type Props = {
   locationLabel?: string;
   handleLocationPress?: () => void;
   name?: string;
+  role?: string;
 };
 
 const HomeHeader: FC<Props> = ({
@@ -19,6 +21,7 @@ const HomeHeader: FC<Props> = ({
   handleLocationPress,
   locationLabel,
   name,
+  role = Roles.USER,
 }) => {
   const styles = useGlobalStyles();
 
@@ -60,12 +63,13 @@ const HomeHeader: FC<Props> = ({
           <Text style={[styles.smallText, globalStyles.mH10]}>
             {locationLabel}
           </Text>
-
-          <MaterialIcons
-            name={'chevron-right'}
-            size={moderateScale(18)}
-            color={theme.colors.common.primary}
-          />
+          {role !== Roles.DRIVER ? (
+            <MaterialIcons
+              name={'chevron-right'}
+              size={moderateScale(18)}
+              color={theme.colors.common.primary}
+            />
+          ) : null}
         </Pressable>
       </View>
     </View>

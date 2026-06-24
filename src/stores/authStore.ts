@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { mmkvStorage } from '../utils/mmkvStorage';
 import { CountryData, getFlagEmoji } from '../components/PhoneInput';
+import { socket } from '../services/socketService';
 
 export type UserRole = 'USER' | 'DRIVER';
 

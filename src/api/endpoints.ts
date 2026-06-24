@@ -31,6 +31,9 @@ export const ENDPOINTS = {
 
   DRIVER: {
     ONLINEDRIVERS: 'driver/onlineDrivers',
+    DRIVERDETAILS: (driverId: string) => `driver/${driverId}`,
+    ONLINESTATUS: `driver/onlineStatus`,
+    STATS: 'driver/stats',
   },
 
   HOSPITALS: {
