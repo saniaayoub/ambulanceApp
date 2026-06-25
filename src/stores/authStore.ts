@@ -2,8 +2,6 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { mmkvStorage } from '../utils/mmkvStorage';
 import { CountryData, getFlagEmoji } from '../components/PhoneInput';
-import { socket } from '../services/socketService';
-
 export type UserRole = 'USER' | 'DRIVER';
 
 export interface User {
@@ -22,6 +20,8 @@ interface AuthState {
   fcmToken: string | null;
   selectedCountry: CountryData;
   otpResult: any;
+  hasHydrated: boolean;
+  setHasHydrated: (value: boolean) => void;
   setToken: (token: string) => void;
   setUserData: (data: User) => void;
   clearToken: () => void;
@@ -39,16 +39,19 @@ export const useAuthStore = create<AuthState>()(
       role: '',
       fcmToken: null,
       otpResult: null,
+      hasHydrated: false,
       selectedCountry: {
         iso2: 'pk',
         dialCode: '+92',
         label: 'Pakistan',
         flag: getFlagEmoji('pk'),
       },
+      setHasHydrated: value => set({ hasHydrated: value }),
       setUserData: (data: User) => set({ userData: data }),
       setOTPResult: (otpResult: object) => set({ otpResult }),
       setToken: (token: string) => set({ token }),
       clearToken: () => {
+        console.log('clearToken');
         set({ token: null, userData: null });
       },
       setRole: (role: string) => set({ role: role }),
@@ -62,6 +65,9 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'auth-storage',
       storage: createJSONStorage(() => mmkvStorage),
+      onRehydrateStorage: () => state => {
+        state?.setHasHydrated(true);
+      },
     },
   ),
 );

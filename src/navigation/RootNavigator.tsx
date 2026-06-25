@@ -6,6 +6,7 @@ import { Roles } from '../utils/enums';
 
 const RootNavigator = () => {
   const role = useAuthStore(state => state.role);
+  console.log(role, 'role');
 
   if (role === Roles.DRIVER) {
     return <DriverDrawer />;

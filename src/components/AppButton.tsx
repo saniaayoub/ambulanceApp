@@ -25,7 +25,7 @@ interface AppButtonProps {
   disabled?: boolean;
   style?: ViewStyle | Array<Object>;
   icon?: string;
-  textStyle?: TextStyle;
+  textStyle?: TextStyle[] | TextStyle;
   iconColor?: string;
 }
 

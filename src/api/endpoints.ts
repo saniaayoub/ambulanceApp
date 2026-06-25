@@ -53,6 +53,8 @@ export const ENDPOINTS = {
     LIST_FILTER: 'trips/filter',
     DETAIL: (tripId: string) => `trips/${tripId}`,
     DELETE: (tripId: string) => `trips/${tripId}`,
+    ACCEPT: (tripId: string) => `trips/accept/${tripId}`,
+    REJECT: (tripId: string) => `trips/reject/${tripId}`,
   },
   // Details/Items Endpoints
   DETAILS: {

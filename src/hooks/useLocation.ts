@@ -8,23 +8,8 @@ import { useLoaderStore } from '../stores/loaderStore';
 import { useLocationStore } from '../stores/locationStore';
 
 export const useLocation = () => {
-  const { setCurrentLocation, currentLocation } = useLocationStore();
+  const { setCurrentLocation } = useLocationStore();
   const { showLoader, hideLoader } = useLoaderStore();
-
-  const fetchLocation = async () => {
-    const granted = await requestLocationPermission();
-
-    if (!granted) {
-      toastError('Maps Permission denied');
-      return;
-    }
-    try {
-      const location = await getCurrentLocation();
-      setCurrentLocation(location);
-    } catch (e) {
-      console.log(e, 'Maps');
-    }
-  };
 
   const changeLocation = async (lat: number, lng: number, setLocation) => {
     showLoader();
@@ -52,8 +37,6 @@ export const useLocation = () => {
   };
 
   return {
-    fetchLocation,
-    currentLocation,
     changeLocation,
     getLocationWithName,
   };

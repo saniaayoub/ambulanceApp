@@ -18,3 +18,16 @@ export const toggleOnlineStatus = async () =>
     method: 'post',
     url: ENDPOINTS.DRIVER.ONLINESTATUS,
   });
+
+////// TRIPS
+
+export const tripAccept = async (tripId: string) =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.TRIPS.ACCEPT(tripId),
+  });
+export const tripReject = async (tripId: string) =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.TRIPS.REJECT(tripId),
+  });

@@ -1,7 +1,36 @@
-import { View, Text, Pressable } from 'react-native';
-import React, { useCallback } from 'react';
+import React from 'react';
+import { Text, View } from 'react-native';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
+import AppButton from '../AppButton';
+
+export const Location = ({
+  color,
+  value,
+  styles,
+}: {
+  color: string;
+  value: string;
+  styles: any;
+}) => {
+  return (
+    <View style={[globalStyles.row, globalStyles.alignCenter]}>
+      <View
+        style={[
+          styles.round,
+          globalStyles.mT5,
+          globalStyles.size10,
+          globalStyles.centered,
+          globalStyles.mR10,
+          { backgroundColor: color },
+        ]}
+      >
+        <View style={[styles.round, globalStyles.size5, styles.card]} />
+      </View>
+      <Text style={[styles.smallText, globalStyles.mT5]}>{value}</Text>
+    </View>
+  );
+};
 
 const ActiveTripComp = ({
   activeTrip,
@@ -31,29 +60,6 @@ const ActiveTripComp = ({
     }
   };
 
-  const Location = useCallback(
-    ({ color, value }) => {
-      return (
-        <View style={[globalStyles.row, globalStyles.alignCenter]}>
-          <View
-            style={[
-              styles.round,
-              globalStyles.mT5,
-              globalStyles.size10,
-              globalStyles.centered,
-              globalStyles.mR10,
-              { backgroundColor: color },
-            ]}
-          >
-            <View style={[styles.round, globalStyles.size5, styles.card]} />
-          </View>
-          <Text style={[styles.lightText, globalStyles.mT5]}>{value}</Text>
-        </View>
-      );
-    },
-    [activeTrip],
-  );
-
   return (
     <View
       style={[
@@ -75,6 +81,7 @@ const ActiveTripComp = ({
       <Location
         color={theme.colors.common.success}
         value={activeTrip?.pickupLocation?.address || 'N/A'}
+        styles={styles}
       />
       {/* <View
         style={[styles.verticalLine, globalStyles.height20, styles.buttonCard]}
@@ -92,45 +99,43 @@ const ActiveTripComp = ({
       <Location
         color={theme.colors.common.warning}
         value={activeTrip?.destination?.address || 'N/A'}
+        styles={styles}
       />
 
       {/* Actions */}
       <View
         style={[globalStyles.row, globalStyles.spaceBetween, globalStyles.mT10]}
       >
-        <Pressable
-          onPress={onPressDetails}
+        <AppButton
           style={[
-            styles.border,
-            globalStyles.padding10,
             globalStyles.halfwidth,
+            styles.whiteBtn,
+            styles.border,
+            styles.round,
+            globalStyles.mB0,
+            globalStyles.mT0,
           ]}
-        >
-          <Text style={[styles.link, globalStyles.textCenter]}>
-            View Details
-          </Text>
-        </Pressable>
+          title="View Details"
+          onPress={onPressDetails}
+          textStyle={styles.smallText}
+        />
 
         {activeTrip?.status === 'ASSIGNED' && (
-          <Pressable
+          <AppButton
             onPress={onArrived}
-            style={[styles.buttonCard, globalStyles.halfwidth]}
-          >
-            <Text style={[styles.buttonText, globalStyles.textCenter]}>
-              Accept / Arrived
-            </Text>
-          </Pressable>
+            style={[globalStyles.halfwidth, globalStyles.mB0, globalStyles.mT0]}
+            title="Arrived"
+            textStyle={[styles.smallText, styles.white]}
+          />
         )}
 
         {activeTrip?.status === 'ARRIVED' && (
-          <Pressable
+          <AppButton
             onPress={onStartTrip}
-            style={[styles.buttonCard, globalStyles.halfwidth]}
-          >
-            <Text style={[styles.buttonText, globalStyles.textCenter]}>
-              Start Trip
-            </Text>
-          </Pressable>
+            style={[globalStyles.halfwidth, globalStyles.mB0, globalStyles.mT0]}
+            title="Arrived"
+            textStyle={[styles.smallText, styles.white]}
+          />
         )}
 
         {activeTrip?.status === 'STARTED' && (

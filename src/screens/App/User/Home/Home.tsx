@@ -29,19 +29,13 @@ const Home: FC = ({ navigation }: any) => {
     destinationLocation,
   } = useBookingStore();
   const { userData } = useAuthStore();
-  const { fetchLocation, currentLocation } = useLocation();
+  const { currentLocation } = useLocation();
   const { data: homeData, isLoading: isHomeLoading } = useHomeData();
   const { data: hospitalsData } = useHospitalsData(
     currentLocation?.latitude,
     currentLocation?.longitude,
   );
   const nearbyHospitals = hospitalsData?.data || [];
-
-  useEffect(() => {
-    if (!currentLocation) {
-      fetchLocation();
-    }
-  }, []);
 
   const openDrawer = () => {
     navigation.openDrawer();
@@ -67,7 +61,7 @@ const Home: FC = ({ navigation }: any) => {
       <HomeHeader
         onOpenMenu={openDrawer}
         name={userData?.fullName}
-        locationLabel={currentLocation?.name}
+        locationLabel={currentLocation?.placeName}
         handleLocationPress={handleLocationSelect}
       />
       <ScrollView showsVerticalScrollIndicator={false}>

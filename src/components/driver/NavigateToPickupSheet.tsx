@@ -1,56 +1,82 @@
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React, { useEffect, useRef, type FC } from 'react';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { useDriverStore } from '../../stores/driverStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
+import { makeaCall } from '../../utils/functions';
 import AppButton from '../AppButton';
 import DetailColumnComp from '../booking/DetailColumnComp';
+import { Location } from './ActiveTrip';
 
-const NavigateToPickupSheet: FC = () => {
+const NavigateToPickupSheet: FC = ({
+  currentTrip,
+  tripStep,
+  arriveAtPickup,
+}: any) => {
   const styles = useGlobalStyles();
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { currentTrip, tripStep, arriveAtPickup } = useDriverStore();
 
   useEffect(() => {
-    console.log('issssw', bottomSheetRef);
-    bottomSheetRef.current?.expand();
-  }, [bottomSheetRef]);
+    if (tripStep === 'navigate_to_pickup') {
+      bottomSheetRef.current?.expand();
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [tripStep]);
 
-  // useEffect(() => {
-  //   if (tripStep === 'navigate_to_pickup') {
-  //     bottomSheetRef.current?.expand();
-  //   } else {
-  //     bottomSheetRef.current?.close();
-  //   }
-  // }, [tripStep]);
-
-  // if (!currentTrip || tripStep !== 'navigate_to_pickup') return null;
-
+  console.log(currentTrip, 'currentTrip');
+  if (!currentTrip || tripStep !== 'navigate_to_pickup') return null;
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      snapPoints={['45%']}
-      // enablePanDownToClose={false}
-      // handleIndicatorStyle={styles.greyCard}
-      // backgroundStyle={styles.card}
+      index={0}
+      snapPoints={['60%', '80%']}
+      enablePanDownToClose={false}
+      backgroundStyle={styles.card}
     >
       <BottomSheetScrollView
         showsVerticalScrollIndicator={false}
-        style={globalStyles.padding15}
+        style={[globalStyles.paddingH15]}
       >
         {/* Header */}
-        <Text style={[styles.h5, globalStyles.textCenter, globalStyles.mB5]}>
+        <Text style={[styles.h5, globalStyles.textCenter, globalStyles.mB15]}>
           Navigate to Pickup
         </Text>
 
+        {/* Trip Details */}
+        {/* Pickup */}
+        <View style={[globalStyles.paddingH10, globalStyles.mB15]}>
+          <Location
+            color={theme.colors.common.success}
+            value={currentTrip?.pickupLocation?.address || 'N/A'}
+            styles={styles}
+          />
+          {/* <View
+        style={[styles.verticalLine, globalStyles.height20, styles.buttonCard]}
+      /> */}
+          <View style={[globalStyles.row, globalStyles.alignCenter]}>
+            <View style={[globalStyles.mR20]}>
+              <View style={[styles.greyCard, styles.dot]} />
+              <View style={[styles.greyCard, styles.dot]} />
+              <View style={[styles.greyCard, styles.dot]} />
+            </View>
+            <View style={styles.horizontalLine} />
+          </View>
+
+          {/* Destination */}
+          <Location
+            color={theme.colors.common.warning}
+            value={currentTrip?.destination?.address || 'N/A'}
+            styles={styles}
+          />
+        </View>
         {/* Patient Info Card */}
         <View
           style={[
             styles.border,
-            globalStyles.padding15,
+            globalStyles.padding10,
             globalStyles.mB15,
             globalStyles.row,
             globalStyles.alignCenter,
@@ -67,12 +93,15 @@ const NavigateToPickupSheet: FC = () => {
             </View>
             <View>
               {/* <Text style={styles.h6}>{currentTrip.patientName}</Text> */}
-              <Text style={styles.h6}>patientName</Text>
+              <Text style={styles.h6}>{currentTrip?.userId?.fullName}</Text>
 
               <Text style={styles.smallText}>Patient</Text>
             </View>
           </View>
-          <View
+          <Pressable
+            onPress={() => {
+              makeaCall(currentTrip?.userId?.phone);
+            }}
             style={[
               globalStyles.size40,
               styles.round,
@@ -85,55 +114,16 @@ const NavigateToPickupSheet: FC = () => {
               size={moderateScale(20)}
               color={theme.colors.common.white}
             />
-          </View>
+          </Pressable>
         </View>
-
-        {/* Trip Details */}
-        <DetailColumnComp
-          title1="Pickup"
-          // text1={currentTrip.pickupLocation}
-          text1={'pickupLocation'}
-          title2="Destination"
-          // text2={currentTrip.destinationHospital}
-          text2={'destinationHospital'}
-        />
 
         {/* ETA */}
-        <View
-          style={[
-            globalStyles.row,
-            globalStyles.alignCenter,
-            globalStyles.justifyBetween,
-            styles.border,
-            globalStyles.padding15,
-            globalStyles.mB10,
-          ]}
-        >
-          <View>
-            <Text style={styles.smallText}>ETA</Text>
-            {/* <Text style={styles.h6}>{currentTrip.eta}</Text> */}
-            <Text style={styles.h6}>12min</Text>
-          </View>
-          <View>
-            <Text style={styles.smallText}>Distance</Text>
-            {/* <Text style={styles.h6}>{currentTrip.distance}</Text> */}
-            <Text style={styles.h6}>12 miles</Text>
-          </View>
-          <View
-            style={[
-              globalStyles.size40,
-              styles.round,
-              styles.buttonCard,
-              globalStyles.centered,
-            ]}
-          >
-            <MaterialDesignIcons
-              name="navigation-variant"
-              size={moderateScale(24)}
-              color={theme.colors.common.white}
-            />
-          </View>
-        </View>
+        <DetailColumnComp
+          title1={'ETA'}
+          text1={`${currentTrip?.etaMinutes} min`}
+          title2={'Distance'}
+          text2={`${currentTrip?.distanceKm} km`}
+        />
 
         {/* Arrived Button */}
         <AppButton title="I've Arrived" onPress={arriveAtPickup} />
@@ -141,5 +131,5 @@ const NavigateToPickupSheet: FC = () => {
     </BottomSheet>
   );
 };
-
+5;
 export default React.memo(NavigateToPickupSheet);

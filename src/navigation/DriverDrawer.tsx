@@ -10,6 +10,7 @@ import RideDetailScreen from '../screens/App/Shared/History/RideDetailScreen';
 import Notifications from '../screens/App/Shared/Notifications';
 import ProfileSettings from '../screens/App/Shared/ProfileSettings';
 import BookingScreen from '../screens/App/Driver/Booking/BookingScreen';
+import { useDriverSocket } from '../hooks/useDriverSocket';
 
 export type DrawerStackParamList = {
   Home: undefined;
@@ -64,14 +65,15 @@ const HomeStack = () => {
 };
 
 const DriverDrawer: FC = () => {
+  useDriverSocket();
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent}
       screenOptions={{ headerShown: false, drawerType: 'slide' }}
     >
       <Drawer.Screen name="Home" component={HomeStack} />
-      {/* <Drawer.Screen name="Booking" component={BookingScreen} />
-      <Drawer.Screen name="Earnings" component={EarningsScreen} />
+      <Drawer.Screen name="Booking" component={BookingScreen} />
+      {/*  <Drawer.Screen name="Earnings" component={EarningsScreen} />
       <Drawer.Screen name="RideHistory" component={RideStack} />
       <Drawer.Screen name="Notifications" component={Notifications} />
       <Drawer.Screen name="Profile" component={ProfileSettings} />

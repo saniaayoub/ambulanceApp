@@ -1,9 +1,9 @@
 export type Location = {
   latitude: number;
   longitude: number;
-  name: string;
+  address?: string;
+  placeName?: string;
 };
-
 interface LocationState {
   currentLocation: Location | null;
   setCurrentLocation: (location: any) => void;

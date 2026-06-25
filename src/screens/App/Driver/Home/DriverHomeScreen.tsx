@@ -21,7 +21,8 @@ import { ambulanceImages } from '../../../../utils/constants';
 import DashboardComp from '../../../../components/driver/DashboardComp';
 import ActiveTripComp from '../../../../components/driver/ActiveTrip';
 import HomeMapComp from '../../../../components/driver/HomeMapComp';
-import { socket } from '../../../../services/socketService';
+import { useLocationStore } from '../../../../stores/locationStore';
+
 type Props = {
   navigation: any;
 };
@@ -29,60 +30,38 @@ type Props = {
 const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
   const styles = useGlobalStyles();
   const userData = useAuthStore(state => state.userData);
+
   const data = useDriver(userData?.driverId);
-  console.log(data, 'k');
   const {
     isOnline,
     toggleOnline,
     tripStep,
+    setCurrentTrip,
     incomingRequest,
-    todayEarnings,
-    completedTrips,
     setIsOnline,
-    setIncomingRequest,
+    setTripStep,
   } = useDriverStore();
-  const { fetchLocation, currentLocation } = useLocation();
-  const driverhook = useDriverTracking(userData?.driverId, isOnline);
+
+  // console.log(data, userData, incomingRequest, 'k');
+
+  const { currentLocation } = useLocationStore();
+  useDriverTracking(userData?.driverId, isOnline);
   const stats = useDriverDashboard(userData?.driverId);
 
   const openDrawer = useCallback(() => {
     navigation.openDrawer();
   }, [navigation]);
-
-  // console.log(userData, 'driver');
-
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleIncomingTrip = (tripRequest: any) => {
-      console.log('Incoming trip:', tripRequest);
-
-      setIncomingRequest(tripRequest); // zustand
-      // setBottomSheetVisible(true);
-    };
-
-    const handleRemoveRequest = (tripRequest: any) => {
-      if (tripRequest?.tripId === incomingRequest?.tripId) {
-        console.log('request removed:', tripRequest);
-
-        setIncomingRequest(null);
-      }
-    };
-
-    socket.on('incoming_trip_request', handleIncomingTrip);
-    socket.on('trip_request_taken', handleRemoveRequest);
-
-    return () => {
-      socket.off('incoming_trip_request', handleIncomingTrip);
-      socket.off('trip_request_taken', handleRemoveRequest);
-    };
-  }, [socket]);
+  // console.log(currentLocation, userData, isOnline, 'cur');
+  // useEffect(() => {
+  //   fetchLocation();
+  // }, []);
 
   useEffect(() => {
-    if (currentLocation) {
-      fetchLocation();
+    if (stats?.activeTrip) {
+      setTripStep('navigate_to_pickup');
+      setCurrentTrip(stats?.activeTrip);
     }
-  }, []);
+  }, [stats]);
 
   useEffect(() => {
     if (data?.isOnline !== undefined) {
@@ -93,42 +72,12 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
   const navigateToEarnings = useCallback(() => {
     navigation.navigate('Earnings');
   }, [navigation]);
-
-  // // Simulate an incoming request for demo
-  // useEffect(() => {
-  //   if (isOnline && tripStep === 'idle') {
-  //     const timer = setTimeout(
-  //       () => {
-  //         setIncomingRequest({
-  //           pickupLocation: 'Healthy Smile Clinic, Main Boulevard',
-  //           destinationHospital: 'Jinnah Hospital, Jail Road',
-  //           distance: '8.2 km',
-  //           fareEstimate: 'Rs. 2,500',
-  //           patientName: 'Muhammad Ali',
-  //           patientPhone: '+92 300 1234567',
-  //           timestamp: Date.now(),
-  //         });
-  //       },
-  //       isOnline ? 8000 : 999999,
-  //     );
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [isOnline, tripStep, setIncomingRequest]);
-
-  useEffect(() => {
-    if (isOnline && tripStep === 'navigate_to_pickup') {
-      navigation.navigate('NavigateToPickup');
-    }
-  }, []);
-
-  // console.log(userData);
-  // console.log(userData, 'k');
   return (
     <View style={[globalStyles.flex, globalStyles.padding15, styles.card]}>
       <HomeHeader
         onOpenMenu={openDrawer}
         name={userData?.fullName}
-        locationLabel={currentLocation?.name}
+        locationLabel={currentLocation?.placeName}
         role={userData?.role}
       />
 
@@ -137,7 +86,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
         {stats?.activeTrip ? (
           <ActiveTripComp
             activeTrip={stats?.activeTrip}
-            onPressDetails={() => navigation.navigate('TripDetails')}
+            onPressDetails={() => navigation.navigate('Booking')}
             onStartTrip={() => console.log('start')}
             onArrived={() => console.log('arrived/accept')}
           />
@@ -151,7 +100,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
           image={ambulanceImages[userData?.ambulanceType]}
           text={data?.vehicleNumber}
           label={'Rating'}
-          value={`${userData?.rating}★`}
+          value={`${data?.rating}★`}
         />
 
         {/* Stats Row - Today's Earnings & Completed Trips */}

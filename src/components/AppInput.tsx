@@ -46,7 +46,6 @@ const AppInput = forwardRef<TextInput, AppInputProps>(
       rest.secureTextEntry ?? false,
     );
     const styles = useStyles(variant);
-
     return (
       <View style={[globalStyles.fullWidth, globalStyles.mB10, containerStyle]}>
         {!!label && <Text style={styles.label}>{label}</Text>}
@@ -75,8 +74,8 @@ const AppInput = forwardRef<TextInput, AppInputProps>(
             inputStyle,
           ]}
           placeholderTextColor={styles.placeholder.color}
-          secureTextEntry={hidePassword}
           {...rest}
+          secureTextEntry={hidePassword}
         />
 
         {!!error && <Text style={styles.error}>{error}</Text>}
@@ -86,10 +85,12 @@ const AppInput = forwardRef<TextInput, AppInputProps>(
             onPress={() => setHidePassword(prev => !prev)}
             style={[
               globalStyles.absPosition,
+              globalStyles.row,
+
               globalStyles.greaterzIndex,
               {
                 right: moderateScale(10),
-                top: moderateScale(10),
+                top: verticalScale(42),
               },
             ]}
           >

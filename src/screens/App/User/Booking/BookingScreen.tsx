@@ -23,7 +23,7 @@ import { globalStyles } from '../../../../styles/globalStyles';
 import { useIsFocused } from '@react-navigation/native';
 import { showAlert } from '../../../../utils/functions';
 import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
-import { socket } from '../../../../services/socketService';
+// import { socket } from '../../../../services/socketService';
 
 type Props = NativeStackScreenProps<DrawerStackParamList, 'Booking'>;
 const tripStatusToStep = {
@@ -319,7 +319,6 @@ const BookingScreen = ({ navigation }: Props) => {
     const interval = setInterval(async () => {
       try {
         const response = await getTripStatus();
-        console.log(bookingStep, response, 'k');
         if (!response) return;
 
         setTrip(response);
@@ -334,19 +333,19 @@ const BookingScreen = ({ navigation }: Props) => {
     return () => clearInterval(interval);
   }, [trip?.id]);
 
-  useEffect(() => {
-    socket.on('driver_location_changed', location => {
-      setDriverLocation({
-        latitude: location.lat,
-        longitude: location.lng,
-        name: '',
-      });
-    });
+  // useEffect(() => {
+  //   socket.on('driver_location_changed', location => {
+  //     setDriverLocation({
+  //       latitude: location.lat,
+  //       longitude: location.lng,
+  //       name: '',
+  //     });
+  //   });
 
-    return () => {
-      socket.off('driver_location_changed');
-    };
-  }, []);
+  //   return () => {
+  //     socket.off('driver_location_changed');
+  //   };
+  // }, []);
 
   const getEstimatedData = async () => {
     let data = await getEstimate({

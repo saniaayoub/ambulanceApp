@@ -1,123 +1,144 @@
-import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import React, { useEffect, useRef, useState, type FC } from 'react';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
+import React, { useEffect, useRef, useState, type FC, useMemo } from 'react';
 import { Text, View } from 'react-native';
 import { useDriverStore } from '../../stores/driverStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import AppButton from '../AppButton';
 import DetailColumnComp from '../booking/DetailColumnComp';
-import { moderateScale } from 'react-native-size-matters';
+import useDriverTrips from '../../hooks/useDriverTrips';
+import { verticalScale } from 'react-native-size-matters';
 
 const COUNTDOWN_SECONDS = 15;
 
 const IncomingRequestSheet: FC = () => {
   const styles = useGlobalStyles();
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { incomingRequest, acceptRequest, declineRequest } = useDriverStore();
+  const snapPoints = useMemo(() => ['70%'], []);
+
+  const { accept, reject } = useDriverTrips();
+  const incomingRequest = useDriverStore(state => state.incomingRequest);
+
   const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
-  const request = incomingRequest?._doc;
+  const renderBackdrop = React.useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+        pressBehavior="none"
+      />
+    ),
+    [],
+  );
   useEffect(() => {
     if (incomingRequest) {
-      bottomSheetRef.current?.expand();
       setCountdown(COUNTDOWN_SECONDS);
+
+      // wait one frame so sheet is mounted and ref is ready
+      requestAnimationFrame(() => {
+        bottomSheetRef.current?.snapToIndex(0);
+      });
     } else {
       bottomSheetRef.current?.close();
     }
   }, [incomingRequest]);
 
-  // useEffect(() => {
-  //   if (!incomingRequest) return;
-  //   if (countdown <= 0) {
-  //     declineRequest();
-  //     return;
-  //   }
-  //   const timer = setInterval(() => {
-  //     setCountdown(prev => prev - 1);
-  //   }, 1000);
-  //   return () => clearInterval(timer);
-  // }, [countdown, incomingRequest, declineRequest]);
-
-  if (!incomingRequest) return null;
-
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      snapPoints={['50%']}
+      snapPoints={snapPoints}
+      index={-1} // start CLOSED
       enablePanDownToClose={false}
       handleIndicatorStyle={styles.greyCard}
       backgroundStyle={styles.lightGreyCard}
-      style={styles.border}
+      backdropComponent={renderBackdrop}
+      style={[styles.border, globalStyles.paddingB40]}
     >
       <BottomSheetScrollView
         showsVerticalScrollIndicator={false}
-        style={globalStyles.padding15}
+        style={[globalStyles.padding15]}
       >
-        {/* Countdown */}
-        <View style={[globalStyles.centered, globalStyles.mB15]}>
-          <View
-            style={[
-              globalStyles.size50,
-              styles.round,
-              styles.buttonCard,
-              globalStyles.centered,
-            ]}
-          >
-            <Text style={[styles.h4, styles.white]}>{countdown}</Text>
+        {!incomingRequest ? (
+          <View style={[globalStyles.centered, { paddingVertical: 20 }]}>
+            <Text style={styles.smallText}>No incoming incomingRequest</Text>
           </View>
-          <Text style={[styles.smallText, globalStyles.mT5]}>
-            Time remaining
-          </Text>
-        </View>
+        ) : (
+          <>
+            <View style={[globalStyles.centered, globalStyles.mB15]}>
+              <View
+                style={[
+                  globalStyles.size50,
+                  styles.round,
+                  styles.buttonCard,
+                  globalStyles.centered,
+                ]}
+              >
+                <Text style={[styles.h4, styles.white]}>{countdown}</Text>
+              </View>
+              <Text style={[styles.smallText, globalStyles.mT5]}>
+                Time remaining
+              </Text>
+            </View>
 
-        {/* Title */}
-        <Text
-          style={[
-            styles.h4,
-            globalStyles.textCenter,
-            globalStyles.mB15,
-            globalStyles.negmargin,
-          ]}
-        >
-          New Ride Request
-        </Text>
-
-        {/* Details */}
-        <DetailColumnComp
-          title1="Pickup"
-          text1={request?.pickupLocation?.address}
-          title2="Destination"
-          text2={request?.destination?.address}
-        />
-
-        <DetailColumnComp
-          title1="Distance"
-          text1={`${request?.distanceKm} Km`}
-          title2="Fare"
-          text2={`Rs. ${request?.fare?.total?.toLocaleString()}`}
-        />
-
-        {/* Actions */}
-        <View style={[globalStyles.row, globalStyles.spaceBetween]}>
-          <View style={[globalStyles.flex, globalStyles.mR10]}>
-            <AppButton
-              title="Decline"
-              onPress={declineRequest}
+            <Text
               style={[
-                styles.whiteBtn,
-                styles.border,
-                styles.round,
-                globalStyles.mV5,
+                styles.h4,
+                globalStyles.textCenter,
+                globalStyles.mB15,
+                globalStyles.negmargin,
               ]}
-              textStyle={styles.text2}
+            >
+              New Ride incomingRequest
+            </Text>
+
+            <DetailColumnComp
+              title1="Pickup"
+              text1={incomingRequest?.pickupLocation?.address}
+              title2="Destination"
+              text2={incomingRequest?.destination?.address}
             />
-          </View>
-          <View style={[globalStyles.flex, globalStyles.mL10]}>
-            <AppButton
-              title="Accept"
-              onPress={acceptRequest}
-              style={[globalStyles.mV5]}
+
+            <DetailColumnComp
+              title1="Distance"
+              text1={`${incomingRequest?.distanceKm} Km`}
+              title2="Fare"
+              text2={`Rs. ${incomingRequest?.fare?.total?.toLocaleString()}`}
             />
-          </View>
-        </View>
+
+            <View
+              style={[
+                globalStyles.row,
+                globalStyles.spaceBetween,
+                globalStyles.mB40,
+              ]}
+            >
+              <AppButton
+                title="Decline"
+                onPress={() => reject(incomingRequest?.tripId)}
+                style={[
+                  styles.whiteBtn,
+                  styles.border,
+                  styles.round,
+                  globalStyles.halfwidth,
+                  globalStyles.mV5,
+                ]}
+                textStyle={styles.text2}
+              />
+
+              {/* <View style={[globalStyles.flex, globalStyles.mL10]}> */}
+              <AppButton
+                title="Accept"
+                onPress={() => accept(incomingRequest?.tripId)}
+                style={[globalStyles.mV5, globalStyles.halfwidth]}
+              />
+              {/* </View> */}
+            </View>
+          </>
+        )}
       </BottomSheetScrollView>
     </BottomSheet>
   );

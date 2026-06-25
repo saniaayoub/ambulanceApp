@@ -22,7 +22,7 @@ export const getNearbyDrivers = async (drivers: any[], pickup: Location) => {
   return nearbyDrivers;
 };
 export const fetchRoute = async (pickup: Location, destination: Location) => {
-  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${pickup.latitude},${pickup.longitude}&destination=${destination.latitude},${destination.longitude}&key=${Config.API_KEY}`;
+  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${pickup.latitude},${pickup.longitude}&destination=${destination.latitude},${destination.longitude}&mode="driving"&alternatives=true&key=${Config.API_KEY}`;
   try {
     const res = await handleResponse({
       method: 'get',
@@ -38,8 +38,16 @@ export const fetchRoute = async (pickup: Location, destination: Location) => {
 
     return coords;
   } catch (error) {
-    // console.log(error, 'polyline error');
-    return [];
+    console.log(error, 'polyline error');
+    const fallbackPolyline = [
+      { latitude: 24.90904585357697, longitude: 67.19322588362331 },
+      { latitude: 24.911376682861575, longitude: 67.17200070689865 },
+      { latitude: 24.91370751214618, longitude: 67.15077553017399 },
+      { latitude: 24.91603834143079, longitude: 67.12955035344932 },
+      { latitude: 24.918369170715393, longitude: 67.10832517672466 },
+      { latitude: 24.9207, longitude: 67.0871 },
+    ];
+    return fallbackPolyline;
   }
 };
 export const getCurrentLocation = async () =>
