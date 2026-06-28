@@ -1,4 +1,12 @@
-import { tripAccept, tripReject } from '../services/driverService';
+import { queryClient } from '../../App';
+import {
+  completeTrip,
+  markDriverArrived,
+  startTrip,
+  tripAccept,
+  tripCancel,
+  tripReject,
+} from '../services/driverService';
 import { toastError, toastSuccess } from '../services/toast';
 import { useDriverStore } from '../stores/driverStore';
 import { useLoaderStore } from '../stores/loaderStore';
@@ -21,9 +29,9 @@ const useDriverTrips = () => {
         return response;
       }
       setCurrentTrip(response.data);
-      setTripStep('navigate_to_pickup');
-      setIncomingRequest(null);
-
+      setTripStep(response.data.status);
+      // setIncomingRequest(null);
+      queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
       toastSuccess(response?.message);
       navigation.navigate('Booking');
       // return response;
@@ -48,9 +56,93 @@ const useDriverTrips = () => {
       hideLoader();
     }
   };
+
+  const handleArrived = async (tripId: string) => {
+    showLoader();
+    try {
+      const response = await markDriverArrived(tripId);
+
+      if (!response.success) {
+        toastError(getErrorMessage(response.error));
+        return response;
+      }
+      setCurrentTrip(response.data);
+      toastSuccess(response?.message);
+      setTripStep(response?.data?.status);
+      queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
+      // return response;
+    } finally {
+      hideLoader();
+    }
+  };
+
+  const handleCancelTrip = async (tripId: string, reason: string) => {
+    showLoader();
+    try {
+      const response = await tripCancel(tripId, reason);
+
+      if (!response.success) {
+        toastError(getErrorMessage(response.error));
+        return response;
+      }
+      setCurrentTrip(null);
+      setTripStep(null);
+      toastSuccess(response?.message);
+      navigation.goBack();
+      queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
+      // return response;
+    } finally {
+      hideLoader();
+    }
+  };
+
+  const handleTripStart = async (tripId: string) => {
+    showLoader();
+    try {
+      const response = await startTrip(tripId);
+
+      if (!response.success) {
+        toastError(getErrorMessage(response.error));
+        return response;
+      }
+      setCurrentTrip(response?.data);
+      setTripStep(response?.data?.status);
+
+      toastSuccess(response?.message);
+      queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
+      // return response;
+    } finally {
+      hideLoader();
+    }
+  };
+
+  const handleTripComplete = async (tripId: string) => {
+    showLoader();
+    try {
+      const response = await completeTrip(tripId);
+
+      if (!response.success) {
+        toastError(getErrorMessage(response.error));
+        return response;
+      }
+      setCurrentTrip(response?.data);
+      setTripStep(response?.data?.status);
+
+      toastSuccess(response?.message);
+      queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
+      // return response;
+    } finally {
+      hideLoader();
+    }
+  };
+
   return {
     accept: acceptTripRequest,
     reject: rejectTripRequest,
+    arrived: handleArrived,
+    start: handleTripStart,
+    complete: handleTripComplete,
+    cancel: handleCancelTrip,
   };
 };
 

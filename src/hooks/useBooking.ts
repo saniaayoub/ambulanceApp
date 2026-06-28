@@ -60,18 +60,13 @@ export const useBooking = () => {
   const getOnlineDriversList = async (type: string, pickup: Location) => {
     showLoader();
     try {
-      const response = await getOnlineDrivers(type);
+      const response = await getOnlineDrivers({ pickup, type });
       if (!response.success) {
         toastError(getErrorMessage(response.error));
         return response;
       }
-      const nearbyDrivers = await getNearbyDrivers(response.data, pickup);
 
-      nearbyDrivers.sort((a, b) => a.distance - b.distance);
-
-      setDrivers(nearbyDrivers.slice(0, 5));
-
-      return nearbyDrivers;
+      setDrivers(response.data);
     } finally {
       hideLoader();
     }

@@ -1,25 +1,15 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 // import your zustand auth store
-import { useAuthStore } from '../stores/authStore'; // <-- change path
 import { BaseURL } from '../api/axiosInstance';
+import { useAuthStore } from '../stores/authStore'; // <-- change path
 import { useDriverStore } from '../stores/driverStore';
 // import your trip/driver store if needed
 // import { useTripStore } from '../store/tripStore';
 
-const SOCKET_URL = 'http://YOUR_SERVER_URL:5000'; // <-- change this
-
 type JoinPayload = {
   userId: string;
   role: 'driver' | 'user' | 'admin';
-};
-
-type DriverLocationPayload = {
-  driverId?: string;
-  lat: number;
-  lng: number;
-  //   heading?: number;
-  //   speed?: number;
 };
 
 type IncomingTripPayload = {
@@ -41,7 +31,7 @@ type TripStatusPayload = {
   [key: string]: any;
 };
 
-let socketInstance: Socket | null = null;
+export let socketInstance: Socket | null = null;
 
 export const getDriverSocket = () => socketInstance;
 
@@ -49,10 +39,7 @@ export const useDriverSocket = () => {
   const currentUser = useAuthStore(state => state.userData);
   const token = useAuthStore(state => state.token);
   const setIncomingRequest = useDriverStore(state => state.setIncomingRequest);
-
   const hasHydrated = useAuthStore(state => state.hasHydrated); // if you have this in zustand
-  // const setIncomingTrip = useTripStore(state => state.setIncomingTrip);
-  // const setTripStatus = useTripStore(state => state.setTripStatus);
 
   const hasJoinedRef = useRef(false);
   const lastJoinedRoomRef = useRef<string | null>(null);
@@ -85,12 +72,12 @@ export const useDriverSocket = () => {
         reconnectionAttempts: Infinity,
         reconnectionDelay: 1000,
         timeout: 20000,
-        auth: {
-          token, // optional if backend reads token from socket.handshake.auth.token
-        },
-        extraHeaders: {
-          Authorization: `Bearer ${token}`, // useful if backend supports it
-        },
+        // auth: {
+        //   token, // optional if backend reads token from socket.handshake.auth.token
+        // },
+        // extraHeaders: {
+        //   Authorization: `Bearer ${token}`, // useful if backend supports it
+        // },
       });
     } else {
       // keep token fresh if socket already exists and user logs in again
@@ -172,12 +159,17 @@ export const useDriverSocket = () => {
 
     const onIncomingTrip = (trip: IncomingTripPayload) => {
       console.log('🚑 incoming_trip =>', trip);
-
-      // Example:
       setIncomingRequest(trip);
 
       // If you want a local notification / sound, trigger it here
       // playIncomingTripSound();
+    };
+    const onTripRequestTaken = ({ tripId }) => {
+      const request = useDriverStore.getState().incomingRequest;
+      if (request?.tripId === tripId) {
+        setIncomingRequest(null);
+        console.log('taken');
+      }
     };
 
     const onTripCancelled = (payload: TripCancelledPayload) => {
@@ -204,6 +196,7 @@ export const useDriverSocket = () => {
 
     // ===== REGISTER LISTENERS =====
     socket.on('incoming_trip_request', onIncomingTrip);
+    socket.on('trip_request_taken', onTripRequestTaken);
     socket.on('trip_cancelled', onTripCancelled);
     socket.on('trip_status_updated', onTripStatusUpdated);
     socket.on('driver_approved', onDriverApproved);
@@ -211,125 +204,11 @@ export const useDriverSocket = () => {
 
     return () => {
       socket.off('incoming_trip_request', onIncomingTrip);
+      socket.off('trip_request_taken', onTripRequestTaken);
       socket.off('trip_cancelled', onTripCancelled);
       socket.off('trip_status_updated', onTripStatusUpdated);
       socket.off('driver_approved', onDriverApproved);
       socket.off('driver_rejected', onDriverRejected);
     };
   }, []);
-
-  /**
-   * Emit driver location update
-   */
-  const emitDriverLocation = useCallback(
-    (payload: DriverLocationPayload) => {
-      if (!socketInstance?.connected) {
-        console.log('⚠️ emitDriverLocation skipped: socket not connected');
-        return;
-      }
-
-      const finalPayload = {
-        driverId: payload.driverId || resolvedUserId, // adjust if backend expects driverId instead of userId
-        lat: payload.lat,
-        lng: payload.lng,
-        // heading: payload.heading,
-        // speed: payload.speed,
-      };
-
-      console.log('📍 driver_location_update =>', finalPayload);
-      socketInstance.emit('driver_location_update', finalPayload);
-    },
-    [resolvedUserId],
-  );
-
-  /**
-   * Emit driver online/offline status if you want via socket too
-   */
-  const emitDriverAvailability = useCallback(
-    (isOnline: boolean) => {
-      if (!socketInstance?.connected) {
-        console.log('⚠️ emitDriverAvailability skipped: socket not connected');
-        return;
-      }
-
-      const payload = {
-        userId: resolvedUserId,
-        isOnline,
-      };
-
-      console.log('🟢 driver_availability_update =>', payload);
-      socketInstance.emit('driver_availability_update', payload);
-    },
-    [resolvedUserId],
-  );
-
-  /**
-   * Accept trip
-   */
-  const emitAcceptTrip = useCallback((tripId: string) => {
-    if (!socketInstance?.connected) {
-      console.log('⚠️ emitAcceptTrip skipped: socket not connected');
-      return;
-    }
-
-    socketInstance.emit('accept_trip', { tripId });
-  }, []);
-
-  /**
-   * Arrive at pickup
-   */
-  const emitArrived = useCallback((tripId: string) => {
-    if (!socketInstance?.connected) return;
-    socketInstance.emit('trip_arrived', { tripId });
-  }, []);
-
-  /**
-   * Start trip
-   */
-  const emitStartTrip = useCallback((tripId: string) => {
-    if (!socketInstance?.connected) return;
-    socketInstance.emit('start_trip', { tripId });
-  }, []);
-
-  /**
-   * Complete trip
-   */
-  const emitCompleteTrip = useCallback((tripId: string) => {
-    if (!socketInstance?.connected) return;
-    socketInstance.emit('complete_trip', { tripId });
-  }, []);
-
-  /**
-   * Reject trip
-   */
-  const emitRejectTrip = useCallback((tripId: string, reason?: string) => {
-    if (!socketInstance?.connected) return;
-    socketInstance.emit('reject_trip', { tripId, reason });
-  }, []);
-
-  /**
-   * Manual disconnect if needed on logout
-   */
-  const disconnectSocket = useCallback(() => {
-    if (socketInstance) {
-      console.log('🔌 Disconnecting driver socket');
-      socketInstance.disconnect();
-      hasJoinedRef.current = false;
-      lastJoinedRoomRef.current = null;
-    }
-  }, []);
-
-  return {
-    socket: socketInstance,
-    isConnected: !!socketInstance?.connected,
-
-    emitDriverLocation,
-    emitDriverAvailability,
-    emitAcceptTrip,
-    emitArrived,
-    emitStartTrip,
-    emitCompleteTrip,
-    emitRejectTrip,
-    disconnectSocket,
-  };
 };

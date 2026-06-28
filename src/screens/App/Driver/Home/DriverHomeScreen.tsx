@@ -1,27 +1,20 @@
-import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React, { useCallback, useEffect, type FC } from 'react';
-import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
-import HomeHeader from '../../../../components/home/header';
-import { useDriverStore } from '../../../../stores/driverStore';
-import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
-import theme from '../../../../styles/theme';
-import IncomingRequestSheet from '../../../../components/driver/IncomingRequestSheet';
-import NavigateToPickupSheet from '../../../../components/driver/NavigateToPickupSheet';
-import TripInProgressSheet from '../../../../components/driver/TripInProgressSheet';
-import TripCompletedSheet from '../../../../components/driver/TripCompletedSheet';
-import { useThemeStore } from '../../../../stores/themeStore';
-import { useAuthStore } from '../../../../stores/authStore';
-import { useLocation } from '../../../../hooks/useLocation';
-import OnlineToggle from '../../../../components/driver/OnlineToggle';
+import { ScrollView, View } from 'react-native';
 import InfoCard from '../../../../components/booking/InfoCard';
-import { useDriverTracking } from '../../../../hooks/useDriverTracking';
-import { useDriver, useDriverDashboard } from '../../../../hooks/useDriver';
-import { ambulanceImages } from '../../../../utils/constants';
-import DashboardComp from '../../../../components/driver/DashboardComp';
 import ActiveTripComp from '../../../../components/driver/ActiveTrip';
+import DashboardComp from '../../../../components/driver/DashboardComp';
 import HomeMapComp from '../../../../components/driver/HomeMapComp';
+import IncomingRequestSheet from '../../../../components/driver/IncomingRequestSheet';
+import OnlineToggle from '../../../../components/driver/OnlineToggle';
+import HomeHeader from '../../../../components/home/header';
+import { useDriver, useDriverDashboard } from '../../../../hooks/useDriver';
+import { useDriverTracking } from '../../../../hooks/useDriverTracking';
+import { useAuthStore } from '../../../../stores/authStore';
+import { useDriverStore } from '../../../../stores/driverStore';
 import { useLocationStore } from '../../../../stores/locationStore';
+import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
+import { ambulanceImages } from '../../../../utils/constants';
+import useDriverTrips from '../../../../hooks/useDriverTrips';
 
 type Props = {
   navigation: any;
@@ -32,33 +25,22 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
   const userData = useAuthStore(state => state.userData);
 
   const data = useDriver(userData?.driverId);
-  const {
-    isOnline,
-    toggleOnline,
-    tripStep,
-    setCurrentTrip,
-    incomingRequest,
-    setIsOnline,
-    setTripStep,
-  } = useDriverStore();
-
-  // console.log(data, userData, incomingRequest, 'k');
-
-  const { currentLocation } = useLocationStore();
+  const { isOnline, toggleOnline, setCurrentTrip, setIsOnline, setTripStep } =
+    useDriverStore();
+  const currentLocation = useLocationStore(state => state.currentLocation);
   useDriverTracking(userData?.driverId, isOnline);
   const stats = useDriverDashboard(userData?.driverId);
+  const { arrived } = useDriverTrips();
 
   const openDrawer = useCallback(() => {
     navigation.openDrawer();
   }, [navigation]);
-  // console.log(currentLocation, userData, isOnline, 'cur');
-  // useEffect(() => {
-  //   fetchLocation();
-  // }, []);
 
   useEffect(() => {
     if (stats?.activeTrip) {
-      setTripStep('navigate_to_pickup');
+      const status = stats?.activeTrip?.status;
+
+      setTripStep(status);
       setCurrentTrip(stats?.activeTrip);
     }
   }, [stats]);
@@ -72,6 +54,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
   const navigateToEarnings = useCallback(() => {
     navigation.navigate('Earnings');
   }, [navigation]);
+
   return (
     <View style={[globalStyles.flex, globalStyles.padding15, styles.card]}>
       <HomeHeader
@@ -85,14 +68,16 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
         {/* Online/Offline Toggle */}
         {stats?.activeTrip ? (
           <ActiveTripComp
+            driverLoc={currentLocation}
             activeTrip={stats?.activeTrip}
             onPressDetails={() => navigation.navigate('Booking')}
             onStartTrip={() => console.log('start')}
-            onArrived={() => console.log('arrived/accept')}
+            onArrived={() => arrived(stats.activeTrip?._id)}
           />
         ) : (
           <OnlineToggle isOnline={isOnline} toggleOnline={toggleOnline} />
         )}
+        {/* <OnlineToggle isOnline={isOnline} toggleOnline={toggleOnline} /> */}
 
         {/* Driver Profile Card */}
         <InfoCard
@@ -111,10 +96,10 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
         />
 
         {/* Live Map Placeholder */}
-
+        {/* 
         <View style={[globalStyles.flex, globalStyles.height200]}>
           <HomeMapComp />
-        </View>
+        </View> */}
       </ScrollView>
 
       <IncomingRequestSheet />

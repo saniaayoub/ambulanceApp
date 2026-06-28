@@ -1,8 +1,8 @@
 import { View } from 'react-native';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { getDistance } from 'geolib';
 
-import { globalStyles } from '../../../../styles/globalStyles';
+import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import NavigateToPickupSheet from '../../../../components/driver/NavigateToPickupSheet';
 import TripInProgressSheet from '../../../../components/driver/TripInProgressSheet';
 import TripCompletedSheet from '../../../../components/driver/TripCompletedSheet';
@@ -11,15 +11,64 @@ import BaseMapDriver, {
 } from '../../../../components/map/BaseMapDriver';
 import { useDriverStore } from '../../../../stores/driverStore';
 import { useLocationStore } from '../../../../stores/locationStore';
+import BottomSheet from '@gorhom/bottom-sheet';
+import useDriverTrips from '../../../../hooks/useDriverTrips';
+import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
+import { showAlert } from '../../../../utils/functions';
 
-// SEARCHING / ASSIGNED -> navigate_to_pickup
+// SEARCHING / ASSIGNED -> ASSIGNED
 // ARRIVED / STARTED -> trip_in_progress
 // COMPLETED -> trip_completed
 
+const reasons = [
+  {
+    id: '1',
+    title: 'Patient did not answer',
+    icon: 'phone-remove',
+  },
+  {
+    id: '2',
+    title: 'Patient not at pickup',
+    icon: 'map-marker-remove',
+  },
+  {
+    id: '3',
+    title: 'Unable to reach pickup location',
+    icon: 'road-variant',
+  },
+  {
+    id: '4',
+    title: 'Vehicle issue / Breakdown',
+    icon: 'car-wrench',
+  },
+  {
+    id: '5',
+    title: 'Emergency call received',
+    icon: 'ambulance',
+  },
+  {
+    id: '6',
+    title: 'Safety concerns',
+    icon: 'shield-alert',
+  },
+  {
+    id: '7',
+    title: 'Patient requested cancellation',
+    icon: 'account-cancel',
+  },
+  {
+    id: '8',
+    title: 'Other',
+    icon: 'help-circle-outline',
+  },
+];
 const BookingScreen = () => {
-  const { currentTrip, tripStep, arriveAtPickup } = useDriverStore();
-  const { currentLocation } = useLocationStore();
+  const { currentTrip, setTripStep, tripStep } = useDriverStore();
+  const { arrived, cancel, start, complete } = useDriverTrips();
 
+  const { currentLocation } = useLocationStore();
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const styles = useGlobalStyles();
   const markers: MarkerData[] = useMemo(() => {
     const list: MarkerData[] = [];
 
@@ -35,6 +84,8 @@ const BookingScreen = () => {
         title: 'Driver',
       });
     }
+    const pickUpLat = currentTrip?.pickupLocation?.lat;
+    const pickUpLng = currentTrip?.pickupLocation?.lng;
 
     if (
       currentTrip?.pickupLocation?.lat != null &&
@@ -42,8 +93,8 @@ const BookingScreen = () => {
     ) {
       list.push({
         id: 'pickup',
-        latitude: currentTrip.pickupLocation.lat,
-        longitude: currentTrip.pickupLocation.lng,
+        latitude: pickUpLat,
+        longitude: pickUpLng,
         type: 'pickup',
         title: 'Pickup',
       });
@@ -64,6 +115,14 @@ const BookingScreen = () => {
 
     return list;
   }, [currentLocation, currentTrip]);
+
+  useEffect(() => {
+    if (bottomSheetRef.current) {
+      setTimeout(() => {
+        bottomSheetRef.current?.snapToIndex(0);
+      }, 1000);
+    }
+  }, [bottomSheetRef.current]);
 
   const initialRegion = useMemo(() => {
     if (
@@ -129,24 +188,106 @@ const BookingScreen = () => {
     };
   }, [markers]);
 
+  const destinationMeta = useMemo(() => {
+    const driver = markers.find(m => m.id === 'driver');
+    const destination = markers.find(m => m.id === 'destination');
+
+    if (!driver || !destination) {
+      return {
+        distanceKm: null,
+        etaMinutes: null,
+      };
+    }
+
+    const distanceMeters = getDistance(
+      {
+        latitude: driver.latitude,
+        longitude: driver.longitude,
+      },
+      {
+        latitude: destination.latitude,
+        longitude: destination.longitude,
+      },
+    );
+
+    const distanceKm = Number((distanceMeters / 1000).toFixed(1));
+    const etaMinutes = Math.max(1, Math.ceil((distanceKm / 30) * 60));
+    console.log(driver, ',');
+    return {
+      distanceKm,
+      etaMinutes,
+    };
+  }, [markers]);
+
+  const handleShowAlert = () => {
+    showAlert(() => {
+      setTripStep('CANCEL');
+    }, 'Are you sure you want to cancel the ride?');
+  };
+
   const renderBottomSheet = () => {
     switch (tripStep) {
-      case 'navigate_to_pickup':
+      case 'ASSIGNED':
         return (
           <NavigateToPickupSheet
             currentTrip={currentTrip}
-            tripStep={tripStep}
-            arriveAtPickup={arriveAtPickup}
+            handlePress={() => arrived(currentTrip?._id)}
             etaMinutes={pickupMeta.etaMinutes}
             distanceKm={pickupMeta.distanceKm}
+            title={'Navigate to Pickup'}
+            btnTitle="Arrived"
+            handleCancel={handleShowAlert}
+          />
+        );
+      case 'WAITING':
+        return (
+          <NavigateToPickupSheet
+            currentTrip={currentTrip}
+            handlePress={() => start(currentTrip?._id)}
+            etaMinutes={destinationMeta.etaMinutes}
+            distanceKm={destinationMeta.distanceKm}
+            title={'Reached at Pickup'}
+            btnTitle={'Start Trip'}
+            showWaiting={true}
+            handleCancel={handleShowAlert}
           />
         );
 
-      case 'trip_in_progress':
-        return <TripInProgressSheet currentTrip={currentTrip} />;
+      case 'STARTED':
+        return (
+          <TripInProgressSheet
+            currentTrip={currentTrip}
+            handlePress={() => complete(currentTrip?._id)}
+            etaMinutes={destinationMeta.etaMinutes}
+            distanceKm={destinationMeta.distanceKm}
+            title={'Trip In Progress'}
+            btnTitle={'Complete Trip'}
+          />
+        );
 
-      case 'trip_completed':
-        return <TripCompletedSheet currentTrip={currentTrip} />;
+      case 'COMPLETED':
+        return (
+          <NavigateToPickupSheet
+            currentTrip={currentTrip}
+            handlePress={() => complete(currentTrip?._id)}
+            etaMinutes={destinationMeta.etaMinutes}
+            distanceKm={destinationMeta.distanceKm}
+            title={'Trip Completed'}
+            btnTitle={'Go Back to Home'}
+          />
+        );
+      case 'CANCEL':
+        return (
+          <CancelRideBottomSheet
+            reasons={reasons}
+            onKeepBooking={() => {
+              setTripStep(currentTrip?.status);
+            }}
+            onCancelBooking={(reason: string) => {
+              cancel(currentTrip?._id, reason);
+            }}
+          />
+        );
 
       default:
         return null;
@@ -160,9 +301,17 @@ const BookingScreen = () => {
         step={tripStep}
         initialRegion={initialRegion}
         title="Current Booking"
+      />
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={0}
+        snapPoints={['70%', '80%']}
+        enablePanDownToClose={false}
+        backgroundStyle={styles.card}
       >
         {renderBottomSheet()}
-      </BaseMapDriver>
+      </BottomSheet>
     </View>
   );
 };

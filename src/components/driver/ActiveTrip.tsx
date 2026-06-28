@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import AppButton from '../AppButton';
+import { Location as LocationProp } from '../../stores/locationStore';
+import { getDistance } from 'geolib';
 
 export const Location = ({
   color,
@@ -37,11 +39,13 @@ const ActiveTripComp = ({
   onPressDetails,
   onStartTrip,
   onArrived,
+  driverLoc,
 }: {
   activeTrip: any;
   onPressDetails: () => void;
   onStartTrip: () => void;
   onArrived: () => void;
+  driverLoc: LocationProp | null;
 }) => {
   const styles = useGlobalStyles();
 
@@ -59,7 +63,43 @@ const ActiveTripComp = ({
         return 'Active Trip';
     }
   };
+  const distanceM = useMemo(() => {
+    if (activeTrip?.status === 'ASSIGNED') {
+      const driverLat = driverLoc?.latitude;
+      const driverLng = driverLoc?.longitude;
+      const pickupLat = activeTrip?.pickupLocation?.lat;
+      const pickupLng = activeTrip?.pickupLocation?.lng;
 
+      if (
+        driverLat == null ||
+        driverLng == null ||
+        pickupLat == null ||
+        pickupLng == null
+      ) {
+        return Infinity;
+      }
+
+      return getDistance(
+        {
+          latitude: driverLat,
+          longitude: driverLng,
+        },
+        {
+          latitude: pickupLat,
+          longitude: pickupLng,
+        },
+      );
+    }
+    return null;
+  }, [driverLoc, activeTrip]);
+  console.log(
+    activeTrip?.status,
+    distanceM,
+    distanceM <= 100,
+    driverLoc,
+    activeTrip?.pickupLocation,
+    'kk',
+  );
   return (
     <View
       style={[
@@ -123,17 +163,18 @@ const ActiveTripComp = ({
         {activeTrip?.status === 'ASSIGNED' && (
           <AppButton
             onPress={onArrived}
+            disabled={distanceM >= 100}
             style={[globalStyles.halfwidth, globalStyles.mB0, globalStyles.mT0]}
             title="Arrived"
             textStyle={[styles.smallText, styles.white]}
           />
         )}
 
-        {activeTrip?.status === 'ARRIVED' && (
+        {activeTrip?.status === 'WAITING' && (
           <AppButton
             onPress={onStartTrip}
             style={[globalStyles.halfwidth, globalStyles.mB0, globalStyles.mT0]}
-            title="Arrived"
+            title="Start Trip"
             textStyle={[styles.smallText, styles.white]}
           />
         )}

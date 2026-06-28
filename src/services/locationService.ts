@@ -22,7 +22,10 @@ export const getNearbyDrivers = async (drivers: any[], pickup: Location) => {
   return nearbyDrivers;
 };
 export const fetchRoute = async (pickup: Location, destination: Location) => {
-  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${pickup.latitude},${pickup.longitude}&destination=${destination.latitude},${destination.longitude}&mode="driving"&alternatives=true&key=${Config.API_KEY}`;
+  let mode = 'driving';
+  let alternative = true;
+
+  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${pickup.latitude},${pickup.longitude}&destination=${destination.latitude},${destination.longitude}&mode=${mode}&alternatives=${alternative}&key=${Config.API_KEY}`;
   try {
     const res = await handleResponse({
       method: 'get',
@@ -39,15 +42,8 @@ export const fetchRoute = async (pickup: Location, destination: Location) => {
     return coords;
   } catch (error) {
     console.log(error, 'polyline error');
-    const fallbackPolyline = [
-      { latitude: 24.90904585357697, longitude: 67.19322588362331 },
-      { latitude: 24.911376682861575, longitude: 67.17200070689865 },
-      { latitude: 24.91370751214618, longitude: 67.15077553017399 },
-      { latitude: 24.91603834143079, longitude: 67.12955035344932 },
-      { latitude: 24.918369170715393, longitude: 67.10832517672466 },
-      { latitude: 24.9207, longitude: 67.0871 },
-    ];
-    return fallbackPolyline;
+
+    return [];
   }
 };
 export const getCurrentLocation = async () =>
@@ -112,11 +108,14 @@ export const getLocationName = async (lat: number, lng: number) => {
 
     const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${apiKey}`;
 
-    const res = await fetch(url);
-    const data = await res.json();
-    return data.results?.[0]?.formatted || '';
+    const res = await handleResponse({ url: url, method: 'get' });
+    if (!res?.success) {
+      return 'Some Location';
+    }
+    return res?.results?.[0]?.formatted || '';
   } catch (error) {
-    console.log(error, 'inn');
+    console.log(error, 'getLocationName inn');
+    return 'Some Location';
     // throw error;
   }
 };

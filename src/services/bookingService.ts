@@ -28,11 +28,11 @@ export const getEstimateData = async (payload: object) =>
     data: payload,
   });
 
-export const getOnlineDrivers = async (type: string) =>
+export const getOnlineDrivers = async (payload: object) =>
   handleResponse({
-    method: 'get', // HTTP method used for the request
+    method: 'post', // HTTP method used for the request
     url: ENDPOINTS.DRIVER.ONLINEDRIVERS, // The endpoint URL for the dashboard
-    params: type ? { type } : undefined,
+    data: payload,
   });
 
 export const createBooking = async (payload: object) =>

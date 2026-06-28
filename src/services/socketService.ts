@@ -35,3 +35,11 @@
 // socket.on('connect_error', error => {
 //   console.log('Socket Error:', error.message);
 // });
+
+// user
+// socket.on("trip_status_updated", data => {
+//     if (data.status === "ARRIVED") {
+//         // Update trip status
+//         // Show "Driver has arrived"
+//     }
+// });

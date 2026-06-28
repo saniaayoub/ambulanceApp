@@ -145,7 +145,7 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
       setIsFetchingRoute(true);
       console.log(markers, 'ks');
       // 1) Driver -> Pickup
-      if (step === 'navigate_to_pickup') {
+      if (step === 'ASSIGNED') {
         if (!driverMarker || !pickupMarker) {
           console.log(driverMarker, pickupMarker, 'inner');
           setRouteCoords([]);
@@ -165,11 +165,19 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
         if (!hasRouteChangedEnough(origin, destination)) {
           return;
         }
-        console.log(origin, destination, 'arrives');
 
         const polylineData = await fetchRoute(origin, destination);
-        console.log('arrive', polylineData);
-        setRouteCoords(polylineData || []);
+        const fallbackPolyline = [
+          { latitude: 24.90904585357697, longitude: 67.19322588362331 },
+          { latitude: 24.911376682861575, longitude: 67.17200070689865 },
+          { latitude: 24.91370751214618, longitude: 67.15077553017399 },
+          { latitude: 24.91603834143079, longitude: 67.12955035344932 },
+          { latitude: 24.918369170715393, longitude: 67.10832517672466 },
+          { latitude: 24.9207, longitude: 67.0871 },
+        ];
+        // setRouteCoords(polylineData || []);
+        setRouteCoords(fallbackPolyline || []);
+
         lastRouteOriginRef.current = origin;
         lastRouteDestinationRef.current = destination;
         return;

@@ -55,6 +55,10 @@ export const ENDPOINTS = {
     DELETE: (tripId: string) => `trips/${tripId}`,
     ACCEPT: (tripId: string) => `trips/accept/${tripId}`,
     REJECT: (tripId: string) => `trips/reject/${tripId}`,
+    ARRIVED: (tripId: string) => `trips/arrived/${tripId}`,
+    START: (tripId: string) => `trips/start/${tripId}`,
+    COMPLETE: (tripId: string) => `trips/complete/${tripId}`,
+    CANCEL: (tripId: string) => `trips/cancel/${tripId}`,
   },
   // Details/Items Endpoints
   DETAILS: {

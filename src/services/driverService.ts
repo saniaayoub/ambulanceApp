@@ -26,8 +26,36 @@ export const tripAccept = async (tripId: string) =>
     method: 'post',
     url: ENDPOINTS.TRIPS.ACCEPT(tripId),
   });
+
 export const tripReject = async (tripId: string) =>
   handleResponse({
     method: 'post',
     url: ENDPOINTS.TRIPS.REJECT(tripId),
+  });
+
+export const tripCancel = async (tripId: string, reason: string) =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.TRIPS.CANCEL(tripId),
+    data: {
+      reason,
+    },
+  });
+
+export const startTrip = async (tripId: string) =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.TRIPS.START(tripId),
+  });
+
+export const completeTrip = async (tripId: string) =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.TRIPS.COMPLETE(tripId),
+  });
+
+export const markDriverArrived = async (tripId: string) =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.TRIPS.ARRIVED(tripId),
   });

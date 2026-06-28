@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
 import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
-
-import { useDriverSocket } from './useDriverSocket';
 import { useLocationStore } from '../stores/locationStore';
 import { getLocationName } from '../services/locationService';
+import {
+  emitDriverLocation,
+  isSocketConnected,
+} from '../services/driverSocketService';
 
 const REVERSE_GEOCODE_DISTANCE_METERS = 150;
 
@@ -15,7 +17,6 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
     longitude: number;
   } | null>(null);
   const isGeocodingRef = useRef(false);
-  const { emitDriverLocation, isConnected } = useDriverSocket();
   const { setCurrentLocation, currentLocation } = useLocationStore();
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
     watchId.current = Geolocation.watchPosition(
       async position => {
         const { latitude, longitude } = position.coords;
-        console.log(latitude, longitude, 'lo');
+
         // 1) always update live coordinates immediately
         setCurrentLocation({
           latitude,
@@ -39,7 +40,7 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
         });
 
         // 2) emit live location to backend
-        if (isConnected) {
+        if (isSocketConnected()) {
           emitDriverLocation({
             driverId,
             lat: latitude,
@@ -51,7 +52,6 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
         const nextCoords = { latitude, longitude };
 
         let shouldReverseGeocode = false;
-
         if (!lastGeocodedLocationRef.current) {
           shouldReverseGeocode = true;
         } else {
@@ -64,12 +64,10 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
             shouldReverseGeocode = true;
           }
         }
-
         if (!shouldReverseGeocode || isGeocodingRef.current) return;
 
         try {
           isGeocodingRef.current = true;
-
           const formattedAddress = await getLocationName(latitude, longitude);
 
           setCurrentLocation({
@@ -100,5 +98,5 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
         Geolocation.clearWatch(watchId.current);
       }
     };
-  }, [driverId, isOnline, isConnected]);
+  }, [driverId, isOnline]);
 };

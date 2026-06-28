@@ -16,6 +16,7 @@ import {
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { formatPhoneNumber } from '../utils/functions';
+import { disconnectSocket } from '../services/driverSocketService';
 
 export const getErrorMessage = (error: any) =>
   error?.response?.data?.message || error?.message || 'Something went wrong';
@@ -185,6 +186,7 @@ export const useAuth = () => {
         toastError(getErrorMessage(response.error));
         return response;
       }
+      disconnectSocket();
       clearToken();
       return response;
     } finally {

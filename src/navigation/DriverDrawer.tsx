@@ -73,6 +73,7 @@ const DriverDrawer: FC = () => {
     >
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Booking" component={BookingScreen} />
+      <Drawer.Screen name="Earnings" component={EarningsScreen} />
       {/*  <Drawer.Screen name="Earnings" component={EarningsScreen} />
       <Drawer.Screen name="RideHistory" component={RideStack} />
       <Drawer.Screen name="Notifications" component={Notifications} />

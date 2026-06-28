@@ -44,7 +44,6 @@ export const formatPhoneNumber = (phoneNumber: string, countryCode: string) => {
 
   // Remove leading zeros
   phone = phone.replace(/^0+/, '');
-
   return `+${code}${phone}`;
 };
 
@@ -58,7 +57,7 @@ export const formatTime = (sec: number) => {
   const m = Math.floor(sec / 60);
   const s = sec % 60;
 
-  return `${m}:${s < 10 ? '0' : ''}${s}`;
+  return `${m} min ${s < 10 ? '0' : ''}${s} sec`;
 };
 
 export const showAlert = (onConfirm: () => void, text: string) => {

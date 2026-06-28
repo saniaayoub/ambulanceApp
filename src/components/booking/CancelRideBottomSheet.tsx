@@ -11,42 +11,14 @@ import theme from '../../styles/theme';
 type Props = {
   onKeepBooking: () => void;
   onCancelBooking: (reason: string) => void;
+  reasons: Array<object>;
 };
 
-const reasons = [
-  {
-    id: '1',
-    title: "Driver didn't answer",
-    icon: 'phone-remove',
-  },
-  {
-    id: '2',
-    title: 'Driver not at pickup',
-    icon: 'map-marker-remove',
-  },
-  {
-    id: '3',
-    title: 'Driver asked me to cancel',
-    icon: 'account-cancel',
-  },
-  {
-    id: '4',
-    title: 'Driver on wrong route',
-    icon: 'routes',
-  },
-  {
-    id: '5',
-    title: 'Ambulance arrived early',
-    icon: 'clock-alert-outline',
-  },
-  {
-    id: '6',
-    title: 'Other',
-    icon: 'help-circle-outline',
-  },
-];
-
-const CancelRideSheet = ({ onKeepBooking, onCancelBooking }: Props) => {
+const CancelRideSheet = ({
+  onKeepBooking,
+  onCancelBooking,
+  reasons,
+}: Props) => {
   const styles = useGlobalStyles();
   const [selectedReason, setSelectedReason] = useState('');
 

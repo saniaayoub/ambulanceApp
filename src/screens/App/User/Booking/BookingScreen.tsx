@@ -25,6 +25,39 @@ import { showAlert } from '../../../../utils/functions';
 import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
 // import { socket } from '../../../../services/socketService';
 
+const reasons = [
+  {
+    id: '1',
+    title: "Driver didn't answer",
+    icon: 'phone-remove',
+  },
+  {
+    id: '2',
+    title: 'Driver not at pickup',
+    icon: 'map-marker-remove',
+  },
+  {
+    id: '3',
+    title: 'Driver asked me to cancel',
+    icon: 'account-cancel',
+  },
+  {
+    id: '4',
+    title: 'Driver on wrong route',
+    icon: 'routes',
+  },
+  {
+    id: '5',
+    title: 'Ambulance arrived early',
+    icon: 'clock-alert-outline',
+  },
+  {
+    id: '6',
+    title: 'Other',
+    icon: 'help-circle-outline',
+  },
+];
+
 type Props = NativeStackScreenProps<DrawerStackParamList, 'Booking'>;
 const tripStatusToStep = {
   SEARCHING: 'Searching',
@@ -107,15 +140,14 @@ const BookingScreen = ({ navigation }: Props) => {
       ...(bookingStep === 'Searching'
         ? nearbyDrivers.map((item: any) => ({
             id: item?.user?.phone, // or any unique value
-            latitude: item?.driver?.currentLocation?.lat,
-            longitude: item?.driver?.currentLocation?.lng,
+            latitude: item?.currentLocation?.lat,
+            longitude: item?.currentLocation?.lng,
             type: 'driver' as const,
           }))
         : []),
     ],
     [pickupLocation, destinationLocation, bookingStep, nearbyDrivers],
   );
-
   const handleShowAlert = () => {
     showAlert(async () => {
       await handleBookingCancel();
@@ -205,7 +237,7 @@ const BookingScreen = ({ navigation }: Props) => {
       case 'Searching':
         return (
           <SearchingSheet
-            nearbyCount={nearbyDrivers.length}
+            nearbyCount={nearbyDrivers?.length}
             estimatedTime="20-45 sec"
             currentStep={bookingStep}
             onCancel={handleShowAlert}
@@ -266,6 +298,7 @@ const BookingScreen = ({ navigation }: Props) => {
             onKeepBooking={() => {
               setStep('Driver Assigned');
             }}
+            reasons={reasons}
             onCancelBooking={async (reason: string) => {
               console.log('hi');
               await handleBookingCancel(reason);
@@ -305,8 +338,8 @@ const BookingScreen = ({ navigation }: Props) => {
 
     const loadData = async () => {
       if (bookingStep === 'Trip Details') {
-        await getEstimatedData();
-        await getOnlineDriversList(selectedAmbulance?.type, pickupLocation);
+        getEstimatedData();
+        getOnlineDriversList(selectedAmbulance?.type, pickupLocation);
       }
     };
 
