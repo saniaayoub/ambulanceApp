@@ -5,8 +5,8 @@ import DrawerPlaceholder from '../screens/DrawerPlaceholder';
 import DriverHomeScreen from '../screens/App/Driver/Home/DriverHomeScreen';
 import EarningsScreen from '../screens/App/Driver/Earnings/EarningsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import RideHistoryScreen from '../screens/App/Shared/History/RideHistoryScreen';
-import RideDetailScreen from '../screens/App/Shared/History/RideDetailScreen';
+import RideHistoryScreen from '../screens/App/Driver/RideHistory/History';
+import RideDetailScreen from '../screens/App/Driver/RideHistory/Detail';
 import Notifications from '../screens/App/Shared/Notifications';
 import ProfileSettings from '../screens/App/Shared/ProfileSettings';
 import BookingScreen from '../screens/App/Driver/Booking/BookingScreen';
@@ -74,8 +74,8 @@ const DriverDrawer: FC = () => {
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Booking" component={BookingScreen} />
       <Drawer.Screen name="Earnings" component={EarningsScreen} />
-      {/*  <Drawer.Screen name="Earnings" component={EarningsScreen} />
       <Drawer.Screen name="RideHistory" component={RideStack} />
+      {/*  <Drawer.Screen name="Earnings" component={EarningsScreen} />
       <Drawer.Screen name="Notifications" component={Notifications} />
       <Drawer.Screen name="Profile" component={ProfileSettings} />
       <Drawer.Screen name="HelpSupport" component={DrawerPlaceholder} /> */}

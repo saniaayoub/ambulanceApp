@@ -21,8 +21,12 @@ type Props = {
   distanceKm: number | null;
   title: string;
   btnTitle: string;
+
   showWaiting?: boolean;
+  showCancel?: boolean;
+  disableActionButton?: boolean;
 };
+
 const NavigateToPickupSheet = ({
   currentTrip,
   handlePress,
@@ -32,6 +36,8 @@ const NavigateToPickupSheet = ({
   title,
   btnTitle,
   showWaiting = false,
+  showCancel = true,
+  disableActionButton = distanceKm != null ? distanceKm < 0.1 : true,
 }: Props) => {
   const styles = useGlobalStyles();
   const seconds = useLiveWaitingTimer(currentTrip?.waitingStartedAt);
@@ -46,7 +52,7 @@ const NavigateToPickupSheet = ({
         {title}
       </Text>
 
-      {/* Pickup */}
+      {/* Pickup & Destination */}
       <View style={[globalStyles.paddingH10, globalStyles.mB15]}>
         <Location
           color={theme.colors.common.success}
@@ -55,7 +61,7 @@ const NavigateToPickupSheet = ({
         />
 
         <View style={[globalStyles.row, globalStyles.alignCenter]}>
-          <View style={[globalStyles.mR20]}>
+          <View style={globalStyles.mR20}>
             <View style={[styles.greyCard, styles.dot]} />
             <View style={[styles.greyCard, styles.dot]} />
             <View style={[styles.greyCard, styles.dot]} />
@@ -63,29 +69,31 @@ const NavigateToPickupSheet = ({
           <View style={styles.horizontalLine} />
         </View>
 
-        {/* Destination */}
         <Location
           color={theme.colors.common.warning}
           value={currentTrip?.destination?.address || 'N/A'}
           styles={styles}
         />
       </View>
-      {showWaiting ? (
+
+      {/* Waiting Timer */}
+      {showWaiting && (
         <View style={globalStyles.mB10}>
           <Text style={[styles.lightText, styles.link]}>
             Waiting Since: {formatTime(seconds)} 🕒
           </Text>
         </View>
-      ) : null}
+      )}
 
-      {/* ETA */}
+      {/* ETA / Distance */}
       <DetailColumnComp
-        title1={'ETA'}
-        text1={`${etaMinutes} min`}
-        title2={'Distance'}
-        text2={`${distanceKm} km`}
+        title1="ETA"
+        text1={`${etaMinutes ?? '--'} min`}
+        title2="Distance"
+        text2={`${distanceKm ?? '--'} km`}
       />
 
+      {/* Patient */}
       <View
         style={[
           styles.border,
@@ -104,17 +112,16 @@ const NavigateToPickupSheet = ({
               color={theme.colors.common.primary}
             />
           </View>
+
           <View>
-            {/* <Text style={styles.h6}>{currentTrip.patientName}</Text> */}
             <Text style={styles.h6}>{currentTrip?.userId?.fullName}</Text>
 
             <Text style={styles.smallText}>Patient</Text>
           </View>
         </View>
+
         <Pressable
-          onPress={() => {
-            makeaCall(currentTrip?.userId?.phone);
-          }}
+          onPress={() => makeaCall(currentTrip?.userId?.phone)}
           style={[
             globalStyles.size40,
             styles.round,
@@ -130,25 +137,36 @@ const NavigateToPickupSheet = ({
         </Pressable>
       </View>
 
-      {/* Arrived Button */}
-      <View style={[globalStyles.row, globalStyles.spaceBetween]}>
-        <AppButton
-          title={'Cancel Ride'}
-          onPress={handleCancel}
-          style={[
-            styles.whiteBtn,
-            globalStyles.mV5,
-            globalStyles.halfwidth,
-            styles.border,
-            styles.round,
-          ]}
-          textStyle={[styles.text2]}
-        />
+      {/* Bottom Buttons */}
+      <View
+        style={[
+          globalStyles.row,
+          showCancel ? globalStyles.spaceBetween : globalStyles.justifyCenter,
+        ]}
+      >
+        {showCancel && (
+          <AppButton
+            title="Cancel Ride"
+            onPress={handleCancel}
+            style={[
+              styles.whiteBtn,
+              globalStyles.mV5,
+              globalStyles.halfwidth,
+              styles.border,
+              styles.round,
+            ]}
+            textStyle={styles.text2}
+          />
+        )}
+
         <AppButton
           title={btnTitle}
           onPress={handlePress}
-          style={[globalStyles.mV5, globalStyles.halfwidth]}
-          disabled={distanceKm <= 0.1} //0.1 km ==100m
+          style={[
+            globalStyles.mV5,
+            showCancel ? globalStyles.halfwidth : { width: '100%' },
+          ]}
+          disabled={disableActionButton}
         />
       </View>
     </BottomSheetScrollView>

@@ -1,20 +1,19 @@
-import { View } from 'react-native';
-import React, { useEffect, useMemo, useRef } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { getDistance } from 'geolib';
-
-import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
+import React, { useMemo, useRef } from 'react';
+import { View } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
+import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
 import NavigateToPickupSheet from '../../../../components/driver/NavigateToPickupSheet';
-import TripInProgressSheet from '../../../../components/driver/TripInProgressSheet';
-import TripCompletedSheet from '../../../../components/driver/TripCompletedSheet';
 import BaseMapDriver, {
   MarkerData,
 } from '../../../../components/map/BaseMapDriver';
+import useDriverTrips from '../../../../hooks/useDriverTrips';
 import { useDriverStore } from '../../../../stores/driverStore';
 import { useLocationStore } from '../../../../stores/locationStore';
-import BottomSheet from '@gorhom/bottom-sheet';
-import useDriverTrips from '../../../../hooks/useDriverTrips';
-import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
+import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import { showAlert } from '../../../../utils/functions';
+import TripCompletedSheet from '../../../../components/driver/TripCompletedSheet';
 
 // SEARCHING / ASSIGNED -> ASSIGNED
 // ARRIVED / STARTED -> trip_in_progress
@@ -64,11 +63,13 @@ const reasons = [
 ];
 const BookingScreen = () => {
   const { currentTrip, setTripStep, tripStep } = useDriverStore();
-  const { arrived, cancel, start, complete } = useDriverTrips();
+  const { arrived, cancel, start, complete, paymentReceived } =
+    useDriverTrips();
 
   const { currentLocation } = useLocationStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const styles = useGlobalStyles();
+
   const markers: MarkerData[] = useMemo(() => {
     const list: MarkerData[] = [];
 
@@ -116,13 +117,15 @@ const BookingScreen = () => {
     return list;
   }, [currentLocation, currentTrip]);
 
-  useEffect(() => {
-    if (bottomSheetRef.current) {
-      setTimeout(() => {
+  useFocusEffect(
+    React.useCallback(() => {
+      requestAnimationFrame(() => {
         bottomSheetRef.current?.snapToIndex(0);
-      }, 1000);
-    }
-  }, [bottomSheetRef.current]);
+      });
+
+      return () => {};
+    }, []),
+  );
 
   const initialRegion = useMemo(() => {
     if (
@@ -225,73 +228,75 @@ const BookingScreen = () => {
     }, 'Are you sure you want to cancel the ride?');
   };
 
+  const tripSheetConfig = {
+    ASSIGNED: {
+      handlePress: () => arrived(currentTrip?._id),
+      etaMinutes: pickupMeta.etaMinutes,
+      distanceKm: pickupMeta.distanceKm,
+      title: 'Navigate to Pickup',
+      btnTitle: 'Arrived',
+      handleCancel: handleShowAlert,
+    },
+    WAITING: {
+      handlePress: () => start(currentTrip?._id),
+      etaMinutes: destinationMeta.etaMinutes,
+      distanceKm: destinationMeta.distanceKm,
+      title: 'Reached at Pickup',
+      btnTitle: 'Start Trip',
+      showWaiting: true,
+      handleCancel: handleShowAlert,
+    },
+    STARTED: {
+      handlePress: () => complete(currentTrip?._id),
+      etaMinutes: destinationMeta.etaMinutes,
+      distanceKm: destinationMeta.distanceKm,
+      title: 'Trip In Progress',
+      btnTitle: 'Complete Trip',
+      showCancel: false,
+    },
+    COMPLETED: {
+      handlePress: () => complete(currentTrip?._id),
+      etaMinutes: destinationMeta.etaMinutes,
+      distanceKm: destinationMeta.distanceKm,
+      title: 'Trip Completed',
+      btnTitle: 'Go Back to Home',
+      showCancel: false,
+      disableActionButton: false,
+    },
+  };
+
   const renderBottomSheet = () => {
-    switch (tripStep) {
-      case 'ASSIGNED':
-        return (
-          <NavigateToPickupSheet
-            currentTrip={currentTrip}
-            handlePress={() => arrived(currentTrip?._id)}
-            etaMinutes={pickupMeta.etaMinutes}
-            distanceKm={pickupMeta.distanceKm}
-            title={'Navigate to Pickup'}
-            btnTitle="Arrived"
-            handleCancel={handleShowAlert}
-          />
-        );
-      case 'WAITING':
-        return (
-          <NavigateToPickupSheet
-            currentTrip={currentTrip}
-            handlePress={() => start(currentTrip?._id)}
-            etaMinutes={destinationMeta.etaMinutes}
-            distanceKm={destinationMeta.distanceKm}
-            title={'Reached at Pickup'}
-            btnTitle={'Start Trip'}
-            showWaiting={true}
-            handleCancel={handleShowAlert}
-          />
-        );
-
-      case 'STARTED':
-        return (
-          <TripInProgressSheet
-            currentTrip={currentTrip}
-            handlePress={() => complete(currentTrip?._id)}
-            etaMinutes={destinationMeta.etaMinutes}
-            distanceKm={destinationMeta.distanceKm}
-            title={'Trip In Progress'}
-            btnTitle={'Complete Trip'}
-          />
-        );
-
-      case 'COMPLETED':
-        return (
-          <NavigateToPickupSheet
-            currentTrip={currentTrip}
-            handlePress={() => complete(currentTrip?._id)}
-            etaMinutes={destinationMeta.etaMinutes}
-            distanceKm={destinationMeta.distanceKm}
-            title={'Trip Completed'}
-            btnTitle={'Go Back to Home'}
-          />
-        );
-      case 'CANCEL':
-        return (
-          <CancelRideBottomSheet
-            reasons={reasons}
-            onKeepBooking={() => {
-              setTripStep(currentTrip?.status);
-            }}
-            onCancelBooking={(reason: string) => {
-              cancel(currentTrip?._id, reason);
-            }}
-          />
-        );
-
-      default:
-        return null;
+    if (tripStep === 'CANCEL') {
+      return (
+        <CancelRideBottomSheet
+          reasons={reasons}
+          onKeepBooking={() => setTripStep(currentTrip?.status)}
+          onCancelBooking={reason => cancel(currentTrip?._id, reason)}
+        />
+      );
     }
+
+    if (tripStep === 'COMPLETED') {
+      return (
+        <TripCompletedSheet
+          currentTrip={currentTrip}
+          onDone={() => {
+            if (
+              currentTrip?.paymentMethod === 'CASH' &&
+              currentTrip?.paymentStatus === 'PENDING'
+            ) {
+              paymentReceived(currentTrip._id);
+            }
+          }}
+        />
+      );
+    }
+
+    const config = tripSheetConfig[tripStep as keyof typeof tripSheetConfig];
+
+    if (!config) return null;
+
+    return <NavigateToPickupSheet currentTrip={currentTrip} {...config} />;
   };
 
   return (

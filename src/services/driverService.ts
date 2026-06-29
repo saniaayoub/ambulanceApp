@@ -53,9 +53,33 @@ export const completeTrip = async (tripId: string) =>
     method: 'post',
     url: ENDPOINTS.TRIPS.COMPLETE(tripId),
   });
+export const paymentRecieved = async (tripId: string) =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.TRIPS.PAYMENT_RECIEVED(tripId),
+  });
 
 export const markDriverArrived = async (tripId: string) =>
   handleResponse({
     method: 'post',
     url: ENDPOINTS.TRIPS.ARRIVED(tripId),
   });
+
+export const getDriverTrips = (params: {
+  page: number;
+  limit: number;
+  status?: string;
+}) => {
+  return handleResponse({
+    method: 'get',
+    url: ENDPOINTS.DRIVER.TRIPS,
+    params,
+  });
+};
+
+export const getDriverTripDetail = (tripId: string) => {
+  return handleResponse({
+    method: 'get',
+    url: ENDPOINTS.DRIVER.TRIP_DETAIL(tripId),
+  });
+};

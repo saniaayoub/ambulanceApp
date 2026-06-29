@@ -2,6 +2,7 @@ import { queryClient } from '../../App';
 import {
   completeTrip,
   markDriverArrived,
+  paymentRecieved,
   startTrip,
   tripAccept,
   tripCancel,
@@ -136,12 +137,38 @@ const useDriverTrips = () => {
     }
   };
 
+  const handlePaymentRecieved = async (tripId: string) => {
+    showLoader();
+    try {
+      const response = await paymentRecieved(tripId);
+
+      if (!response.success) {
+        toastError(getErrorMessage(response.error));
+        return response;
+      }
+      setCurrentTrip(null);
+      setTripStep(null);
+
+      toastSuccess(response?.message);
+      queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
+
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
+      // return response;
+    } finally {
+      hideLoader();
+    }
+  };
+
   return {
     accept: acceptTripRequest,
     reject: rejectTripRequest,
     arrived: handleArrived,
     start: handleTripStart,
     complete: handleTripComplete,
+    paymentReceived: handlePaymentRecieved,
     cancel: handleCancelTrip,
   };
 };

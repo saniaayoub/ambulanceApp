@@ -204,6 +204,9 @@ export const globalStyles = StyleSheet.create({
   mV20: {
     marginVertical: moderateScale(20),
   },
+  mV15: {
+    marginVertical: moderateScale(15),
+  },
   mT20: {
     marginTop: moderateScale(20),
   },
@@ -242,6 +245,7 @@ export const globalStyles = StyleSheet.create({
   padding15: {
     padding: moderateScale(15),
   },
+
   padding5: {
     padding: moderateScale(5),
   },

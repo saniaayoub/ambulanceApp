@@ -1,15 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { queryClient } from '../../App';
 import {
   deleteTrip,
   getTripDetail,
   getTrips,
 } from '../services/bookingService';
-import { useLoaderStore } from '../stores/loaderStore';
 import { toastError } from '../services/toast';
+import { useLoaderStore } from '../stores/loaderStore';
 import { getErrorMessage } from './useAuth';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigation } from '@react-navigation/native';
-import { queryClient } from '../../App';
+
 export const useTrips = (limit = 10, status?: string) => {
   return useInfiniteQuery({
     queryKey: ['trips', status],

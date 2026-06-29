@@ -10,16 +10,18 @@ import { useTrips } from '../../../../hooks/useRideHistory';
 import { formatDateSeparator } from '../../../../utils/functions';
 import { useLoaderStore } from '../../../../stores/loaderStore';
 import ListEmptyComp from '../../../../components/ListEmptyComp';
-import FullScreenLoader from '../../../../components/FullScreenLoader';
 
 const FILTERS = ['All', 'COMPLETED', 'CANCELLED', 'STARTED'];
-
-const RideHistoryScreen = () => {
+type Props = {
+  history: ReturnType<typeof useTrips>; // or define a shared interface
+  filter: string;
+  setFilter: React.Dispatch<React.SetStateAction<string>>;
+};
+const RideHistoryScreen = ({ history, filter, setFilter }: Props) => {
   const styles = useGlobalStyles();
   const showLoader = useLoaderStore(state => state.showLoader);
   const hideLoader = useLoaderStore(state => state.hideLoader);
 
-  const [filter, setFilter] = useState('All');
   const {
     data,
     isLoading,
@@ -28,7 +30,8 @@ const RideHistoryScreen = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useTrips(10, filter);
+    isError,
+  } = history;
   const trips = data?.pages.flatMap(page => page?.data?.data || []) || [];
   // console.log(trips, 'trips');
   const navigation = useNavigation<any>();
@@ -65,11 +68,13 @@ const RideHistoryScreen = () => {
     [trips],
   );
   const isFirstLoading = isLoading && trips.length === 0;
+  console.log(isFirstLoading, 'o');
 
   useEffect(() => {
     if (isFirstLoading) {
       showLoader();
     } else {
+      console.log(isLoading, 'hide');
       hideLoader();
     }
   }, [isFirstLoading]);
@@ -95,7 +100,7 @@ const RideHistoryScreen = () => {
         }}
         ListEmptyComponent={
           !isFirstLoading ? (
-            <ListEmptyComp icon={'vehicle'} text="No Ride Found" />
+            <ListEmptyComp icon={'car'} text="No Ride Found" />
           ) : null
         }
         onEndReachedThreshold={0.5}

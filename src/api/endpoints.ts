@@ -34,6 +34,8 @@ export const ENDPOINTS = {
     DRIVERDETAILS: (driverId: string) => `driver/${driverId}`,
     ONLINESTATUS: `driver/onlineStatus`,
     STATS: 'driver/stats',
+    TRIPS: `driver/trips`,
+    TRIP_DETAIL: (tripId: string) => `driver/trips/${tripId}`,
   },
 
   HOSPITALS: {
@@ -58,6 +60,7 @@ export const ENDPOINTS = {
     ARRIVED: (tripId: string) => `trips/arrived/${tripId}`,
     START: (tripId: string) => `trips/start/${tripId}`,
     COMPLETE: (tripId: string) => `trips/complete/${tripId}`,
+    PAYMENT_RECIEVED: (tripId: string) => `trips/payment-received/${tripId}`,
     CANCEL: (tripId: string) => `trips/cancel/${tripId}`,
   },
   // Details/Items Endpoints

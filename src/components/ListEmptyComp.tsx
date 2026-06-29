@@ -10,6 +10,7 @@ const ListEmptyComp = ({ icon, text }: { icon: string; text: string }) => {
   return (
     <View
       style={[
+        globalStyles.flex,
         globalStyles.alignCenter,
         globalStyles.justifyCenter,
         {

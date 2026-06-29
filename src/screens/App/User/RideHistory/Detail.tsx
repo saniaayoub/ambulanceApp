@@ -1,0 +1,13 @@
+import React from 'react';
+import { useTripDetail } from '../../../../hooks/useRideHistory';
+import { useAuthStore } from '../../../../stores/authStore';
+import RideDetailScreen from '../../Shared/History/RideDetailScreen';
+const DriverRideDetail = ({ route }) => {
+  const { tripId } = route?.params;
+  const detail = useTripDetail(tripId);
+  const role = useAuthStore(state => state.role);
+
+  return <RideDetailScreen detail={detail} role={role} />;
+};
+
+export default DriverRideDetail;

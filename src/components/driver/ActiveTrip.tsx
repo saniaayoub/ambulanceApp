@@ -39,12 +39,14 @@ const ActiveTripComp = ({
   onPressDetails,
   onStartTrip,
   onArrived,
+  onCompleteTrip,
   driverLoc,
 }: {
   activeTrip: any;
   onPressDetails: () => void;
   onStartTrip: () => void;
   onArrived: () => void;
+  onCompleteTrip: () => void;
   driverLoc: LocationProp | null;
 }) => {
   const styles = useGlobalStyles();
@@ -100,6 +102,36 @@ const ActiveTripComp = ({
     activeTrip?.pickupLocation,
     'kk',
   );
+
+  const getTripAction = () => {
+    switch (activeTrip?.status) {
+      case 'ASSIGNED':
+        return {
+          title: 'Arrived',
+          onPress: onArrived,
+          disabled: distanceM >= 100,
+        };
+
+      case 'WAITING':
+        return {
+          title: 'Start Trip',
+          onPress: onStartTrip,
+          disabled: false,
+        };
+
+      case 'STARTED':
+        return {
+          title: 'Complete',
+          onPress: onCompleteTrip, // or onStartTrip if intentional
+          disabled: true,
+        };
+
+      default:
+        return null;
+    }
+  };
+
+  const action = getTripAction();
   return (
     <View
       style={[
@@ -160,31 +192,14 @@ const ActiveTripComp = ({
           textStyle={styles.smallText}
         />
 
-        {activeTrip?.status === 'ASSIGNED' && (
+        {action && (
           <AppButton
-            onPress={onArrived}
-            disabled={distanceM >= 100}
+            onPress={action.onPress}
+            disabled={action.disabled}
             style={[globalStyles.halfwidth, globalStyles.mB0, globalStyles.mT0]}
-            title="Arrived"
+            title={action.title}
             textStyle={[styles.smallText, styles.white]}
           />
-        )}
-
-        {activeTrip?.status === 'WAITING' && (
-          <AppButton
-            onPress={onStartTrip}
-            style={[globalStyles.halfwidth, globalStyles.mB0, globalStyles.mT0]}
-            title="Start Trip"
-            textStyle={[styles.smallText, styles.white]}
-          />
-        )}
-
-        {activeTrip?.status === 'STARTED' && (
-          <View style={[styles.lightGreyCard, globalStyles.halfwidth]}>
-            <Text style={[styles.h6, globalStyles.textCenter]}>
-              In Progress
-            </Text>
-          </View>
         )}
       </View>
     </View>
