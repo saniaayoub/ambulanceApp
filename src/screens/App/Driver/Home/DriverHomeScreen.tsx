@@ -15,6 +15,7 @@ import { useLocationStore } from '../../../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import { ambulanceImages } from '../../../../utils/constants';
 import useDriverTrips from '../../../../hooks/useDriverTrips';
+import FullScreenLoader from '../../../../components/FullScreenLoader';
 
 type Props = {
   navigation: any;
@@ -23,13 +24,14 @@ type Props = {
 const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
   const styles = useGlobalStyles();
   const userData = useAuthStore(state => state.userData);
-
-  const data = useDriver(userData?.driverId);
+  const { data, isLoading } = useDriver(userData?.driverId);
   const { isOnline, toggleOnline, setCurrentTrip, setIsOnline, setTripStep } =
     useDriverStore();
   const currentLocation = useLocationStore(state => state.currentLocation);
   useDriverTracking(userData?.driverId, isOnline);
-  const stats = useDriverDashboard(userData?.driverId);
+  const { data: stats, isLoading: isLoadingStats } = useDriverDashboard(
+    userData?.driverId,
+  );
   const { arrived } = useDriverTrips();
 
   const openDrawer = useCallback(() => {
@@ -51,12 +53,14 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
     }
   }, [data?.isOnline]);
 
-  const navigateToEarnings = useCallback(() => {
+  const navigateToEarnings = () => {
     navigation.navigate('Earnings');
-  }, [navigation]);
+  };
 
   return (
     <View style={[globalStyles.flex, globalStyles.padding15, styles.card]}>
+      <FullScreenLoader loading={isLoading || isLoadingStats} />
+
       <HomeHeader
         onOpenMenu={openDrawer}
         name={userData?.fullName}

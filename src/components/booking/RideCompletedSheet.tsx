@@ -33,7 +33,7 @@ type Props = {
 };
 
 export const renderRow = (label: string, value: string, styles: any) => (
-  <View style={[globalStyles.row, globalStyles.spaceBetween, globalStyles.mB5]}>
+  <View style={[globalStyles.row, globalStyles.spaceBetween]}>
     <Text style={styles.lightText}>{label}</Text>
     <Text style={styles.h6}>{value}</Text>
   </View>

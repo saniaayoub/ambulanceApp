@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import AppButton from '../../components/AppButton';
-import AuthWrapper from '../../components/AuthWrapper';
+import AuthWrapper from '../../components/auth/AuthWrapper';
 import FormInput from '../../components/FormInput';
 import PhoneNumberInput from '../../components/PhoneInput';
 import { useAuth } from '../../hooks/useAuth';

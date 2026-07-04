@@ -1,15 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useMemo, useRef, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import AppButton from '../../components/AppButton';
-import AuthWrapper from '../../components/AuthWrapper';
+import AuthWrapper from '../../components/auth/AuthWrapper';
 import { useAuth } from '../../hooks/useAuth';
 import { AuthStackParamList } from '../../navigation/AuthStack';
 import { toastError } from '../../services/toast';

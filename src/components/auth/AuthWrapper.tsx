@@ -1,10 +1,10 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { moderateScale, verticalScale } from 'react-native-size-matters';
-import { LogoSvg } from '../assets/images/svgs';
-import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
+import { LogoSvg } from '../../assets/images/svgs';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import FooterLink from './FooterLink';
-import BackButton from './BackButton';
+import BackButton from '../BackButton';
 
 type Props = {
   children: React.ReactNode;

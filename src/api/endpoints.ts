@@ -36,6 +36,7 @@ export const ENDPOINTS = {
     STATS: 'driver/stats',
     TRIPS: `driver/trips`,
     TRIP_DETAIL: (tripId: string) => `driver/trips/${tripId}`,
+    EARNINGS: (period: string) => `/driver/earnings?period=${period}`,
   },
 
   HOSPITALS: {

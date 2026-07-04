@@ -9,7 +9,7 @@ import {
 import AppButton from '../../../../components/AppButton';
 import AmbulanceCategories from '../../../../components/booking/AmbulanceCategories';
 import HomeHeader from '../../../../components/home/header';
-import HospitalsList from '../../../../components/HospitalsList';
+import HospitalsList from '../../../../components/home/HospitalsList';
 import { useHomeData, useHospitalsData } from '../../../../hooks/useHomeData';
 import { useHospitalActions } from '../../../../hooks/useHospitalActions';
 import { useLocation } from '../../../../hooks/useLocation';

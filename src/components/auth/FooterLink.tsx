@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 
 type Props = {
   handleNavigate: () => void;

@@ -7,7 +7,6 @@ import { useThemedStyles } from '../styles/createThemedStyles';
 const FullScreenLoader = ({ loading }: { loading: boolean }) => {
   // const { isLoading } = useLoaderStore();
   const styles = useStyles();
-
   if (!loading) {
     return null;
   }

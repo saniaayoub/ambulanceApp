@@ -11,6 +11,7 @@ import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import { ambulanceImages } from '../../../../utils/constants';
 import { Roles } from '../../../../utils/enums';
 import { formatTripDate } from '../../../../utils/functions';
+import theme from '../../../../styles/theme';
 
 type Props = {
   detail: any;
@@ -49,6 +50,21 @@ const RideDetailScreen = ({ detail, role }: Props) => {
         }`
       : trip?.passenger?.name ?? '-';
 
+  const getText = () => {
+    switch (trip?.status) {
+      case 'COMPLETED':
+        return theme.colors.common.success;
+
+      case 'CANCELLED':
+        return theme.colors.common.primary;
+
+      case 'STARTED':
+        return theme.colors.common.warning;
+
+      default:
+        return theme.colors.common.primary;
+    }
+  };
   return (
     <View style={[styles.card, globalStyles.flex]}>
       <BackButton title="Ride History Detail" />
@@ -79,23 +95,15 @@ const RideDetailScreen = ({ detail, role }: Props) => {
               />
             </View>
 
-            <Text
-              style={[styles.h5, globalStyles.textCenter, globalStyles.mT10]}
-            >
+            <Text style={[styles.h5, globalStyles.textCenter]}>
               {trip?.ambulanceType} • {trip?.vehicle?.number ?? '-'}
             </Text>
 
             <Text
               style={[
                 styles.smallText,
-                {
-                  color:
-                    trip?.status === 'COMPLETED'
-                      ? 'green'
-                      : trip?.status === 'CANCELLED'
-                      ? 'red'
-                      : '#F5A623',
-                },
+                globalStyles.mB10,
+                { color: getText() },
               ]}
             >
               {trip?.status}
@@ -108,7 +116,7 @@ const RideDetailScreen = ({ detail, role }: Props) => {
             title2="Destination"
             text1={trip?.pickupLocation?.address ?? '-'}
             text2={trip?.destination?.address ?? '-'}
-            style={[globalStyles.mT15, styles.lightGreyCard]}
+            style={[globalStyles.mB0, styles.lightGreyCard]}
           />
 
           <Text style={[styles.h5, globalStyles.mT20, globalStyles.mB15]}>

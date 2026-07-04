@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import { moderateScale } from 'react-native-size-matters';
 
 const HospitalsList = ({ nearbyHospitals, startHospitalBooking }) => {

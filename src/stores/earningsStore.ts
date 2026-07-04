@@ -1,5 +1,23 @@
 import { create } from 'zustand';
 
+export type EarningsTab = 'today' | 'weekly' | 'monthly' | 'yearly';
+
+export interface BreakdownItem {
+  label: string;
+  amount: number;
+  trips: number;
+}
+
+export interface EarningsSummary {
+  earnings: number;
+  trips: number;
+  averagePerTrip: number;
+}
+
+export interface EarningsResponse {
+  summary: EarningsSummary;
+  breakdown: BreakdownItem[];
+}
 export interface EarningsDay {
   date: string;
   amount: number;

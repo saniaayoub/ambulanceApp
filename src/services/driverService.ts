@@ -83,3 +83,10 @@ export const getDriverTripDetail = (tripId: string) => {
     url: ENDPOINTS.DRIVER.TRIP_DETAIL(tripId),
   });
 };
+
+export const getDriverEarnings = (period: string) => {
+  return handleResponse({
+    method: 'get',
+    url: ENDPOINTS.DRIVER.EARNINGS(period),
+  });
+};
