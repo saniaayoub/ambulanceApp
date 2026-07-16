@@ -7,6 +7,7 @@ export type UserRole = 'USER' | 'DRIVER';
 export interface User {
   id: string;
   fullName: string;
+  email?: string;
   phone: string;
   role: UserRole;
   isVerified: boolean;

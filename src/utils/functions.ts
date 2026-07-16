@@ -1,4 +1,43 @@
 import { Alert, Linking } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { launchCamera } from 'react-native-image-picker';
+
+export const openCamera = async () => {
+  const result = await launchCamera({
+    mediaType: 'photo',
+    cameraType: 'front', // or 'back'
+    quality: 0.8,
+    saveToPhotos: false,
+  });
+
+  if (result.didCancel) {
+    return null;
+  }
+
+  if (result.errorCode) {
+    throw new Error(result.errorMessage);
+  }
+
+  return result.assets?.[0];
+};
+
+export const openGallery = async () => {
+  const result = await launchImageLibrary({
+    mediaType: 'photo',
+    selectionLimit: 1,
+    quality: 0.8,
+  });
+
+  if (result.didCancel) {
+    return null;
+  }
+
+  if (result.errorCode) {
+    throw new Error(result.errorMessage);
+  }
+
+  return result.assets?.[0];
+};
 
 export const initials = (name: string) => {
   return name

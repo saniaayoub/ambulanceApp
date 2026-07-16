@@ -1,13 +1,73 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
-import { VentilatorAmbulance } from '../../assets/images/pngs';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
+import React from 'react';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import theme from '../../styles/theme';
 
-const ProfileHeader = ({ name, phone }: { name: string; phone: string }) => {
+import { User } from '../../assets/images/pngs';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
+import theme from '../../styles/theme';
+import { openCamera, openGallery } from '../../utils/functions'; // <-- your utils
+
+interface Props {
+  name: string;
+  image?: any;
+  uploadImage: (image: any) => void;
+}
+
+const ProfileHeader = ({ name, image, uploadImage }: Props) => {
   const styles = useGlobalStyles();
+
+  const onPressCamera = () => {
+    console.log('jo');
+    Alert.alert(
+      'Profile Photo',
+      'Choose an option',
+      [
+        {
+          text: 'Camera',
+          onPress: async () => {
+            try {
+              const selectedImage = await openCamera();
+
+              if (selectedImage) {
+                uploadImage(selectedImage);
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          },
+        },
+        {
+          text: 'Gallery',
+          onPress: async () => {
+            try {
+              const selectedImage = await openGallery();
+
+              if (selectedImage) {
+                uploadImage(selectedImage);
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          },
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+  };
 
   return (
     <View
@@ -18,8 +78,13 @@ const ProfileHeader = ({ name, phone }: { name: string; phone: string }) => {
         globalStyles.alignCenter,
       ]}
     >
-      <TouchableOpacity>
-        <Image source={VentilatorAmbulance} style={localStyles.avatar} />
+      <TouchableOpacity activeOpacity={0.8} onPress={onPressCamera}>
+        <Image
+          source={
+            image?.uri ? { uri: image.uri } : image ? { uri: image } : User
+          }
+          style={localStyles.avatar}
+        />
 
         <View style={localStyles.editIcon}>
           <MaterialDesignIcons
@@ -54,28 +119,5 @@ const localStyles = StyleSheet.create({
     borderRadius: 17,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-
-  settingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 16,
-  },
-
-  logoutBtn: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 16,
-    marginTop: 20,
-    borderWidth: 1,
-    borderColor: '#E53935',
-    borderRadius: 12,
-  },
-
-  logoutText: {
-    color: '#E53935',
-    marginLeft: 10,
-    fontWeight: '600',
   },
 });

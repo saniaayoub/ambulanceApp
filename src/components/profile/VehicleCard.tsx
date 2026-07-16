@@ -3,7 +3,15 @@ import { Text, View } from 'react-native';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import ProfileRow from './ProfileRow';
 
-const VehicleCard = () => {
+const VehicleCard = ({
+  type,
+  vehicleNumber,
+  model,
+}: {
+  type: string;
+  vehicleNumber: string;
+  model: string;
+}) => {
   const styles = useGlobalStyles();
 
   return (
@@ -17,11 +25,15 @@ const VehicleCard = () => {
     >
       <Text style={[styles.h5, globalStyles.mB10]}>Vehicle Information</Text>
 
-      <ProfileRow label="Type" value="Ventilator" icon="ambulance" />
+      <ProfileRow label="Type" value={type} icon="ambulance" />
 
-      <ProfileRow label="Plate" value="ABC-123" icon="card-bulleted-outline" />
+      <ProfileRow
+        label="Plate"
+        value={vehicleNumber}
+        icon="card-bulleted-outline"
+      />
 
-      <ProfileRow label="Model" value="Toyota Hiace" icon="car" />
+      <ProfileRow label="Model" value={model} icon="car" />
     </View>
   );
 };

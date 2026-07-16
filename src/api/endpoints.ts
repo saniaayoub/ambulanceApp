@@ -29,6 +29,10 @@ export const ENDPOINTS = {
     DASHBOARD: 'booking/home',
   },
 
+  PROFILE: {
+    DRIVER_UPDATE: 'driver/profile',
+  },
+
   DRIVER: {
     ONLINEDRIVERS: 'driver/onlineDrivers',
     DRIVERDETAILS: (driverId: string) => `driver/${driverId}`,

@@ -8,12 +8,15 @@ export const useLiveWaitingTimer = (waitingStartedAt: any) => {
 
     const startTime = new Date(waitingStartedAt).getTime();
 
-    const interval = setInterval(() => {
+    const updateTimer = () => {
       const now = Date.now();
-      const diff = Math.floor((now - startTime) / 1000);
+      const diff = Math.max(0, Math.floor((now - startTime) / 1000));
 
       setSeconds(diff);
-    }, 1000);
+    };
+
+    updateTimer(); // update immediately
+    const interval = setInterval(updateTimer, 1000);
 
     return () => clearInterval(interval);
   }, [waitingStartedAt]);

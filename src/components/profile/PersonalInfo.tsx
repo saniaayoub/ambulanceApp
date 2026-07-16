@@ -28,8 +28,9 @@ const PersonalInfo = ({
       <ProfileRow label="Name" value={name} icon="account-outline" />
 
       <ProfileRow label="Phone" value={phone} icon="phone-outline" />
-
-      <ProfileRow label="Email" value={email} icon="email-outline" />
+      {email ? (
+        <ProfileRow label="Email" value={email} icon="email-outline" />
+      ) : null}
     </View>
   );
 };

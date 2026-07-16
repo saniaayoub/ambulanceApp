@@ -4,3 +4,4 @@ export { default as NormalAmbulance } from './Normal.png';
 export { default as VentilatorAmbulance } from './Ventilator.png';
 export { default as DeadBodyAmbulance } from './Mortuary.png';
 export { default as Hospital } from './hospital.png';
+export { default as User } from '../jpg/user.jpg';
