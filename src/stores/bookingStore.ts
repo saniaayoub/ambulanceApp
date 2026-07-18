@@ -3,25 +3,26 @@ import { Location } from './locationStore';
 import { AmbulanceType } from '../components/home/AmbulanceCard';
 
 export type BookingStep =
-  | 'Pickup'
-  | 'Destination'
-  | 'Trip Details'
-  | 'Searching'
-  | 'Driver Assigned'
-  | 'Cancelled'
-  | 'Waiting'
-  | 'Tracking'
-  | 'Completed';
+  | 'PICKUP'
+  | 'DESTINATION'
+  | 'TRIP'
+  | 'SEARCHING'
+  | 'ASSIGNED'
+  | 'CANCELLED'
+  | 'WAITING'
+  | 'STARTED'
+  | 'COMPLETED';
 
-const bookingSteps: BookingStep[] = [
-  'Pickup',
-  'Destination',
-  'Trip Details',
-  'Searching',
-  'Driver Assigned',
-  'Cancelled',
-  'Tracking',
-  'Completed',
+export const bookingSteps = [
+  'pickup',
+  'destination',
+  'trip',
+  'searching',
+  'Assigned',
+  'cancelled',
+  'waiting',
+  'started',
+  'completed',
 ];
 
 interface BookingState {
@@ -58,14 +59,14 @@ export const useBookingStore = create<BookingState>(set => ({
   pickupLocation: {
     latitude: 1234,
     longitude: 12233,
-    name: 'Current Location',
+    placeName: 'Current Location',
   },
   destinationLocation: {
     latitude: 1234,
     longitude: 12233,
-    name: 'Add Destination Location',
+    placeName: 'Add Destination Location',
   },
-  bookingStep: 'Pickup',
+  bookingStep: 'PICKUP',
   isBookingActive: false,
   setTrip: trip => set({ trip }),
   setDriverLocation: loc => set({ driverLocation: loc }),
@@ -75,7 +76,7 @@ export const useBookingStore = create<BookingState>(set => ({
   setStep: (step: BookingStep) =>
     set({
       bookingStep: step,
-      isBookingActive: step !== 'Pickup' && step !== 'Completed',
+      isBookingActive: step !== 'PICKUP' && step !== 'COMPLETED',
     }),
   resetBooking: () =>
     set({
@@ -88,15 +89,17 @@ export const useBookingStore = create<BookingState>(set => ({
       pickupLocation: {
         latitude: 1234,
         longitude: 12233,
-        name: 'Current Location',
+        placeName: 'Current Location',
+        address: 'Current Location',
       },
       destinationLocation: {
         latitude: 1234,
         longitude: 12233,
-        name: 'Add Destination Location',
+        placeName: 'Add Destination Location',
+        address: 'Current Location',
       },
-      bookingStep: 'Pickup',
+      bookingStep: 'PICKUP',
       isBookingActive: false,
     }),
-  startBooking: () => set({ bookingStep: 'Pickup', isBookingActive: true }),
+  startBooking: () => set({ bookingStep: 'PICKUP', isBookingActive: true }),
 }));

@@ -80,15 +80,17 @@ const InfoCard = ({
             <Text style={[styles.h6, globalStyles.width120, globalStyles.mL20]}>
               {name}
             </Text>
-            <Text
-              style={[
-                styles.smallText,
-                globalStyles.width120,
-                globalStyles.mL20,
-              ]}
-            >
-              {text}
-            </Text>
+            {text ? (
+              <Text
+                style={[
+                  styles.smallText,
+                  globalStyles.width120,
+                  globalStyles.mL20,
+                ]}
+              >
+                {text}
+              </Text>
+            ) : null}
           </View>
         </View>
 

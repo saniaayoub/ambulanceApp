@@ -7,6 +7,7 @@ import {
   getEstimateData,
   getOnlineDrivers,
   getTripStatus,
+  stopSearchingTrip,
 } from '../services/bookingService';
 import { BookingStep, useBookingStore } from '../stores/bookingStore';
 import { useLoaderStore } from '../stores/loaderStore';
@@ -16,15 +17,6 @@ import { toastError } from '../services/toast';
 import { getErrorMessage } from './useAuth';
 import { useNavigation } from '@react-navigation/native';
 // Currently routing is handled directly in BookingScreen component
-export const bookingSteps: BookingStep[] = [
-  'Pickup',
-  'Destination',
-  'Trip Details',
-  'Searching',
-  'Driver Assigned',
-  'Tracking',
-  'Completed',
-];
 
 type EstimatePayload = {
   pickupLocation: Location;
@@ -98,8 +90,9 @@ export const useBooking = () => {
         return response;
       }
 
+      console.log(response.data, 'trip');
       setTrip(response.data);
-
+      setStep('SEARCHING');
       return response;
     } finally {
       hideLoader();
@@ -110,6 +103,21 @@ export const useBooking = () => {
     showLoader();
     try {
       const response = await cancelBooking({ tripId: trip?.id });
+      if (!response.success) {
+        toastError(getErrorMessage(response.error));
+        return response;
+      }
+      setTrip(null);
+      navigation.goBack();
+      setStep('');
+    } finally {
+      hideLoader();
+    }
+  };
+  const stopSearching = async () => {
+    showLoader();
+    try {
+      const response = await stopSearchingTrip(trip?._id);
       if (!response.success) {
         toastError(getErrorMessage(response.error));
         return response;
@@ -138,6 +146,7 @@ export const useBooking = () => {
     handleCreateBooking,
     handleBookingCancel,
     drivers,
+    stopSearching,
     getStatus,
   };
 };

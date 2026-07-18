@@ -3,13 +3,13 @@ import MaterialIcons from '@react-native-vector-icons/material-design-icons';
 import React, { useCallback, useEffect, useState, type FC } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { bookingSteps } from '../../hooks/useBooking';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import AppButton from '../AppButton';
 import BookingStepIndicator from './BookingStepIndicator';
 import { Location } from '../../stores/locationStore';
 import AppInput from '../AppInput';
+import { bookingSteps } from '../../stores/bookingStore';
 
 type LocationItem = {
   id: string;
@@ -148,24 +148,24 @@ const LocationSheet: FC<Props> = ({
       style={globalStyles.padding15}
     >
       <BookingStepIndicator currentStep={currentStep} steps={bookingSteps} />
-      {pickupLocation?.name ? (
+      {pickupLocation?.placeName ? (
         <Text style={[styles.smallText, globalStyles.mV10]}>
           Pick Up:{' '}
           <Text style={[styles.h6, globalStyles.mB10]}>
-            {pickupLocation?.name}
+            {pickupLocation?.placeName}
           </Text>
         </Text>
       ) : null}
 
-      {destinationLocation?.name ? (
+      {destinationLocation?.placeName ? (
         <Text style={[styles.smallText, globalStyles.mB10]}>
           Destination:{' '}
           <Text style={[styles.h6, globalStyles.mB10]}>
-            {destinationLocation?.name}
+            {destinationLocation?.placeName}
           </Text>
         </Text>
       ) : null}
-      {currentStep === 'Pickup' ? (
+      {currentStep === 'PICKUP' ? (
         <>
           <AppButton
             title="Choose on map"
@@ -197,7 +197,12 @@ const LocationSheet: FC<Props> = ({
       <AppButton
         title={`Confirm`}
         onPress={handleConfirm}
-        // disabled={!selectedLocation}
+        disabled={
+          pickupLocation !== null &&
+          destinationLocation?.placeName === 'Add Destination Location'
+            ? true
+            : false
+        }
       />
       {/* 
       {savedAddresses.length > 0 && (

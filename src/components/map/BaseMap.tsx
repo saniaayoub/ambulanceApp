@@ -50,7 +50,6 @@ const BaseMap: React.FC<BaseMapProps> = ({
   useEffect(() => {
     getPolyLineData();
   }, [markers, step]);
-  console.log(markers, 'markers');
 
   const getPolyLineData = async () => {
     if (markers.length >= 2 && step === 'Trip Details') {
@@ -86,6 +85,7 @@ const BaseMap: React.FC<BaseMapProps> = ({
         followsUserLocation={followsUserLocation}
         showsMyLocationButton
         onRegionChangeComplete={region => {
+          console.log(region, 'keigion');
           onRegionChangeComplete?.(region);
         }}
       >

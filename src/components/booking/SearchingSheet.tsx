@@ -12,14 +12,14 @@ import SearchingLoader from './SearchingLoader';
 type Props = {
   nearbyCount?: number;
   estimatedTime?: string;
-  onCancel: () => void;
+  onStopSearching: () => void;
   currentStep: BookingStep;
 };
 
 const SearchingSheet = ({
   nearbyCount = 3,
   estimatedTime = '15-30 sec',
-  onCancel,
+  onStopSearching,
   currentStep,
 }: Props) => {
   const styles = useGlobalStyles();
@@ -35,7 +35,7 @@ const SearchingSheet = ({
         🚑{'   '}Finding Ambulance
       </Text>
 
-      {currentStep === 'Searching' && <SearchingLoader />}
+      {currentStep === 'SEARCHING' && <SearchingLoader />}
 
       <DetailColumnComp
         title1="Response"
@@ -44,7 +44,7 @@ const SearchingSheet = ({
         text2={`${nearbyCount} Vehicles`}
       />
 
-      <AppButton title="Cancel Request" onPress={onCancel} />
+      <AppButton title="Stop Searching" onPress={onStopSearching} />
     </BottomSheetScrollView>
   );
 };

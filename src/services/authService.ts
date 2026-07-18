@@ -32,7 +32,10 @@ export type Response<T = any> = T | { success: false; error: any };
 export const handleResponse = async (config: any): Promise<Response> => {
   try {
     const data = await apiCall({ ...config, skipQueue: true });
-    return data;
+    return {
+      success: true,
+      ...data,
+    };
   } catch (error) {
     return { success: false, error };
   }

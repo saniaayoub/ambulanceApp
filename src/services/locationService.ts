@@ -46,20 +46,25 @@ export const fetchRoute = async (pickup: Location, destination: Location) => {
     return [];
   }
 };
-export const getCurrentLocation = async () =>
+export const getCurrentLocation = async (): Promise<Location> =>
   new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(
       async position => {
-        const loc = await getLocationName(
-          position.coords.latitude,
-          position.coords.longitude,
-        );
+        try {
+          const { address, placeName } = await getLocationName(
+            position.coords.latitude,
+            position.coords.longitude,
+          );
 
-        resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          name: loc,
-        });
+          resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            address,
+            placeName,
+          });
+        } catch (error) {
+          reject(error);
+        }
       },
       error => reject(error),
       {
@@ -107,15 +112,38 @@ export const getLocationName = async (lat: number, lng: number) => {
     const apiKey = Config.OPENCAGE_API_KEY;
 
     const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${apiKey}`;
+    console.log(url, 'url');
+    const res = await handleResponse({
+      url,
+      method: 'get',
+    });
 
-    const res = await handleResponse({ url: url, method: 'get' });
-    if (!res?.success) {
-      return 'Some Location';
+    if (res?.success === false) {
+      return {
+        address: 'Some Location',
+        placeName: 'Unknown',
+      };
     }
-    return res?.results?.[0]?.formatted || '';
+
+    const result = res.results[0];
+
+    return {
+      address: result.formatted ?? 'Some Location',
+      placeName:
+        result.components?.suburb ||
+        result.components?.neighbourhood ||
+        result.components?.city ||
+        result.components?.town ||
+        result.components?.village ||
+        result.components?.county ||
+        'Unknown',
+    };
   } catch (error) {
-    console.log(error, 'getLocationName inn');
-    return 'Some Location';
-    // throw error;
+    console.log(error);
+
+    return {
+      address: 'Some Location',
+      placeName: 'Unknown',
+    };
   }
 };

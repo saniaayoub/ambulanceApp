@@ -58,6 +58,9 @@ export const ENDPOINTS = {
   TRIPS: {
     LIST: 'trips',
     LIST_FILTER: 'trips/filter',
+    ESTIMATE: 'trips/estimate',
+    CREATE: 'trips/create',
+    STOP_SEARCH: (tripId: string) => `trips/stopSearch/${tripId}`,
     DETAIL: (tripId: string) => `trips/${tripId}`,
     DELETE: (tripId: string) => `trips/${tripId}`,
     ACCEPT: (tripId: string) => `trips/accept/${tripId}`,

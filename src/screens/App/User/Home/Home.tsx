@@ -16,6 +16,7 @@ import { useLocation } from '../../../../hooks/useLocation';
 import { useAuthStore } from '../../../../stores/authStore';
 import { useBookingStore } from '../../../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
+import { useLocationStore } from '../../../../stores/locationStore';
 
 const Home: FC = ({ navigation }: any) => {
   const { startHospitalBooking } = useHospitalActions(navigation);
@@ -29,13 +30,19 @@ const Home: FC = ({ navigation }: any) => {
     destinationLocation,
   } = useBookingStore();
   const { userData } = useAuthStore();
-  const { currentLocation } = useLocation();
+  const { currentLocation } = useLocationStore();
+  const { fetchCurrentLocation } = useLocation();
+
   const { data: homeData, isLoading: isHomeLoading } = useHomeData();
   const { data: hospitalsData } = useHospitalsData(
     currentLocation?.latitude,
     currentLocation?.longitude,
   );
   const nearbyHospitals = hospitalsData?.data || [];
+
+  useEffect(() => {
+    fetchCurrentLocation();
+  }, []);
 
   const openDrawer = () => {
     navigation.openDrawer();

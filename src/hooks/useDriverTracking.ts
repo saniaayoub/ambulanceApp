@@ -68,13 +68,16 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
 
         try {
           isGeocodingRef.current = true;
-          const formattedAddress = await getLocationName(latitude, longitude);
+          const { address, placeName } = await getLocationName(
+            latitude,
+            longitude,
+          );
 
           setCurrentLocation({
             latitude,
             longitude,
-            address: formattedAddress || '',
-            placeName: formattedAddress || '', // for now same value
+            address: address || '',
+            placeName: placeName || '', // for now same value
           });
 
           lastGeocodedLocationRef.current = nextCoords;

@@ -3,8 +3,7 @@ import MaterialDesignIcons from '@react-native-vector-icons/material-design-icon
 import React, { useState, type FC } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { bookingSteps } from '../../hooks/useBooking';
-import { BookingStep } from '../../stores/bookingStore';
+import { BookingStep, bookingSteps } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import { ambulanceImages } from '../../utils/constants';
@@ -22,8 +21,8 @@ type Props = {
   bookingData: any;
   selectedAmbulance: AmbulanceType;
   setSelectedAmbulance: (type: AmbulanceType) => void;
-  pickupLocation: string;
-  destinationLocation: string;
+  pickupLocation?: string;
+  destinationLocation?: string;
   onNext: () => void;
 };
 
@@ -71,7 +70,7 @@ const TripDetailsSheet: FC<Props> = ({
         name={selectedAmbulance?.label}
         rightActionText="Change"
         onPressRightAction={handleShowAmbulance}
-        footerText="ETA 6 min"
+        // footerText="ETA 6 min"
       />
       {showAmbulance && (
         <AmbulanceCategories

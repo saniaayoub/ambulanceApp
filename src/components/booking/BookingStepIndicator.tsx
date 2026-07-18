@@ -9,14 +9,15 @@ type Props = {
 
 const BookingStepIndicator: FC<Props> = ({ currentStep, steps }) => {
   const styles = useGlobalStyles();
-  const currentIndex = steps.indexOf(currentStep);
+  console.log(currentStep, steps);
+  const currentIndex = steps?.indexOf(currentStep?.toLowerCase());
 
   return (
     <View style={styles.stepIndicator}>
       <View
         style={[globalStyles.row, globalStyles.centered, globalStyles.mB10]}
       >
-        {steps.slice(0, 4).map((step, index) => (
+        {steps?.slice(0, 4).map((step, index) => (
           <View
             key={step}
             style={[
@@ -26,7 +27,7 @@ const BookingStepIndicator: FC<Props> = ({ currentStep, steps }) => {
             ]}
           >
             <Text style={styles.smallText}>
-              {index === currentIndex ? currentStep : ''}
+              {index === currentIndex ? currentStep?.toLowerCase() : ''}
             </Text>
 
             <View
