@@ -4,7 +4,7 @@ import { ENDPOINTS } from '../api/endpoints';
 export const getHomeData = async (payload: object) =>
   handleResponse({
     method: 'post', // HTTP method used for the request
-    url: ENDPOINTS.HOME.DASHBOARD, // The endpoint URL for the dashboard
+    url: ENDPOINTS.USER.DASHBOARD, // The endpoint URL for the dashboard
     data: payload,
   });
 
@@ -24,40 +24,40 @@ export const getHospitalDetails = async (placeId: string) =>
 export const getEstimateData = async (payload: object) =>
   handleResponse({
     method: 'post', // HTTP method used for the request
-    url: ENDPOINTS.TRIPS.ESTIMATE, // The endpoint URL for the dashboard
+    url: ENDPOINTS.TRIP.ESTIMATE, // The endpoint URL for the dashboard
     data: payload,
   });
 
 export const getOnlineDrivers = async (payload: object) =>
   handleResponse({
     method: 'post', // HTTP method used for the request
-    url: ENDPOINTS.DRIVER.ONLINEDRIVERS, // The endpoint URL for the dashboard
+    url: ENDPOINTS.USER.ONLINEDRIVERS, // The endpoint URL for the dashboard
     data: payload,
   });
 
 export const createBooking = async (payload: object) =>
   handleResponse({
     method: 'post', // HTTP method used for the request
-    url: ENDPOINTS.TRIPS.CREATE, // The endpoint URL for the dashboard
+    url: ENDPOINTS.TRIP.CREATE, // The endpoint URL for the dashboard
     data: payload,
   });
 export const cancelBooking = async (payload: object) =>
   handleResponse({
     method: 'post', // HTTP method used for the request
-    url: ENDPOINTS.BOOKING.CANCEL, // The endpoint URL for the dashboard
+    url: ENDPOINTS.USER.TRIP_CANCEL, // The endpoint URL for the dashboard
     data: payload,
   });
 
 export const stopSearchingTrip = async (payload: string) =>
   handleResponse({
     method: 'post', // HTTP method used for the request
-    url: ENDPOINTS.TRIPS.STOP_SEARCH(payload), // The endpoint URL for the dashboard
+    url: ENDPOINTS.TRIP.STOP_SEARCH(payload), // The endpoint URL for the dashboard
   });
 
-export const getTripStatus = async (tripId: string) =>
+export const getTripStatus = async () =>
   handleResponse({
     method: 'get', // HTTP method used for the request
-    url: ENDPOINTS.BOOKING.STATUS(tripId), // The endpoint URL for the dashboard
+    url: ENDPOINTS.USER.TRIP_STATUS, // The endpoint URL for the dashboard
   });
 
 export const getTrips = async (params: {
@@ -67,17 +67,17 @@ export const getTrips = async (params: {
 }) =>
   handleResponse({
     method: 'get',
-    url: ENDPOINTS.TRIPS.LIST,
+    url: ENDPOINTS.TRIP.LIST,
     params,
   });
 
 export const getTripDetail = async (tripId: string) =>
   handleResponse({
     method: 'get',
-    url: ENDPOINTS.TRIPS.DETAIL(tripId),
+    url: ENDPOINTS.TRIP.DETAIL(tripId),
   });
 export const deleteTrip = async (tripId: string) =>
   handleResponse({
     method: 'delete',
-    url: ENDPOINTS.TRIPS.DELETE(tripId),
+    url: ENDPOINTS.TRIP.DELETE(tripId),
   });

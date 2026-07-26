@@ -7,9 +7,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { View } from 'react-native';
+import { InteractionManager, Keyboard, Platform, View } from 'react-native';
 import BaseMap from '../../../../components/map/BaseMap';
-
+import { Modalize } from 'react-native-modalize';
 import TripDetailsSheet from '../../../../components/booking/TripDetailsSheet';
 import DriverAssignedSheet from '../../../../components/booking/DriverAssignedSheet';
 import LocationSheet from '../../../../components/booking/LocationSheet';
@@ -26,9 +26,11 @@ import { Region } from 'react-native-maps';
 import AppButton from '../../../../components/AppButton';
 import { useLocation } from '../../../../hooks/useLocation';
 import { globalStyles } from '../../../../styles/globalStyles';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { showAlert } from '../../../../utils/functions';
 import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
+import { moderateScale, verticalScale } from 'react-native-size-matters';
+import { screenHeight } from '../../../../utils/constants';
 // import { socket } from '../../../../services/socketService';
 
 const reasons = [
@@ -76,10 +78,10 @@ const tripStatusToStep = {
   CANCELLED: 'Cancelled',
 };
 const BookingScreen = ({ navigation }: Props) => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<Modalize>(null);
   const [isMapLocked, setIsMapLocked] = useState(false);
   const isFocused = useIsFocused();
-
+  const [showSearch, setShowSearch] = useState(true);
   const { currentLocation } = useLocationStore();
   const {
     driverLocation,
@@ -100,7 +102,6 @@ const BookingScreen = ({ navigation }: Props) => {
   const pickupLocation = useBookingStore(s => s.pickupLocation);
   const destinationLocation = useBookingStore(s => s.destinationLocation);
   const selectedAmbulance = useBookingStore(s => s.selectedAmbulance);
-  console.log(destinationLocation, 'l');
   const setPickupLocation = useBookingStore(s => s.setPickupLocation);
   const setDestinationLocation = useBookingStore(s => s.setDestinationLocation);
   const setSelectedAmbulance = useBookingStore(s => s.setSelectedAmbulance);
@@ -119,6 +120,17 @@ const BookingScreen = ({ navigation }: Props) => {
     longitudeDelta: 0.01,
   });
   const [estimate, setEstimate] = useState(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (trip?.status === 'SEARCHING') {
+        getOnlineDriversList(trip?.ambulanceType, trip?.pickupLocation);
+      }
+      setTimeout(() => {
+        bottomSheetRef.current?.open();
+      }, 100);
+    }, []), // Keep this array empty
+  );
 
   const markers = useMemo(
     () => [
@@ -183,13 +195,19 @@ const BookingScreen = ({ navigation }: Props) => {
           <LocationSheet
             pickupLocation={pickupLocation}
             currentStep={bookingStep}
+            showSearch={showSearch}
             onCurrentLocationPress={() => {
               if (!currentLocation) return;
               setPickupLocation(currentLocation);
               setStep('DESTINATION');
             }}
             onPressChangeonMap={() => {
-              bottomSheetRef.current?.close();
+              Keyboard.dismiss();
+              setShowSearch(false);
+
+              setTimeout(() => {
+                bottomSheetRef.current?.close();
+              }, 100);
             }}
             onSelectLocation={location => {
               setPickupLocation(location);
@@ -202,11 +220,17 @@ const BookingScreen = ({ navigation }: Props) => {
         return (
           <LocationSheet
             pickupLocation={pickupLocation}
+            showSearch={showSearch}
             destinationLocation={destinationLocation}
             currentStep={bookingStep}
-            onSelectLocation={handleDestinationNext}
+            onSelectLocation={getEstimatedData}
             onPressChangeonMap={() => {
-              bottomSheetRef.current?.close();
+              Keyboard.dismiss();
+              setShowSearch(false);
+
+              setTimeout(() => {
+                bottomSheetRef.current?.close();
+              }, 100);
             }}
           />
         );
@@ -301,15 +325,9 @@ const BookingScreen = ({ navigation }: Props) => {
       case 'CANCELLED':
         return (
           <CancelRideBottomSheet
-            onKeepBooking={() => {
-              setStep('Driver Assigned');
-            }}
+            onKeepBooking={() => setStep(trip?.status)}
             reasons={reasons}
-            onCancelBooking={async (reason: string) => {
-              console.log('hi');
-              await handleBookingCancel(reason);
-              navigation.goBack;
-            }}
+            onCancelBooking={handleBookingCancel}
           />
         );
       default:
@@ -324,7 +342,9 @@ const BookingScreen = ({ navigation }: Props) => {
     );
     if (location) {
       await setPickupLocation(location);
-      bottomSheetRef.current?.expand();
+      setShowSearch(true);
+
+      bottomSheetRef.current?.open();
     }
   };
 
@@ -333,45 +353,33 @@ const BookingScreen = ({ navigation }: Props) => {
       selected?.latitude,
       selected?.longitude,
     );
-    console.log(location, 'dd');
     if (location) {
       await setDestinationLocation(location);
-      bottomSheetRef.current?.expand();
+      setShowSearch(true);
+
+      bottomSheetRef.current?.open();
     }
   };
 
-  useEffect(() => {
-    if (!isFocused) return;
+  // useEffect(() => {
+  //   if (!trip?.id && bookingStep !== 'ASSIGNED') return;
+  //   let i = 1;
+  //   const interval = setInterval(async () => {
+  //     try {
+  //       const response = await getTripStatus();
+  //       if (!response) return;
 
-    const loadData = async () => {
-      if (bookingStep === 'TRIP') {
-        getEstimatedData();
-        getOnlineDriversList(selectedAmbulance?.type, pickupLocation);
-      }
-    };
+  //       setTrip(response);
 
-    loadData();
-  }, [isFocused, bookingStep, selectedAmbulance]);
+  //       setStep(tripStatusToStep[response?.status]);
+  //       i = i + 1;
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }, 3000 + i * 1000);
 
-  useEffect(() => {
-    if (!trip?.id && bookingStep !== 'ASSIGNED') return;
-    let i = 1;
-    const interval = setInterval(async () => {
-      try {
-        const response = await getTripStatus();
-        if (!response) return;
-
-        setTrip(response);
-
-        setStep(tripStatusToStep[response?.status]);
-        i = i + 1;
-      } catch (error) {
-        console.log(error);
-      }
-    }, 3000 + i * 1000);
-
-    return () => clearInterval(interval);
-  }, [trip?.id]);
+  //   return () => clearInterval(interval);
+  // }, [trip?.id]);
 
   // useEffect(() => {
   //   socket.on('driver_location_changed', location => {
@@ -387,27 +395,20 @@ const BookingScreen = ({ navigation }: Props) => {
   //   };
   // }, []);
 
-  const getEstimatedData = async () => {
+  const getEstimatedData = async (location: Location) => {
+    setDestinationLocation(location);
     let data = await getEstimate({
       pickupLocation: pickupLocation,
-      destination: destinationLocation,
+      destination: location,
       ambulanceType: selectedAmbulance?.type,
     });
-    setEstimate(data);
-  };
-
-  const handleDestinationNext = async (location: Location) => {
-    setDestinationLocation(location);
-
+    getOnlineDriversList(selectedAmbulance?.type, pickupLocation);
     setStep('TRIP');
+    setEstimate(data);
   };
 
   const showCenterPin =
     bookingStep === 'PICKUP' || bookingStep === 'DESTINATION';
-
-  const handleSheetChanges = (index: number) => {
-    setIsMapLocked(index === -1);
-  };
 
   return (
     <View style={globalStyles.flex}>
@@ -416,7 +417,7 @@ const BookingScreen = ({ navigation }: Props) => {
         markers={markers}
         step={bookingStep}
         title={'Booking Ambulance'}
-        onRegionChangeComplete={!isMapLocked ? () => {} : setSelected}
+        onRegionChangeComplete={setSelected}
         showCenterPin={showCenterPin}
       >
         <AppButton
@@ -427,16 +428,33 @@ const BookingScreen = ({ navigation }: Props) => {
           }
         />
       </BaseMap>
-
+      {/* 
       <BottomSheet
         ref={bottomSheetRef}
         index={0}
         onChange={handleSheetChanges}
-        snapPoints={['40%', '60%', '90%']}
-        enablePanDownToClose={false}
+        snapPoints={['50%', '60%', '90%']}
+        enableDynamicSizing={true}
+        keyboardBlurBehavior="restore"
+        keyboardBehavior="interactive"
+        android_keyboardInputMode="adjustResize"
+        // enablePanDownToClose={false}
+      > */}
+      <Modalize
+        ref={bottomSheetRef}
+        modalHeight={screenHeight - verticalScale(100)}
+        keyboardAvoidingBehavior={
+          Platform.OS === 'android' ? 'height' : 'padding'
+        }
+        panGestureEnabled={false}
+        closeOnOverlayTap={false}
+        scrollViewProps={{
+          keyboardShouldPersistTaps: 'handled',
+        }}
       >
         {renderSheetContent()}
-      </BottomSheet>
+      </Modalize>
+      {/* </BottomSheet> */}
     </View>
   );
 };

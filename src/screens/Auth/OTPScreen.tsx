@@ -72,7 +72,6 @@ const OTPScreen = ({ navigation, route }: Props) => {
       toastError('Enter the 6-digit code');
       return;
     }
-    console.log('otp', otpValue);
     await verifyOtp(otpValue);
     // navigation.navigate('ResetPassword', {
     //   email,

@@ -33,7 +33,6 @@ const RideHistoryScreen = ({ history, filter, setFilter }: Props) => {
     isError,
   } = history;
   const trips = data?.pages.flatMap(page => page?.data?.data || []) || [];
-  // console.log(trips, 'trips');
   const navigation = useNavigation<any>();
 
   const getDateOnly = (date: string) => {
@@ -68,13 +67,11 @@ const RideHistoryScreen = ({ history, filter, setFilter }: Props) => {
     [trips],
   );
   const isFirstLoading = isLoading && trips.length === 0;
-  console.log(isFirstLoading, 'o');
 
   useEffect(() => {
     if (isFirstLoading) {
       showLoader();
     } else {
-      console.log(isLoading, 'hide');
       hideLoader();
     }
   }, [isFirstLoading]);

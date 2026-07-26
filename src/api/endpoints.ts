@@ -18,15 +18,12 @@ export const ENDPOINTS = {
 
   // User Endpoints
   USER: {
-    PROFILE: 'user/profile',
-    UPDATE_PROFILE: 'user/profile',
-    CHANGE_PASSWORD: 'user/change-password',
-    UPLOAD_AVATAR: 'user/avatar',
-  },
-
-  // Home/Dashboard Endpoints
-  HOME: {
-    DASHBOARD: 'booking/home',
+    DASHBOARD: 'user/home',
+    ESTIMATE: 'user/estimate',
+    CREATE: 'user/create',
+    TRIP_CANCEL: 'user/cancelTrip',
+    TRIP_STATUS: `user/trip-status`,
+    ONLINEDRIVERS: 'user/onlineDrivers',
   },
 
   PROFILE: {
@@ -34,12 +31,11 @@ export const ENDPOINTS = {
   },
 
   DRIVER: {
-    ONLINEDRIVERS: 'driver/onlineDrivers',
     DRIVERDETAILS: (driverId: string) => `driver/${driverId}`,
     ONLINESTATUS: `driver/onlineStatus`,
     STATS: 'driver/stats',
     TRIPS: `driver/trips`,
-    TRIP_DETAIL: (tripId: string) => `driver/trips/${tripId}`,
+    TRIP_DETAIL: (tripId: string) => `driver/trip/${tripId}`,
     EARNINGS: (period: string) => `/driver/earnings?period=${period}`,
   },
 
@@ -48,28 +44,21 @@ export const ENDPOINTS = {
     DETAILS: (placeId: string) => `hospitals/${placeId}`,
   },
 
-  BOOKING: {
-    ESTIMATE: 'booking/estimate',
-    CREATE: 'booking/create',
-    CANCEL: 'booking/cancel',
-    STATUS: (tripId: string) => `booking/status/${tripId}`,
-  },
-
-  TRIPS: {
-    LIST: 'trips',
-    LIST_FILTER: 'trips/filter',
-    ESTIMATE: 'trips/estimate',
-    CREATE: 'trips/create',
-    STOP_SEARCH: (tripId: string) => `trips/stopSearch/${tripId}`,
-    DETAIL: (tripId: string) => `trips/${tripId}`,
-    DELETE: (tripId: string) => `trips/${tripId}`,
-    ACCEPT: (tripId: string) => `trips/accept/${tripId}`,
-    REJECT: (tripId: string) => `trips/reject/${tripId}`,
-    ARRIVED: (tripId: string) => `trips/arrived/${tripId}`,
-    START: (tripId: string) => `trips/start/${tripId}`,
-    COMPLETE: (tripId: string) => `trips/complete/${tripId}`,
-    PAYMENT_RECIEVED: (tripId: string) => `trips/payment-received/${tripId}`,
-    CANCEL: (tripId: string) => `trips/cancel/${tripId}`,
+  TRIP: {
+    LIST: 'trip',
+    LIST_FILTER: 'trip/filter',
+    ESTIMATE: 'trip/estimate',
+    CREATE: 'trip/create',
+    STOP_SEARCH: (tripId: string) => `trip/stopSearch/${tripId}`,
+    DETAIL: (tripId: string) => `trip/${tripId}`,
+    DELETE: (tripId: string) => `trip/${tripId}`,
+    ACCEPT: (tripId: string) => `trip/accept/${tripId}`,
+    REJECT: (tripId: string) => `trip/reject/${tripId}`,
+    ARRIVED: (tripId: string) => `trip/arrived/${tripId}`,
+    START: (tripId: string) => `trip/start/${tripId}`,
+    COMPLETE: (tripId: string) => `trip/complete/${tripId}`,
+    PAYMENT_RECIEVED: (tripId: string) => `trip/payment-received/${tripId}`,
+    CANCEL: (tripId: string) => `trip/cancel/${tripId}`,
   },
   // Details/Items Endpoints
   DETAILS: {

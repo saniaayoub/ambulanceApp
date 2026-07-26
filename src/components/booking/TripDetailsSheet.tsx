@@ -52,10 +52,7 @@ const TripDetailsSheet: FC<Props> = ({
   };
 
   return (
-    <BottomSheetScrollView
-      showsVerticalScrollIndicator={false}
-      style={globalStyles.padding15}
-    >
+    <View style={[globalStyles.flex, globalStyles.padding15]}>
       <BookingStepIndicator currentStep={currentStep} steps={bookingSteps} />
       <DetailColumnComp
         title1={'Pickup'}
@@ -93,7 +90,7 @@ const TripDetailsSheet: FC<Props> = ({
         title1={'Fare'}
         title2={'Nearby'}
         text1={`Rs. ${bookingData?.fare?.total?.toLocaleString()}`}
-        text2={`${bookingData?.drivers?.length} Ambulances`}
+        text2={`${bookingData?.drivers?.length} Ambulance(s)`}
       />
 
       <InfoCard
@@ -123,7 +120,7 @@ const TripDetailsSheet: FC<Props> = ({
           <AppButton title="Find Ambulance" onPress={onNext} />
         </View>
       </View>
-    </BottomSheetScrollView>
+    </View>
   );
 };
 

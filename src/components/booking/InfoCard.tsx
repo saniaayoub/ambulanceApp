@@ -70,11 +70,13 @@ const InfoCard = ({
               color={theme.colors.common.success}
             />
           ) : (
-            <Image
-              source={image}
-              resizeMode="contain"
-              style={globalStyles.size50}
-            />
+            <View style={[styles.border, styles.round, { overflow: 'hidden' }]}>
+              <Image
+                source={image}
+                resizeMode="cover"
+                style={[globalStyles.size50]}
+              />
+            </View>
           )}
           <View>
             <Text style={[styles.h6, globalStyles.width120, globalStyles.mL20]}>

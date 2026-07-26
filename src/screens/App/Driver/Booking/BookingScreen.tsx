@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { getDistance } from 'geolib';
-import React, { useMemo, useRef } from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { Alert, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
 import NavigateToPickupSheet from '../../../../components/driver/NavigateToPickupSheet';
@@ -14,54 +14,13 @@ import { useLocationStore } from '../../../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import { showAlert } from '../../../../utils/functions';
 import TripCompletedSheet from '../../../../components/driver/TripCompletedSheet';
+import { reasons_driver } from '../../../../utils/constants';
 
 // SEARCHING / ASSIGNED -> ASSIGNED
 // ARRIVED / STARTED -> trip_in_progress
 // COMPLETED -> trip_completed
 
-const reasons = [
-  {
-    id: '1',
-    title: 'Patient did not answer',
-    icon: 'phone-remove',
-  },
-  {
-    id: '2',
-    title: 'Patient not at pickup',
-    icon: 'map-marker-remove',
-  },
-  {
-    id: '3',
-    title: 'Unable to reach pickup location',
-    icon: 'road-variant',
-  },
-  {
-    id: '4',
-    title: 'Vehicle issue / Breakdown',
-    icon: 'car-wrench',
-  },
-  {
-    id: '5',
-    title: 'Emergency call received',
-    icon: 'ambulance',
-  },
-  {
-    id: '6',
-    title: 'Safety concerns',
-    icon: 'shield-alert',
-  },
-  {
-    id: '7',
-    title: 'Patient requested cancellation',
-    icon: 'account-cancel',
-  },
-  {
-    id: '8',
-    title: 'Other',
-    icon: 'help-circle-outline',
-  },
-];
-const BookingScreen = () => {
+const BookingScreen = ({ navigation }: any) => {
   const { currentTrip, setTripStep, tripStep } = useDriverStore();
   const { arrived, cancel, start, complete, paymentReceived } =
     useDriverTrips();
@@ -215,12 +174,18 @@ const BookingScreen = () => {
 
     const distanceKm = Number((distanceMeters / 1000).toFixed(1));
     const etaMinutes = Math.max(1, Math.ceil((distanceKm / 30) * 60));
-    console.log(driver, ',');
     return {
       distanceKm,
       etaMinutes,
     };
   }, [markers]);
+
+  useEffect(() => {
+    if (tripStep === 'idle') {
+      navigation.goBack();
+      Alert.alert('User cancelled the trip');
+    }
+  }, [tripStep]);
 
   const handleShowAlert = () => {
     showAlert(() => {
@@ -269,7 +234,7 @@ const BookingScreen = () => {
     if (tripStep === 'CANCEL') {
       return (
         <CancelRideBottomSheet
-          reasons={reasons}
+          reasons={reasons_driver}
           onKeepBooking={() => setTripStep(currentTrip?.status)}
           onCancelBooking={reason => cancel(currentTrip?._id, reason)}
         />
@@ -311,7 +276,7 @@ const BookingScreen = () => {
       <BottomSheet
         ref={bottomSheetRef}
         index={0}
-        snapPoints={['70%', '80%']}
+        snapPoints={['70%', '80%', '90%']}
         enablePanDownToClose={false}
         backgroundStyle={styles.card}
       >

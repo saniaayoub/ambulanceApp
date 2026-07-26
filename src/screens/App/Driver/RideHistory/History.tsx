@@ -4,7 +4,6 @@ import RideHistoryScreen from '../../Shared/History/RideHistoryScreen';
 const RideHistoryDriver = () => {
   const [filter, setFilter] = useState('All');
   const history = useDriverTrips(10, filter);
-  console.log(history, 'his');
   return (
     <RideHistoryScreen
       history={history}

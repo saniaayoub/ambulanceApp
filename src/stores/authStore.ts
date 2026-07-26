@@ -52,7 +52,6 @@ export const useAuthStore = create<AuthState>()(
       setOTPResult: (otpResult: object) => set({ otpResult }),
       setToken: (token: string) => set({ token }),
       clearToken: () => {
-        console.log('clearToken');
         set({ token: null, userData: null });
       },
       setRole: (role: string) => set({ role: role }),

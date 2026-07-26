@@ -5,28 +5,80 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, '16.0'
+platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+static_frameworks = [
+  'FirebaseAuthInterop',
+  'FirebaseAppCheckInterop',
+  'FirebaseCore',
+  'FirebaseCoreExtension',
+  'GoogleUtilities',
+  'RecaptchaInterop',
+  'FirebaseCoreInternal',
+  'FirebaseInstallations',
+  'GoogleDataTransport',
+  'nanopb',
+  'FirebaseABTesting',
+  'FirebaseAuth'
+]
 
-target 'Ambulanceapp' do
-  config = use_native_modules!
-  use_frameworks! :linkage => :static
-  $RNFirebaseAsStaticFramework = true
-  # Override Firebase SDK Version if desired
-$FirebaseSDKVersion = '12.13.0'
-  use_react_native!(
-    :path => config[:reactNativePath],
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
-  )
-
-  post_install do |installer|
-    react_native_post_install(installer)
-
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+pre_install do |installer|
+  installer.pod_targets.each do |pod|
+    if static_frameworks.include?(pod.name)
+      puts "Configuring #{pod.name} as static framework"
+      def pod.build_type
+        Pod::BuildType.new(:linkage => :static, :packaging => :framework)
       end
     end
   end
 end
+target 'AmbulanceApp' do
+
+    rn_maps_path = '../node_modules/react-native-maps'
+pod 'react-native-maps/Google', :path => rn_maps_path
+
+  config = use_native_modules!
+# # Force CocoaPods to build Firebase as static frameworks
+# $RNFirebaseAsStaticFramework = true
+# use_frameworks! :linkage => :static
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+
+   pod 'FirebaseAuth'
+  pod 'FirebaseAuthInterop'
+  pod 'FirebaseAppCheckInterop'
+  pod 'FirebaseCore'
+  pod 'FirebaseCoreExtension'
+  pod 'FirebaseCoreInternal'
+  pod 'GoogleUtilities'
+  pod 'RecaptchaInterop'
+  pod 'nanopb'
+  pod 'FirebaseABTesting'
+  pod 'FirebaseInstallations'
+  pod 'GoogleDataTransport'
+
+  post_install do |installer|
+     installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+
+    end
+  end
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false,
+      # :ccache_enabled => true
+    )
+  end
+end
+
+
+

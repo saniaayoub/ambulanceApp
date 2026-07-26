@@ -4,6 +4,7 @@ import { io, Socket } from 'socket.io-client';
 import { BaseURL } from '../api/axiosInstance';
 import { useAuthStore } from '../stores/authStore'; // <-- change path
 import { useDriverStore } from '../stores/driverStore';
+import { queryClient } from '../../App';
 // import your trip/driver store if needed
 // import { useTripStore } from '../store/tripStore';
 
@@ -39,6 +40,9 @@ export const useDriverSocket = () => {
   const currentUser = useAuthStore(state => state.userData);
   const token = useAuthStore(state => state.token);
   const setIncomingRequest = useDriverStore(state => state.setIncomingRequest);
+  const setCurrentTrip = useDriverStore(state => state.setIncomingRequest);
+  const setTripStep = useDriverStore(state => state.setTripStep);
+
   const hasHydrated = useAuthStore(state => state.hasHydrated); // if you have this in zustand
 
   const hasJoinedRef = useRef(false);
@@ -166,9 +170,9 @@ export const useDriverSocket = () => {
     };
     const onTripRequestTaken = ({ tripId }) => {
       const request = useDriverStore.getState().incomingRequest;
+      console.log('clear incoming');
       if (request?.tripId === tripId) {
         setIncomingRequest(null);
-        console.log('taken');
       }
     };
 
@@ -176,7 +180,9 @@ export const useDriverSocket = () => {
       console.log('❌ trip_cancelled =>', payload);
 
       // Example:
-      // setTripStatus({ tripId: payload.tripId, status: 'CANCELLED' });
+      setCurrentTrip(null);
+      setTripStep('idle');
+      queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
     };
 
     const onTripStatusUpdated = (payload: TripStatusPayload) => {
@@ -197,6 +203,7 @@ export const useDriverSocket = () => {
     // ===== REGISTER LISTENERS =====
     socket.on('incoming_trip_request', onIncomingTrip);
     socket.on('trip_request_taken', onTripRequestTaken);
+    socket.on('trip_search_stopped', onTripRequestTaken);
     socket.on('trip_cancelled', onTripCancelled);
     socket.on('trip_status_updated', onTripStatusUpdated);
     socket.on('driver_approved', onDriverApproved);
@@ -205,6 +212,7 @@ export const useDriverSocket = () => {
     return () => {
       socket.off('incoming_trip_request', onIncomingTrip);
       socket.off('trip_request_taken', onTripRequestTaken);
+      socket.off('trip_search_stopped', onTripRequestTaken);
       socket.off('trip_cancelled', onTripCancelled);
       socket.off('trip_status_updated', onTripStatusUpdated);
       socket.off('driver_approved', onDriverApproved);

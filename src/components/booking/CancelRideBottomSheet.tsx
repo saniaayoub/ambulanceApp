@@ -1,8 +1,6 @@
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import React, { useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
-
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import AppButton from '../../components/AppButton';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
@@ -23,10 +21,7 @@ const CancelRideSheet = ({
   const [selectedReason, setSelectedReason] = useState('');
 
   return (
-    <BottomSheetScrollView
-      showsVerticalScrollIndicator={false}
-      style={globalStyles.paddingH15}
-    >
+    <View style={[globalStyles.flex, globalStyles.padding15]}>
       <Text style={styles.h4}>Cancel Ambulance?</Text>
 
       <Text style={[styles.lightText, globalStyles.mB10]}>
@@ -103,7 +98,7 @@ const CancelRideSheet = ({
         ]}
         textStyle={styles.text2}
       />
-    </BottomSheetScrollView>
+    </View>
   );
 };
 

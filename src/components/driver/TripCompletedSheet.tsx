@@ -22,7 +22,6 @@ const TripCompletedSheet = ({ currentTrip, onDone }: Props) => {
   const isCash = currentTrip?.paymentMethod === 'CASH';
   const waitingCharge = currentTrip?.fare?.waitingCharge ?? 0;
   const nightSurcharge = currentTrip?.fare?.nightSurcharge ?? 0;
-
   return (
     <BottomSheetScrollView
       showsVerticalScrollIndicator={false}

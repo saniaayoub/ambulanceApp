@@ -1,24 +1,14 @@
-import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, Linking, Text, View } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
+import React, { useCallback, useMemo, useState } from 'react';
+import { FlatList, Text, View } from 'react-native';
+import AppButton from '../../../../components/AppButton';
 import AppInput from '../../../../components/AppInput';
 import BackButton from '../../../../components/BackButton';
-import Filters from '../../../../components/Filters';
 import ListEmptyComp from '../../../../components/ListEmptyComp';
+import { useHospitalsData } from '../../../../hooks/useHomeData';
+import { useHospitalActions } from '../../../../hooks/useHospitalActions';
+import { useLocationStore } from '../../../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import theme from '../../../../styles/theme';
-import AppButton from '../../../../components/AppButton';
-import {
-  useHomeData,
-  useHospitalDetails,
-  useHospitalsData,
-} from '../../../../hooks/useHomeData';
-import { useLocation } from '../../../../hooks/useLocation';
-import { getHospitalDetails } from '../../../../services/bookingService';
-import { useMutation } from '@tanstack/react-query';
-import { useBookingStore } from '../../../../stores/bookingStore';
-import { useHospitalActions } from '../../../../hooks/useHospitalActions';
 
 const FILTERS = ['All', 'Emergency', 'Private', 'Government'];
 
@@ -59,7 +49,7 @@ const HOSPITALS = [
 
 const HospitalsScreen = ({ navigation }: any) => {
   const styles = useGlobalStyles();
-  const { currentLocation } = useLocation();
+  const { currentLocation } = useLocationStore();
   const { startHospitalBooking, callHospital } = useHospitalActions(navigation);
   const { data } = useHospitalsData(
     currentLocation?.latitude,

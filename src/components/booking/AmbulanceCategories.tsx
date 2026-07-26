@@ -10,8 +10,8 @@ const AmbulanceCategories = ({
   data,
   isLoading,
 }) => {
-  const { ambulanceCategories } = data?.data || {
-    AmbulanceCategories: [],
+  const { ambulanceCategories } = data || {
+    ambulanceCategories: [],
   };
 
   if (isLoading) {

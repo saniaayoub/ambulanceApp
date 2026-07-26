@@ -29,10 +29,7 @@ const DriverDetailsSheet: FC<Props> = ({
   const styles = useGlobalStyles();
 
   return (
-    <BottomSheetScrollView
-      showsVerticalScrollIndicator={false}
-      style={globalStyles.padding15}
-    >
+    <View style={[globalStyles.flex, globalStyles.padding15]}>
       <View style={[globalStyles.centered]}>
         <Image
           source={driverData?.driverImage}
@@ -115,7 +112,7 @@ const DriverDetailsSheet: FC<Props> = ({
         ]}
         textStyle={styles.text2}
       />
-    </BottomSheetScrollView>
+    </View>
   );
 };
 

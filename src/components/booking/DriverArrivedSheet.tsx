@@ -1,6 +1,6 @@
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import AppButton from '../AppButton';
 import { bookingSteps } from '../../hooks/useBooking';
 import { BookingStep } from '../../stores/bookingStore';
@@ -24,10 +24,7 @@ const DriverArrivedSheet = ({
   const styles = useGlobalStyles();
 
   return (
-    <BottomSheetScrollView
-      showsVerticalScrollIndicator={false}
-      style={globalStyles.padding15}
-    >
+    <View style={[globalStyles.flex, globalStyles.padding15]}>
       <BookingStepIndicator currentStep={currentStep} steps={bookingSteps} />
 
       <Text style={[styles.h5, globalStyles.mT10]}>
@@ -46,7 +43,7 @@ const DriverArrivedSheet = ({
       />
 
       <AppButton title="Cancel Request" onPress={onCancel} />
-    </BottomSheetScrollView>
+    </View>
   );
 };
 

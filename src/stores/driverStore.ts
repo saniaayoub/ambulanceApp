@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { queryClient } from '../../App';
 
 export type DriverTripStep =
+  | 'idle'
   | 'INCOMING'
   | 'ASSIGNED'
   | 'WAITING'

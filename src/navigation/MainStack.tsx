@@ -4,8 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import SettingsScreen from '../screens/App/Settings';
 import { SplashScreen } from '../screens/Auth';
 import {
   getFCMToken,
@@ -14,7 +14,6 @@ import {
 } from '../services/notification';
 import { useAuthStore } from '../stores/authStore';
 import AuthStack from './AuthStack';
-import DrawerNavigator from './DriverDrawer';
 import RootNavigator from './RootNavigator';
 
 export type MainStackParamList = {
@@ -85,17 +84,19 @@ export default function MainStack() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {showSplash ? (
-            <Stack.Screen name="SplashScreen" component={SplashScreen} />
-          ) : token ? (
-            <Stack.Screen name="App" component={RootNavigator} />
-          ) : (
-            <Stack.Screen name="AuthStack" component={AuthStack} />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {showSplash ? (
+              <Stack.Screen name="SplashScreen" component={SplashScreen} />
+            ) : token ? (
+              <Stack.Screen name="App" component={RootNavigator} />
+            ) : (
+              <Stack.Screen name="AuthStack" component={AuthStack} />
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
 }

@@ -34,10 +34,14 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>RCTNewArchEnabled</key>
 	<true/>
-	<key>UIAppFonts</key>
+
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your camera to capture photos.</string>
+
+<key>UIAppFonts</key>
 	<array>
 		<string>Geologica-Light.ttf</string>
 		<string>Geologica-Thin.ttf</string>
@@ -48,7 +52,7 @@
 		<string>Geologica-Black.ttf</string>
 		<string>Geologica-Regular.ttf</string>
 		<string>Geologica-ExtraLight.ttf</string>
-		<!-- <string>MaterialDesignIcons.ttf</string> -->
+		<string>MaterialDesignIcons.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array/>

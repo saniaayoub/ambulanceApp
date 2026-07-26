@@ -151,6 +151,9 @@ export const globalStyles = StyleSheet.create({
   mL5: {
     marginLeft: moderateScale(5),
   },
+  mL3: {
+    marginLeft: moderateScale(3),
+  },
   mV10: {
     marginVertical: moderateScale(10),
   },
@@ -255,6 +258,9 @@ export const globalStyles = StyleSheet.create({
   },
   paddingH30: {
     paddingHorizontal: moderateScale(30),
+  },
+  paddingR10: {
+    paddingRight: moderateScale(10),
   },
   paddingV20: {
     paddingVertical: moderateScale(20),

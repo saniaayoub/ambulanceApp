@@ -3,7 +3,7 @@ import MaterialDesignIcons from '@react-native-vector-icons/material-design-icon
 import React, { FC } from 'react';
 import { Image, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { Hospital } from '../../assets/images/pngs';
+import { Hospital, User } from '../../assets/images/pngs';
 import { useLiveWaitingTimer } from '../../hooks/useWaitingTimer';
 import { Location } from '../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
@@ -28,13 +28,12 @@ const DriverAssignedSheet: FC<Props> = ({
   pickupLocation,
 }: Props) => {
   const styles = useGlobalStyles();
-
+  console.log(trip);
   const seconds = useLiveWaitingTimer(trip?.waitingStartedAt);
+  const driver = trip?.driver || trip?.driverId;
+
   return (
-    <BottomSheetScrollView
-      showsVerticalScrollIndicator={false}
-      style={globalStyles.paddingH15}
-    >
+    <View style={[globalStyles.flex, globalStyles.padding15]}>
       <View
         style={[
           globalStyles.row,
@@ -44,16 +43,16 @@ const DriverAssignedSheet: FC<Props> = ({
         ]}
       >
         <View>
-          <Text style={[styles.h5]}>{trip?.ambulanceType}</Text>
+          <Text style={[styles.h5]}>{trip?.ambulanceType} Ambulance</Text>
 
-          {trip?.status === 'Waiting' ? (
+          {trip?.status === 'WAITING' ? (
             <Text style={[styles.lightText]}>
               Driver is waiting outside {'\n'}
               <Text style={[styles.lightText, styles.link]}>
                 {formatTime(seconds)} 🕒
               </Text>
             </Text>
-          ) : trip?.status === 'Tracking' ? (
+          ) : trip?.status === 'STARTED' ? (
             <Text style={[styles.lightText]}>
               Reaching Destination in {trip?.etaMinutes} mins
             </Text>
@@ -88,25 +87,29 @@ const DriverAssignedSheet: FC<Props> = ({
               styles.borderDark,
             ]}
           >
-            <Text>{trip?.driver?.ambulance?.vehicleNumber}</Text>
+            <Text>{trip?.vehicleId?.vehicleNumber}</Text>
           </View>
         </View>
       </View>
 
       {/* DRIVER INFORMATION */}
       <InfoCard
-        image={Hospital}
-        name={trip?.driver?.user?.name}
+        image={
+          driver?.userId?.profileImage
+            ? { uri: driver?.userId?.profileImage }
+            : User
+        }
+        name={driver?.userId?.fullName}
         label="Rating"
-        value={`⭐ ${trip?.driver?.driver?.rating}`}
-        onPress={() => makeaCall(trip?.driver?.user?.phone)}
+        value={`⭐ ${driver?.rating ?? 0}`}
+        onPress={() => makeaCall(driver?.userId?.phone)}
       />
       {/* DESTINATION INFORMATION */}
       <DetailColumnComp
         title1={'Pickup'}
         title2={'Destination'}
-        text1={pickupLocation?.name}
-        text2={destination?.name}
+        text1={pickupLocation?.address}
+        text2={destination?.address}
         // style={globalStyles.mT10}
       />
       <InfoCard
@@ -128,7 +131,7 @@ const DriverAssignedSheet: FC<Props> = ({
         title="Cancel Ride"
         onPress={onCancel}
       />
-    </BottomSheetScrollView>
+    </View>
   );
 };
 

@@ -2,6 +2,7 @@ import { queryClient } from '../../App';
 import { logout as authLogout } from '../services/authService';
 import { updateProfile } from '../services/profileService';
 import { toastError, toastSuccess } from '../services/toast';
+import { useAuthStore } from '../stores/authStore';
 import { useLoaderStore } from '../stores/loaderStore';
 
 export const getErrorMessage = (error: any) =>
@@ -9,6 +10,7 @@ export const getErrorMessage = (error: any) =>
 
 export const useProfile = () => {
   const { showLoader, hideLoader } = useLoaderStore();
+  const userData = useAuthStore(state => state.userData);
 
   const updateDriverProfile = async (formData: FormData) => {
     showLoader();
@@ -19,8 +21,18 @@ export const useProfile = () => {
         toastError(getErrorMessage(response.error));
         return response;
       }
+      console.log(
+        queryClient
+          .getQueryCache()
+          .getAll()
+          .map(q => q.queryKey),
+        'k',
+        ['driver-data', userData?.driverId],
+      );
+      queryClient.invalidateQueries({
+        queryKey: ['driver-data', userData?.driverId],
+      });
 
-      queryClient.invalidateQueries({ queryKey: ['driver-data'] });
       toastSuccess(response?.message);
     } finally {
       hideLoader();

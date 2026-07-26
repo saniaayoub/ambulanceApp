@@ -46,7 +46,6 @@ export const useLocation = () => {
       address,
       placeName,
     };
-
     setCurrentLocation(customizeLoc);
     setLocation?.(customizeLoc);
 
@@ -57,7 +56,6 @@ export const useLocation = () => {
     showLoader();
 
     const { address, placeName } = await getLocationName(lat, lng);
-    console.log('ad', placeName);
     const customizeLoc: Location = {
       latitude: lat,
       longitude: lng,

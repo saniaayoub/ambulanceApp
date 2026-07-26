@@ -56,10 +56,7 @@ const RideCompletedSheet = ({
   const [rating, setRating] = useState(0);
 
   return (
-    <BottomSheetScrollView
-      showsVerticalScrollIndicator={false}
-      style={globalStyles.paddingH15}
-    >
+    <View style={[globalStyles.flex, globalStyles.padding15]}>
       <View>
         <View style={[globalStyles.alignCenter, globalStyles.mB10]}>
           <MaterialDesignIcons
@@ -98,7 +95,7 @@ const RideCompletedSheet = ({
         >
           {[1, 2, 3, 4, 5].map(star => (
             <TouchableOpacity key={star} onPress={() => setRating(star)}>
-              <MaterialCommunityIcons
+              <MaterialDesignIcons
                 name={star <= rating ? 'star' : 'star-outline'}
                 size={34}
                 color="#FFC107"
@@ -131,7 +128,7 @@ const RideCompletedSheet = ({
         </View>
       </View>
       <AppButton title="Submit Review" onPress={() => onSubmitReview(rating)} />
-    </BottomSheetScrollView>
+    </View>
   );
 };
 

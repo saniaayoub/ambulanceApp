@@ -43,37 +43,34 @@ const BaseMap: React.FC<BaseMapProps> = ({
   title = '',
 }: BaseMapProps) => {
   const [routeCoords, setRouteCoords] = React.useState<any>([]);
-  useEffect(() => {
-    console.log('mounted base');
-  }, []);
 
-  useEffect(() => {
-    getPolyLineData();
-  }, [markers, step]);
+  // useEffect(() => {
+  //   getPolyLineData();
+  // }, [markers, step]);
 
-  const getPolyLineData = async () => {
-    if (markers.length >= 2 && step === 'Trip Details') {
-      const pickup = markers.find(m => m.id === 'pickup');
-      const destination = markers.find(m => m.id === 'destination');
+  // const getPolyLineData = async () => {
+  //   if (markers.length >= 2 && step === 'Trip Details') {
+  //     const pickup = markers.find(m => m.id === 'pickup');
+  //     const destination = markers.find(m => m.id === 'destination');
 
-      if (pickup && destination) {
-        let polylineData = await fetchRoute(pickup, destination);
+  //     if (pickup && destination) {
+  //       let polylineData = await fetchRoute(pickup, destination);
 
-        const coords = [
-          { latitude: 24.889128, longitude: 67.176883 },
-          { latitude: 24.890429, longitude: 67.180381 },
-          { latitude: 24.891732, longitude: 67.183879 },
-          { latitude: 24.893034, longitude: 67.187377 },
-          { latitude: 24.894336, longitude: 67.190875 },
-          { latitude: 24.895638, longitude: 67.194373 },
-          { latitude: 24.89694, longitude: 67.197871 },
-          { latitude: 24.898428, longitude: 67.201865 },
-        ];
-        setRouteCoords(coords);
-        // setRouteCoords(polylineData);
-      }
-    }
-  };
+  //       const coords = [
+  //         { latitude: 24.889128, longitude: 67.176883 },
+  //         { latitude: 24.890429, longitude: 67.180381 },
+  //         { latitude: 24.891732, longitude: 67.183879 },
+  //         { latitude: 24.893034, longitude: 67.187377 },
+  //         { latitude: 24.894336, longitude: 67.190875 },
+  //         { latitude: 24.895638, longitude: 67.194373 },
+  //         { latitude: 24.89694, longitude: 67.197871 },
+  //         { latitude: 24.898428, longitude: 67.201865 },
+  //       ];
+  //       setRouteCoords(coords);
+  //       // setRouteCoords(polylineData);
+  //     }
+  //   }
+  // };
 
   return (
     <View style={globalStyles.flex}>
@@ -85,21 +82,20 @@ const BaseMap: React.FC<BaseMapProps> = ({
         followsUserLocation={followsUserLocation}
         showsMyLocationButton
         onRegionChangeComplete={region => {
-          console.log(region, 'keigion');
           onRegionChangeComplete?.(region);
         }}
       >
         {/* <Marker coordinate={markers[0]} /> */}
 
-        {markers.map(marker => (
+        {markers?.map(marker => (
           <Marker
-            key={marker.id}
+            key={marker?.id}
             coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
+              latitude: marker?.latitude,
+              longitude: marker?.longitude,
             }}
           >
-            <MapMarker type={marker.type} />
+            <MapMarker type={marker?.type} />
           </Marker>
         ))}
 

@@ -36,6 +36,10 @@
     {
       "path": "src/assets/fonts/Geologica-Thin.ttf",
       "sha1": "90c00cbb8a7da2d5ba33876591a6bb97fc5da2e5"
+    },
+    {
+      "path": "src/assets/fonts/MaterialDesignIcons.ttf",
+      "sha1": "4f51a4dc75a68d3e57321c448efddea23c8a9db0"
     }
   ]
 }

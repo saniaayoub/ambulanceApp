@@ -1,3 +1,4 @@
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -8,8 +9,8 @@ import {
 } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
-import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import theme from '../styles/theme';
+import { Pressable as GesturePressable } from 'react-native-gesture-handler';
 
 // ===== Types =====
 
@@ -27,6 +28,9 @@ interface AppButtonProps {
   icon?: string;
   textStyle?: TextStyle[] | TextStyle;
   iconColor?: string;
+
+  // NEW PROP
+  useGestureHandler?: boolean;
 }
 
 // ===== Component =====
@@ -42,37 +46,61 @@ const AppButton: React.FC<AppButtonProps> = ({
   icon,
   textStyle,
   iconColor,
+  useGestureHandler = false,
 }) => {
   const isDisabled = disabled || loading;
   const styles = useGlobalStyles();
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      disabled={isDisabled}
-      style={[
-        globalStyles.centered,
-        globalStyles.row,
-        globalStyles.fullRadius,
-        globalStyles.mV20,
-        sizeStyles[size],
-        isDisabled && globalStyles.disabled,
-        styles.buttonCard,
-        style,
-      ]}
-    >
+
+  const buttonStyle = [
+    globalStyles.centered,
+    globalStyles.row,
+    globalStyles.fullRadius,
+    globalStyles.mV20,
+    sizeStyles[size],
+    isDisabled && globalStyles.disabled,
+    styles.buttonCard,
+    style,
+  ];
+
+  const content = (
+    <>
       {icon ? (
         <MaterialDesignIcons
           name={icon}
           size={moderateScale(18)}
-          color={iconColor ? iconColor : theme.colors.common.white}
+          color={iconColor ?? theme.colors.common.white}
           style={globalStyles.mR10}
         />
       ) : null}
+
       {loading ? (
         <ActivityIndicator color="#fff" />
       ) : (
         <Text style={[styles.text, styles.white, textStyle]}>{title}</Text>
       )}
+    </>
+  );
+
+  if (useGestureHandler) {
+    return (
+      <GesturePressable
+        onPress={onPress}
+        disabled={isDisabled}
+        style={buttonStyle}
+      >
+        {content}
+      </GesturePressable>
+    );
+  }
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={onPress}
+      disabled={isDisabled}
+      style={buttonStyle}
+    >
+      {content}
     </TouchableOpacity>
   );
 };

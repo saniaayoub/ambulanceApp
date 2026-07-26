@@ -3,6 +3,8 @@ import { useAuthStore } from '../stores/authStore';
 import { API_BASE_URL } from './environment';
 
 export const BaseURL = 'http://192.168.1.7:5000';
+// export const BaseURL = 'https://ambulanceappbe.onrender.com';
+
 const axiosInstance = axios.create({
   // baseURL: API_BASE_URL, // Replace with your API base URL
   baseURL: `${BaseURL}/api/`, // Replace with your API base URL

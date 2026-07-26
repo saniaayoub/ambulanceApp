@@ -32,7 +32,7 @@ const ProfileSettings = () => {
     formState: { isDirty, dirtyFields },
   } = useForm({
     defaultValues: {
-      name: userData?.fullName,
+      name: data?.fullName ?? userData?.fullName,
       email: userData?.email ?? data?.email,
       phone: userData?.phone,
     },
@@ -57,7 +57,6 @@ const ProfileSettings = () => {
       setIsEditing(false); // optional
       return;
     }
-    console.log(isDirty, hasImageChanged, 'k');
     const formData = new FormData();
 
     if (dirtyFields.name) {
@@ -90,11 +89,13 @@ const ProfileSettings = () => {
     setIsEditing(false);
   };
 
-  console.log(image, 'ima');
   return (
     <View style={[styles.card, globalStyles.flex]}>
       <BackButton title="Profile Settings" />
-      <ScrollView contentContainerStyle={globalStyles.paddingH15}>
+      <ScrollView
+        keyboardShouldPersistTaps={'handled'}
+        contentContainerStyle={globalStyles.paddingH15}
+      >
         <ProfileHeader
           name={data?.fullName || userData?.fullName}
           image={data?.image || image?.uri}

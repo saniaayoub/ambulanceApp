@@ -8,7 +8,7 @@ import {
   getOnlineDrivers,
   getTripStatus,
   stopSearchingTrip,
-} from '../services/bookingService';
+} from '../services/userService';
 import { BookingStep, useBookingStore } from '../stores/bookingStore';
 import { useLoaderStore } from '../stores/loaderStore';
 import { Location } from '../stores/locationStore';
@@ -16,6 +16,7 @@ import { getNearbyDrivers } from '../services/locationService';
 import { toastError } from '../services/toast';
 import { getErrorMessage } from './useAuth';
 import { useNavigation } from '@react-navigation/native';
+import { queryClient } from '../../App';
 // Currently routing is handled directly in BookingScreen component
 
 type EstimatePayload = {
@@ -75,10 +76,12 @@ export const useBooking = () => {
         pickupLocation: {
           lat: pickup?.latitude,
           lng: pickup?.longitude,
+          address: pickup?.address,
         },
         destination: {
           lat: destination?.latitude,
           lng: destination?.longitude,
+          address: destination?.address,
         },
         ambulanceType: type,
       };
@@ -90,41 +93,54 @@ export const useBooking = () => {
         return response;
       }
 
-      console.log(response.data, 'trip');
       setTrip(response.data);
       setStep('SEARCHING');
+      queryClient.invalidateQueries({ queryKey: ['home-data'] });
       return response;
     } finally {
       hideLoader();
     }
   };
 
-  const handleBookingCancel = async () => {
+  const handleBookingCancel = async (reason: string, onSuccess?: any) => {
     showLoader();
     try {
-      const response = await cancelBooking({ tripId: trip?.id });
+      const response = await cancelBooking({
+        tripId: trip?.id,
+        reason: reason,
+      });
       if (!response.success) {
         toastError(getErrorMessage(response.error));
         return response;
       }
       setTrip(null);
-      navigation.goBack();
       setStep('');
+      queryClient.invalidateQueries({ queryKey: ['home-data'] });
+      onSuccess?.();
+      if (!onSuccess) {
+        navigation?.goBack();
+      }
     } finally {
       hideLoader();
     }
   };
-  const stopSearching = async () => {
+
+  const stopSearching = async from => {
+    const fromHome = from === 'fromHome' ? true : false;
+
     showLoader();
     try {
-      const response = await stopSearchingTrip(trip?._id);
+      const response = await stopSearchingTrip(trip?.id);
       if (!response.success) {
         toastError(getErrorMessage(response.error));
         return response;
       }
       setTrip(null);
-      navigation.goBack();
+      queryClient.invalidateQueries({ queryKey: ['home-data'] });
       setStep('');
+      if (!fromHome) {
+        navigation?.goBack();
+      }
     } finally {
       hideLoader();
     }
@@ -133,7 +149,7 @@ export const useBooking = () => {
   const getStatus = async () => {
     // showLoader();
     try {
-      const response = await getTripStatus(trip?.id);
+      const response = await getTripStatus();
       return response?.data;
     } finally {
       // hideLoader();

@@ -43,7 +43,6 @@ const RideStatusChip = ({ status }: Props) => {
         return theme.colors.common.primary;
     }
   };
-  console.log(status);
   return (
     <View
       style={[

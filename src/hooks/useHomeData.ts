@@ -3,15 +3,20 @@ import {
   getHomeData,
   getHospitalDetails,
   getHospitalsData,
-} from '../services/bookingService';
+} from '../services/userService';
 
 export const useHomeData = (latitute?: number, longitude?: number) => {
-  return useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['home-data'],
     queryFn: () => getHomeData({ latitute, longitude }),
     staleTime: 1000 * 60 * 5, // 5 min cache
     retry: 1,
+    enabled: !!latitute && !!longitude,
   });
+  return {
+    data: data?.data,
+    isLoading: isLoading,
+  };
 };
 
 export const useHospitalsData = (latitute?: number, longitude?: number) => {

@@ -25,7 +25,6 @@ const ProfileHeader = ({ name, image, uploadImage }: Props) => {
   const styles = useGlobalStyles();
 
   const onPressCamera = () => {
-    console.log('jo');
     Alert.alert(
       'Profile Photo',
       'Choose an option',

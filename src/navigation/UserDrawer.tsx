@@ -11,6 +11,7 @@ import Notifications from '../screens/App/Shared/Notifications';
 import HospitalsScreen from '../screens/App/User/Hospital';
 import ProfileSettings from '../screens/App/Shared/ProfileSettings';
 import LocationPickerScreen from '../screens/App/Shared/Map/LocationPickerScreen';
+import { useUserSocket } from '../hooks/useUserSocket';
 
 export type DrawerStackParamList = {
   Home: undefined;
@@ -46,6 +47,7 @@ const RideStack = () => {
 };
 
 const UserDrawer: FC = () => {
+  useUserSocket();
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent}

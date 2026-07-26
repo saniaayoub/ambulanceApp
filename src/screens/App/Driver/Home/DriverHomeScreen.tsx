@@ -43,6 +43,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
       const status = stats?.activeTrip?.status;
 
       setTripStep(status);
+      console.log(stats.activeTrip, 'l');
       setCurrentTrip(stats?.activeTrip);
     }
   }, [stats]);
@@ -63,7 +64,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
 
       <HomeHeader
         onOpenMenu={openDrawer}
-        name={userData?.fullName}
+        name={data?.fullName}
         locationLabel={currentLocation?.placeName}
         role={userData?.role}
       />

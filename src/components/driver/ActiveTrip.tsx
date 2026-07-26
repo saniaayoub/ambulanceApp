@@ -94,14 +94,6 @@ const ActiveTripComp = ({
     }
     return null;
   }, [driverLoc, activeTrip]);
-  console.log(
-    activeTrip?.status,
-    distanceM,
-    distanceM <= 100,
-    driverLoc,
-    activeTrip?.pickupLocation,
-    'kk',
-  );
 
   const getTripAction = () => {
     switch (activeTrip?.status) {

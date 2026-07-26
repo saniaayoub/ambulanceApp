@@ -1,24 +1,43 @@
-import { Alert, Linking } from 'react-native';
+import { Alert, Linking, PermissionsAndroid, Platform } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { launchCamera } from 'react-native-image-picker';
+import { toastError } from '../services/toast';
+
+const requestCameraPermission = async (): Promise<boolean> => {
+  if (Platform.OS === 'android') {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (error: any) {
+      return false;
+    }
+  }
+  return true; // iOS triggers permission on launchCamera
+};
 
 export const openCamera = async () => {
-  const result = await launchCamera({
-    mediaType: 'photo',
-    cameraType: 'front', // or 'back'
-    quality: 0.8,
-    saveToPhotos: false,
-  });
+  if (await requestCameraPermission()) {
+    const result = await launchCamera({
+      mediaType: 'photo',
+      cameraType: 'front', // or 'back'
+      quality: 0.8,
+      saveToPhotos: false,
+    });
 
-  if (result.didCancel) {
-    return null;
+    if (result.didCancel) {
+      return null;
+    }
+
+    if (result.errorCode) {
+      throw new Error(result.errorMessage);
+    }
+
+    return result.assets?.[0];
+  } else {
+    toastError('Camera access is required.', 'Permission Denied');
   }
-
-  if (result.errorCode) {
-    throw new Error(result.errorMessage);
-  }
-
-  return result.assets?.[0];
 };
 
 export const openGallery = async () => {

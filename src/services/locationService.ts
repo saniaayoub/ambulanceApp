@@ -112,7 +112,6 @@ export const getLocationName = async (lat: number, lng: number) => {
     const apiKey = Config.OPENCAGE_API_KEY;
 
     const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${apiKey}`;
-    console.log(url, 'url');
     const res = await handleResponse({
       url,
       method: 'get',

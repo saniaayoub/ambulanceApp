@@ -1,11 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../../App';
-import {
-  deleteTrip,
-  getTripDetail,
-  getTrips,
-} from '../services/bookingService';
+import { deleteTrip, getTripDetail, getTrips } from '../services/userService';
 import { toastError } from '../services/toast';
 import { useLoaderStore } from '../stores/loaderStore';
 import { getErrorMessage } from './useAuth';

@@ -7,51 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		042FF47D30134F770033A4C5 /* Geologica-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042FF47C30134F770033A4C5 /* Geologica-Black.ttf */; };
+		042FF48530134F950033A4C5 /* Geologica-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042FF47E30134F940033A4C5 /* Geologica-Light.ttf */; };
+		042FF48630134F950033A4C5 /* Geologica-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042FF47F30134F940033A4C5 /* Geologica-Thin.ttf */; };
+		042FF48730134F950033A4C5 /* Geologica-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042FF48030134F940033A4C5 /* Geologica-Regular.ttf */; };
+		042FF48830134F950033A4C5 /* Geologica-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042FF48130134F940033A4C5 /* Geologica-Medium.ttf */; };
+		042FF48930134F950033A4C5 /* Geologica-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042FF48230134F940033A4C5 /* Geologica-ExtraBold.ttf */; };
+		042FF48A30134F950033A4C5 /* Geologica-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042FF48330134F950033A4C5 /* Geologica-ExtraLight.ttf */; };
+		042FF48B30134F950033A4C5 /* Geologica-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042FF48430134F950033A4C5 /* Geologica-SemiBold.ttf */; };
+		04566104300CB33100FC1633 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04566103300CB33100FC1633 /* GoogleService-Info.plist */; };
+		049C9F7C3014C68E00CE0519 /* Geologica-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 049C9F7B3014C68E00CE0519 /* Geologica-Bold.ttf */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		198B013965B6488EA53ED4EB /* Geologica-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A65795C9F08F4C7F8A9D95F6 /* Geologica-Bold.ttf */; };
-		356F1497329D4746AECCDDE4 /* Geologica-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B0B0C93D9FC74CCF977FAEF0 /* Geologica-Thin.ttf */; };
-		401F38B9836D031DBF78F962 /* Pods_Ambulanceapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B1C2C382E567D4ED4F9DB22 /* Pods_Ambulanceapp.framework */; };
-		4D34D29ABDEE44B9B86CBD7B /* Geologica-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA1D5960A4FD4035AF1F35FD /* Geologica-ExtraLight.ttf */; };
-		60A38E0A2FAE12AE00D6930F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60A38E092FAE12AE00D6930F /* GoogleService-Info.plist */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
-		7DBC3DEAB9AE4A14A94E9708 /* Geologica-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3255FD8E48A4919AE0DB3C8 /* Geologica-Light.ttf */; };
+		792728A5423EF09122B3B9AB /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8A4A41496BE74065A7AFBB73 /* Geologica-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1EBD8AFD43784D4AA5F9AF28 /* Geologica-Regular.ttf */; };
-		9F0B0C768D084BECAF11A23B /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8A02C0B51354E3184788E7D /* BootSplash.storyboard */; };
-		B76CBAB7C1B8457CAE16173A /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD4392BAC9C04381BD843350 /* Colors.xcassets */; };
-		C5240B38EE044D50BDDE38D4 /* Geologica-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12C16BA6EC054906875F850F /* Geologica-SemiBold.ttf */; };
-		EF9BEBD745E9480B73989F05 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
-		F0D8DD18BE1A4FB9997E28E6 /* Geologica-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C121383800A4877869A430D /* Geologica-Black.ttf */; };
-		F2402B0A06F84EE195EA7F84 /* Geologica-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1DA3445FCF843DAADC81A0E /* Geologica-Medium.ttf */; };
-		FD481E2C4866484F9DB0FF68 /* Geologica-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7225BCAF3DBE4ED2BE180E81 /* Geologica-ExtraBold.ttf */; };
+		A09BB6900883B96F059C5720 /* libPods-AmbulanceApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9C96875FD065ADAEDC94EA /* libPods-AmbulanceApp.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		12C16BA6EC054906875F850F /* Geologica-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geologica-SemiBold.ttf"; path = "../src/assets/fonts/Geologica-SemiBold.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Ambulanceapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ambulanceapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Ambulanceapp/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Ambulanceapp/Info.plist; sourceTree = "<group>"; };
-		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Ambulanceapp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		1EBD8AFD43784D4AA5F9AF28 /* Geologica-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geologica-Regular.ttf"; path = "../src/assets/fonts/Geologica-Regular.ttf"; sourceTree = "<group>"; };
-		2177E3560632576E849F3FC9 /* Pods-Ambulanceapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ambulanceapp.debug.xcconfig"; path = "Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp.debug.xcconfig"; sourceTree = "<group>"; };
-		60A38E092FAE12AE00D6930F /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		60A38E0B2FAE132300D6930F /* Ambulanceapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Ambulanceapp.entitlements; path = Ambulanceapp/Ambulanceapp.entitlements; sourceTree = "<group>"; };
-		64F6EDFF8CF3732BEF10A38E /* Pods-Ambulanceapp.debug-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ambulanceapp.debug-staging.xcconfig"; path = "Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp.debug-staging.xcconfig"; sourceTree = "<group>"; };
-		7225BCAF3DBE4ED2BE180E81 /* Geologica-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geologica-ExtraBold.ttf"; path = "../src/assets/fonts/Geologica-ExtraBold.ttf"; sourceTree = "<group>"; };
-		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Ambulanceapp/AppDelegate.swift; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Ambulanceapp/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8B1C2C382E567D4ED4F9DB22 /* Pods_Ambulanceapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ambulanceapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C121383800A4877869A430D /* Geologica-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geologica-Black.ttf"; path = "../src/assets/fonts/Geologica-Black.ttf"; sourceTree = "<group>"; };
-		A65795C9F08F4C7F8A9D95F6 /* Geologica-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geologica-Bold.ttf"; path = "../src/assets/fonts/Geologica-Bold.ttf"; sourceTree = "<group>"; };
-		B0B0C93D9FC74CCF977FAEF0 /* Geologica-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geologica-Thin.ttf"; path = "../src/assets/fonts/Geologica-Thin.ttf"; sourceTree = "<group>"; };
-		BD4392BAC9C04381BD843350 /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = Ambulanceapp/Colors.xcassets; sourceTree = "<group>"; };
-		CF2A8E428E9F85599F3ED915 /* Pods-Ambulanceapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ambulanceapp.release.xcconfig"; path = "Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp.release.xcconfig"; sourceTree = "<group>"; };
-		D3255FD8E48A4919AE0DB3C8 /* Geologica-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geologica-Light.ttf"; path = "../src/assets/fonts/Geologica-Light.ttf"; sourceTree = "<group>"; };
-		D6009CDD43448E8F142B218B /* Pods-Ambulanceapp.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ambulanceapp.release-production.xcconfig"; path = "Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp.release-production.xcconfig"; sourceTree = "<group>"; };
-		EA1D5960A4FD4035AF1F35FD /* Geologica-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geologica-ExtraLight.ttf"; path = "../src/assets/fonts/Geologica-ExtraLight.ttf"; sourceTree = "<group>"; };
+		042FF47C30134F770033A4C5 /* Geologica-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Geologica-Black.ttf"; path = "../src/assets/fonts/Geologica-Black.ttf"; sourceTree = "<group>"; };
+		042FF47E30134F940033A4C5 /* Geologica-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Geologica-Light.ttf"; path = "../src/assets/fonts/Geologica-Light.ttf"; sourceTree = "<group>"; };
+		042FF47F30134F940033A4C5 /* Geologica-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Geologica-Thin.ttf"; path = "../src/assets/fonts/Geologica-Thin.ttf"; sourceTree = "<group>"; };
+		042FF48030134F940033A4C5 /* Geologica-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Geologica-Regular.ttf"; path = "../src/assets/fonts/Geologica-Regular.ttf"; sourceTree = "<group>"; };
+		042FF48130134F940033A4C5 /* Geologica-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Geologica-Medium.ttf"; path = "../src/assets/fonts/Geologica-Medium.ttf"; sourceTree = "<group>"; };
+		042FF48230134F940033A4C5 /* Geologica-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Geologica-ExtraBold.ttf"; path = "../src/assets/fonts/Geologica-ExtraBold.ttf"; sourceTree = "<group>"; };
+		042FF48330134F950033A4C5 /* Geologica-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Geologica-ExtraLight.ttf"; path = "../src/assets/fonts/Geologica-ExtraLight.ttf"; sourceTree = "<group>"; };
+		042FF48430134F950033A4C5 /* Geologica-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Geologica-SemiBold.ttf"; path = "../src/assets/fonts/Geologica-SemiBold.ttf"; sourceTree = "<group>"; };
+		04566103300CB33100FC1633 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		049C9F7B3014C68E00CE0519 /* Geologica-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Geologica-Bold.ttf"; path = "../src/assets/fonts/Geologica-Bold.ttf"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* AmbulanceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AmbulanceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AmbulanceApp/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AmbulanceApp/Info.plist; sourceTree = "<group>"; };
+		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = AmbulanceApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		5F9C96875FD065ADAEDC94EA /* libPods-AmbulanceApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AmbulanceApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		60FAB4C600202D67197BEF67 /* Pods-AmbulanceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmbulanceApp.debug.xcconfig"; path = "Target Support Files/Pods-AmbulanceApp/Pods-AmbulanceApp.debug.xcconfig"; sourceTree = "<group>"; };
+		6ADB8990FC67529DB2E9ED85 /* Pods-AmbulanceApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmbulanceApp.release.xcconfig"; path = "Target Support Files/Pods-AmbulanceApp/Pods-AmbulanceApp.release.xcconfig"; sourceTree = "<group>"; };
+		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = AmbulanceApp/AppDelegate.swift; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AmbulanceApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C70E3ACEEA2F40AB87AE0273 /* MaterialDesignIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialDesignIcons.ttf; path = ../src/assets/fonts/MaterialDesignIcons.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F1DA3445FCF843DAADC81A0E /* Geologica-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geologica-Medium.ttf"; path = "../src/assets/fonts/Geologica-Medium.ttf"; sourceTree = "<group>"; };
-		F8A02C0B51354E3184788E7D /* BootSplash.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = BootSplash.storyboard; path = Ambulanceapp/BootSplash.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,51 +53,33 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				401F38B9836D031DBF78F962 /* Pods_Ambulanceapp.framework in Frameworks */,
+				A09BB6900883B96F059C5720 /* libPods-AmbulanceApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		13B07FAE1A68108700A75B9A /* Ambulanceapp */ = {
+		13B07FAE1A68108700A75B9A /* AmbulanceApp */ = {
 			isa = PBXGroup;
 			children = (
-				60A38E0B2FAE132300D6930F /* Ambulanceapp.entitlements */,
+				04566103300CB33100FC1633 /* GoogleService-Info.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
-				F8A02C0B51354E3184788E7D /* BootSplash.storyboard */,
-				BD4392BAC9C04381BD843350 /* Colors.xcassets */,
 			);
-			name = Ambulanceapp;
+			name = AmbulanceApp;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				8B1C2C382E567D4ED4F9DB22 /* Pods_Ambulanceapp.framework */,
+				5F9C96875FD065ADAEDC94EA /* libPods-AmbulanceApp.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		3B48157AACC14DF88EB4405D /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				D3255FD8E48A4919AE0DB3C8 /* Geologica-Light.ttf */,
-				B0B0C93D9FC74CCF977FAEF0 /* Geologica-Thin.ttf */,
-				F1DA3445FCF843DAADC81A0E /* Geologica-Medium.ttf */,
-				12C16BA6EC054906875F850F /* Geologica-SemiBold.ttf */,
-				A65795C9F08F4C7F8A9D95F6 /* Geologica-Bold.ttf */,
-				7225BCAF3DBE4ED2BE180E81 /* Geologica-ExtraBold.ttf */,
-				8C121383800A4877869A430D /* Geologica-Black.ttf */,
-				1EBD8AFD43784D4AA5F9AF28 /* Geologica-Regular.ttf */,
-				EA1D5960A4FD4035AF1F35FD /* Geologica-ExtraLight.ttf */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -116,13 +92,12 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				60A38E092FAE12AE00D6930F /* GoogleService-Info.plist */,
-				13B07FAE1A68108700A75B9A /* Ambulanceapp */,
+				13B07FAE1A68108700A75B9A /* AmbulanceApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
-				3B48157AACC14DF88EB4405D /* Resources */,
+				A578617F5B8D4622888F30F9 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -132,18 +107,33 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Ambulanceapp.app */,
+				13B07F961A680F5B00A75B9A /* AmbulanceApp.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A578617F5B8D4622888F30F9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C70E3ACEEA2F40AB87AE0273 /* MaterialDesignIcons.ttf */,
+				042FF48230134F940033A4C5 /* Geologica-ExtraBold.ttf */,
+				042FF48330134F950033A4C5 /* Geologica-ExtraLight.ttf */,
+				042FF47E30134F940033A4C5 /* Geologica-Light.ttf */,
+				049C9F7B3014C68E00CE0519 /* Geologica-Bold.ttf */,
+				042FF48130134F940033A4C5 /* Geologica-Medium.ttf */,
+				042FF48030134F940033A4C5 /* Geologica-Regular.ttf */,
+				042FF48430134F950033A4C5 /* Geologica-SemiBold.ttf */,
+				042FF47F30134F940033A4C5 /* Geologica-Thin.ttf */,
+				042FF47C30134F770033A4C5 /* Geologica-Black.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				2177E3560632576E849F3FC9 /* Pods-Ambulanceapp.debug.xcconfig */,
-				64F6EDFF8CF3732BEF10A38E /* Pods-Ambulanceapp.debug-staging.xcconfig */,
-				CF2A8E428E9F85599F3ED915 /* Pods-Ambulanceapp.release.xcconfig */,
-				D6009CDD43448E8F142B218B /* Pods-Ambulanceapp.release-production.xcconfig */,
+				60FAB4C600202D67197BEF67 /* Pods-AmbulanceApp.debug.xcconfig */,
+				6ADB8990FC67529DB2E9ED85 /* Pods-AmbulanceApp.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -151,26 +141,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* Ambulanceapp */ = {
+		13B07F861A680F5B00A75B9A /* AmbulanceApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Ambulanceapp" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "AmbulanceApp" */;
 			buildPhases = (
-				893E50D692969B41A447E6DB /* [CP] Check Pods Manifest.lock */,
+				1FC49A5379FD22119C00A9E7 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				08847250FAA4E2967F14D18B /* [CP] Embed Pods Frameworks */,
-				F00ECDE4DE5A1B0DBE970A56 /* [CP] Copy Pods Resources */,
-				E69E8370965CFEAF9AB7FA8B /* [CP-User] [RNFB] Core Configuration */,
+				FA750D1D4E7D72335A53243E /* [CP] Embed Pods Frameworks */,
+				F67A44577B0D9A88BA17AB95 /* [CP] Copy Pods Resources */,
+				D1B6210990747B59E31855B9 /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Ambulanceapp;
-			productName = Ambulanceapp;
-			productReference = 13B07F961A680F5B00A75B9A /* Ambulanceapp.app */;
+			name = AmbulanceApp;
+			productName = AmbulanceApp;
+			productReference = 13B07F961A680F5B00A75B9A /* AmbulanceApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -199,7 +189,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* Ambulanceapp */,
+				13B07F861A680F5B00A75B9A /* AmbulanceApp */,
 			);
 		};
 /* End PBXProject section */
@@ -209,21 +199,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				049C9F7C3014C68E00CE0519 /* Geologica-Bold.ttf in Resources */,
+				042FF48530134F950033A4C5 /* Geologica-Light.ttf in Resources */,
+				042FF48630134F950033A4C5 /* Geologica-Thin.ttf in Resources */,
+				042FF48730134F950033A4C5 /* Geologica-Regular.ttf in Resources */,
+				042FF48830134F950033A4C5 /* Geologica-Medium.ttf in Resources */,
+				042FF48930134F950033A4C5 /* Geologica-ExtraBold.ttf in Resources */,
+				042FF48A30134F950033A4C5 /* Geologica-ExtraLight.ttf in Resources */,
+				042FF48B30134F950033A4C5 /* Geologica-SemiBold.ttf in Resources */,
+				042FF47D30134F770033A4C5 /* Geologica-Black.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				04566104300CB33100FC1633 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				60A38E0A2FAE12AE00D6930F /* GoogleService-Info.plist in Resources */,
-				EF9BEBD745E9480B73989F05 /* PrivacyInfo.xcprivacy in Resources */,
-				9F0B0C768D084BECAF11A23B /* BootSplash.storyboard in Resources */,
-				B76CBAB7C1B8457CAE16173A /* Colors.xcassets in Resources */,
-				7DBC3DEAB9AE4A14A94E9708 /* Geologica-Light.ttf in Resources */,
-				356F1497329D4746AECCDDE4 /* Geologica-Thin.ttf in Resources */,
-				F2402B0A06F84EE195EA7F84 /* Geologica-Medium.ttf in Resources */,
-				C5240B38EE044D50BDDE38D4 /* Geologica-SemiBold.ttf in Resources */,
-				198B013965B6488EA53ED4EB /* Geologica-Bold.ttf in Resources */,
-				FD481E2C4866484F9DB0FF68 /* Geologica-ExtraBold.ttf in Resources */,
-				F0D8DD18BE1A4FB9997E28E6 /* Geologica-Black.ttf in Resources */,
-				8A4A41496BE74065A7AFBB73 /* Geologica-Regular.ttf in Resources */,
-				4D34D29ABDEE44B9B86CBD7B /* Geologica-ExtraLight.ttf in Resources */,
+				792728A5423EF09122B3B9AB /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,24 +234,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"\\\"$WITH_ENVIRONMENT\\\" \\\"$REACT_NATIVE_XCODE\\\"\"\n";
 		};
-		08847250FAA4E2967F14D18B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		893E50D692969B41A447E6DB /* [CP] Check Pods Manifest.lock */ = {
+		1FC49A5379FD22119C00A9E7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -278,14 +249,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Ambulanceapp-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-AmbulanceApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E69E8370965CFEAF9AB7FA8B /* [CP-User] [RNFB] Core Configuration */ = {
+		D1B6210990747B59E31855B9 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -298,21 +269,38 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\n\n##########################################################################\n##########################################################################\n#\n#  NOTE THAT IF YOU CHANGE THIS FILE YOU MUST RUN pod install AFTERWARDS\n#\n#  This file is installed as an Xcode build script in the project file\n#  by cocoapods, and you will not see your changes until you pod install\n#\n##########################################################################\n##########################################################################\n\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"note:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"note:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"note: -> RNFB build script started\"\necho \"note: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"note:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"note:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  if ! _RN_ROOT_EXISTS=$(ruby -Ku -e \"require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\"); then\n    echo \"error: Failed to parse firebase.json, check for syntax errors.\"\n    exit 1\n  fi\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    if ! python3 --version >/dev/null 2>&1; then echo \"error: python3 not found, firebase.json file processing error.\" && exit 1; fi\n    _JSON_OUTPUT_BASE64=$(python3 -c 'import json,sys,base64;print(base64.b64encode(bytes(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"', '\"'rb'\"').read())['${_JSON_ROOT}']), '\"'utf-8'\"')).decode())' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_analytics_storage\n  _ANALYTICS_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_analytics_storage\")\n  if [[ $_ANALYTICS_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_ANALYTICS_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_storage\n  _ANALYTICS_AD_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_storage\")\n  if [[ $_ANALYTICS_AD_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_user_data\n  _ANALYTICS_AD_USER_DATA=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_user_data\")\n  if [[ $_ANALYTICS_AD_USER_DATA ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_USER_DATA\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.analytics_registration_with_ad_network_enabled\n  _ANALYTICS_REGISTRATION_WITH_AD_NETWORK=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_registration_with_ad_network_enabled\")\n  if [[ $_ANALYTICS_REGISTRATION_WITH_AD_NETWORK ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_REGISTRATION_WITH_AD_NETWORK\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"note: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"note: <- RNFB build script finished\"\n";
 		};
-		F00ECDE4DE5A1B0DBE970A56 /* [CP] Copy Pods Resources */ = {
+		F67A44577B0D9A88BA17AB95 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-AmbulanceApp/Pods-AmbulanceApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-AmbulanceApp/Pods-AmbulanceApp-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Ambulanceapp/Pods-Ambulanceapp-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AmbulanceApp/Pods-AmbulanceApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FA750D1D4E7D72335A53243E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AmbulanceApp/Pods-AmbulanceApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AmbulanceApp/Pods-AmbulanceApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AmbulanceApp/Pods-AmbulanceApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -329,269 +317,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		04182EA62FD83CEF0096421A /* Debug-Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"${PODS_ROOT}/ReactCommon",
-					"${PODS_ROOT}/ReactCommon/react/nativemodule/core",
-					"${PODS_ROOT}/React-runtimeexecutor",
-					"${PODS_ROOT}/React-runtimeexecutor/platform/ios",
-					"${PODS_ROOT}/ReactCommon-Samples",
-					"${PODS_ROOT}/ReactCommon-Samples/platform/ios",
-					"${PODS_ROOT}/React-Fabric/react/renderer/components/view/platform/cxx",
-					"${PODS_ROOT}/React-NativeModulesApple",
-					"${PODS_ROOT}/React-graphics",
-					"${PODS_ROOT}/React-graphics/react/renderer/graphics/platform/ios",
-					"${PODS_ROOT}/React-featureflags",
-					"${PODS_ROOT}/React-renderercss",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					/usr/lib/swift,
-					"$(inherited)",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SDKROOT)/usr/lib/swift\"",
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
-					"\"$(inherited)\"",
-				);
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = (
-					"$(inherited)",
-					"-DRCT_REMOVE_LEGACY_ARCH=1",
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-DFOLLY_NO_CONFIG",
-					"-DFOLLY_MOBILE=1",
-					"-DFOLLY_USE_LIBCPP=1",
-					"-DFOLLY_CFG_NO_COROUTINES=1",
-					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
-					"-DRCT_REMOVE_LEGACY_ARCH=1",
-				);
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
-				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
-				USE_HERMES = true;
-			};
-			name = "Debug-Staging";
-		};
-		04182EA72FD83CEF0096421A /* Debug-Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 64F6EDFF8CF3732BEF10A38E /* Pods-Ambulanceapp.debug-staging.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Ambulanceapp/Ambulanceapp.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3MFGT3RT56;
-				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Ambulanceapp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.ambulanceapp;
-				PRODUCT_NAME = Ambulanceapp;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = "Debug-Staging";
-		};
-		04182EA82FD83D100096421A /* Release-Production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"${PODS_ROOT}/ReactCommon",
-					"${PODS_ROOT}/ReactCommon/react/nativemodule/core",
-					"${PODS_ROOT}/React-runtimeexecutor",
-					"${PODS_ROOT}/React-runtimeexecutor/platform/ios",
-					"${PODS_ROOT}/ReactCommon-Samples",
-					"${PODS_ROOT}/ReactCommon-Samples/platform/ios",
-					"${PODS_ROOT}/React-Fabric/react/renderer/components/view/platform/cxx",
-					"${PODS_ROOT}/React-NativeModulesApple",
-					"${PODS_ROOT}/React-graphics",
-					"${PODS_ROOT}/React-graphics/react/renderer/graphics/platform/ios",
-					"${PODS_ROOT}/React-featureflags",
-					"${PODS_ROOT}/React-renderercss",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					/usr/lib/swift,
-					"$(inherited)",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SDKROOT)/usr/lib/swift\"",
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
-					"\"$(inherited)\"",
-				);
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = (
-					"$(inherited)",
-					"-DRCT_REMOVE_LEGACY_ARCH=1",
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-DFOLLY_NO_CONFIG",
-					"-DFOLLY_MOBILE=1",
-					"-DFOLLY_USE_LIBCPP=1",
-					"-DFOLLY_CFG_NO_COROUTINES=1",
-					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
-					"-DRCT_REMOVE_LEGACY_ARCH=1",
-				);
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
-				SDKROOT = iphoneos;
-				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
-				USE_HERMES = true;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-Production";
-		};
-		04182EA92FD83D100096421A /* Release-Production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6009CDD43448E8F142B218B /* Pods-Ambulanceapp.release-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Ambulanceapp/Ambulanceapp.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3MFGT3RT56;
-				INFOPLIST_FILE = Ambulanceapp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.ambulanceapp;
-				PRODUCT_NAME = Ambulanceapp;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = "Release-Production";
-		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2177E3560632576E849F3FC9 /* Pods-Ambulanceapp.debug.xcconfig */;
+			baseConfigurationReference = 60FAB4C600202D67197BEF67 /* Pods-AmbulanceApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Ambulanceapp/Ambulanceapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3MFGT3RT56;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Ambulanceapp/Info.plist;
+				INFOPLIST_FILE = AmbulanceApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -604,8 +339,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.ambulanceapp;
-				PRODUCT_NAME = Ambulanceapp;
+				PRODUCT_NAME = AmbulanceApp;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -616,14 +350,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CF2A8E428E9F85599F3ED915 /* Pods-Ambulanceapp.release.xcconfig */;
+			baseConfigurationReference = 6ADB8990FC67529DB2E9ED85 /* Pods-AmbulanceApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Ambulanceapp/Ambulanceapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3MFGT3RT56;
-				INFOPLIST_FILE = Ambulanceapp/Info.plist;
+				INFOPLIST_FILE = AmbulanceApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -636,8 +369,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.ambulanceapp;
-				PRODUCT_NAME = Ambulanceapp;
+				PRODUCT_NAME = AmbulanceApp;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -649,7 +381,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -735,6 +466,7 @@
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
+				PODFILE_DIR = "$(SRCROOT)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -747,7 +479,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -825,6 +556,7 @@
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
+				PODFILE_DIR = "$(SRCROOT)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
@@ -836,13 +568,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Ambulanceapp" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "AmbulanceApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
-				04182EA72FD83CEF0096421A /* Debug-Staging */,
 				13B07F951A680F5B00A75B9A /* Release */,
-				04182EA92FD83D100096421A /* Release-Production */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -851,9 +581,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
-				04182EA62FD83CEF0096421A /* Debug-Staging */,
 				83CBBA211A601CBA00E9B192 /* Release */,
-				04182EA82FD83D100096421A /* Release-Production */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -19,24 +19,24 @@ export const toggleOnlineStatus = async () =>
     url: ENDPOINTS.DRIVER.ONLINESTATUS,
   });
 
-////// TRIPS
+////// TRIP
 
 export const tripAccept = async (tripId: string) =>
   handleResponse({
     method: 'post',
-    url: ENDPOINTS.TRIPS.ACCEPT(tripId),
+    url: ENDPOINTS.TRIP.ACCEPT(tripId),
   });
 
 export const tripReject = async (tripId: string) =>
   handleResponse({
     method: 'post',
-    url: ENDPOINTS.TRIPS.REJECT(tripId),
+    url: ENDPOINTS.TRIP.REJECT(tripId),
   });
 
 export const tripCancel = async (tripId: string, reason: string) =>
   handleResponse({
     method: 'post',
-    url: ENDPOINTS.TRIPS.CANCEL(tripId),
+    url: ENDPOINTS.TRIP.CANCEL(tripId),
     data: {
       reason,
     },
@@ -45,24 +45,24 @@ export const tripCancel = async (tripId: string, reason: string) =>
 export const startTrip = async (tripId: string) =>
   handleResponse({
     method: 'post',
-    url: ENDPOINTS.TRIPS.START(tripId),
+    url: ENDPOINTS.TRIP.START(tripId),
   });
 
 export const completeTrip = async (tripId: string) =>
   handleResponse({
     method: 'post',
-    url: ENDPOINTS.TRIPS.COMPLETE(tripId),
+    url: ENDPOINTS.TRIP.COMPLETE(tripId),
   });
 export const paymentRecieved = async (tripId: string) =>
   handleResponse({
     method: 'post',
-    url: ENDPOINTS.TRIPS.PAYMENT_RECIEVED(tripId),
+    url: ENDPOINTS.TRIP.PAYMENT_RECIEVED(tripId),
   });
 
 export const markDriverArrived = async (tripId: string) =>
   handleResponse({
     method: 'post',
-    url: ENDPOINTS.TRIPS.ARRIVED(tripId),
+    url: ENDPOINTS.TRIP.ARRIVED(tripId),
   });
 
 export const getDriverTrips = (params: {

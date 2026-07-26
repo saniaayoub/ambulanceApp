@@ -10,6 +10,7 @@ import BookingStepIndicator from './BookingStepIndicator';
 import { Location } from '../../stores/locationStore';
 import AppInput from '../AppInput';
 import { bookingSteps } from '../../stores/bookingStore';
+import SearchAutocomplete from '../map/SearchAutocomplete';
 
 type LocationItem = {
   id: string;
@@ -27,6 +28,7 @@ type Props = {
   pickupLocation?: Location;
   destinationLocation?: Location;
   currentStep: string;
+  showSearch: boolean;
 };
 
 const recentLocations: LocationItem[] = [
@@ -67,6 +69,7 @@ const LocationSheet: FC<Props> = ({
   pickupLocation,
   destinationLocation,
   onPressChangeonMap,
+  showSearch,
   onCurrentLocationPress,
 }) => {
   const styles = useGlobalStyles();
@@ -82,20 +85,12 @@ const LocationSheet: FC<Props> = ({
     styles.card,
   ];
   useEffect(() => {
-    if (pickupLocation) {
+    if (currentStep === 'PICKUP') {
       setSelectedLocation(pickupLocation);
-    }
-  }, [pickupLocation]);
-
-  useEffect(() => {
-    if (destinationLocation) {
+    } else {
       setSelectedLocation(destinationLocation);
     }
-  }, [destinationLocation]);
-
-  // useEffect(() => {
-  //   setSelectedLocation(null);
-  // }, [currentStep]);
+  }, [pickupLocation, destinationLocation, currentStep]);
 
   const handleSelectLocation = (location: Location) => {
     setSelectedLocation(location);
@@ -119,10 +114,10 @@ const LocationSheet: FC<Props> = ({
         globalStyles.mB10,
         styles.card,
         styles.border,
-        selectedLocation === location.address && [styles.border, styles.card],
+        selectedLocation === location?.address && [styles.border, styles.card],
         pressed && styles.opacitylow,
       ]}
-      onPress={() => handleSelectLocation(location.address)}
+      onPress={() => handleSelectLocation(location?.address)}
     >
       <View style={styles.iconStyle40}>
         <MaterialIcons
@@ -142,61 +137,51 @@ const LocationSheet: FC<Props> = ({
   );
 
   return (
-    <BottomSheetScrollView
-      scrollEnabled={true}
-      showsVerticalScrollIndicator={false}
-      style={globalStyles.padding15}
-    >
+    // <BottomSheetScrollView
+    //   // scrollEnabled={true}
+    //   keyboardShouldPersistTaps="handled"
+    //   showsVerticalScrollIndicator={false}
+    //   style={globalStyles.padding15}
+    // >
+    <View style={[globalStyles.flex, globalStyles.padding15]}>
       <BookingStepIndicator currentStep={currentStep} steps={bookingSteps} />
       {pickupLocation?.placeName ? (
-        <Text style={[styles.smallText, globalStyles.mV10]}>
-          Pick Up:{' '}
-          <Text style={[styles.h6, globalStyles.mB10]}>
-            {pickupLocation?.placeName}
-          </Text>
+        <Text style={[styles.smallText, globalStyles.mT10]}>
+          From: <Text style={[styles.h6]}>{pickupLocation?.placeName}</Text>
         </Text>
       ) : null}
 
       {destinationLocation?.placeName ? (
         <Text style={[styles.smallText, globalStyles.mB10]}>
-          Destination:{' '}
+          To:{' '}
           <Text style={[styles.h6, globalStyles.mB10]}>
             {destinationLocation?.placeName}
           </Text>
         </Text>
       ) : null}
-      {currentStep === 'PICKUP' ? (
-        <>
-          <AppButton
-            title="Choose on map"
-            icon="map-marker-outline"
-            iconColor={theme.colors.common.primary}
-            style={tabStyle}
-            textStyle={styles.lightText}
-            onPress={onPressChangeonMap}
-          />
-          <AppButton
-            title={'Use current location'}
-            icon={'crosshairs-gps'}
-            iconColor={theme.colors.common.primary}
-            style={tabStyle}
-            textStyle={styles.lightText}
-            onPress={onCurrentLocationPress}
-          />
-        </>
-      ) : (
-        <AppInput
-          leftIcon="magnify"
-          placeholder="Search"
-          inputStyle={styles.mdroundBorder}
-          rightIcon="map"
-          onPressRightIcon={onPressChangeonMap}
+      {showSearch && (
+        <SearchAutocomplete
+          setSelectedLocation={setSelectedLocation}
+          onPressChangeonMap={onPressChangeonMap}
         />
       )}
+
+      {currentStep === 'PICKUP' ? (
+        <AppButton
+          title={'Use current location'}
+          icon={'crosshairs-gps'}
+          iconColor={theme.colors.common.primary}
+          style={tabStyle}
+          textStyle={styles.lightText}
+          onPress={onCurrentLocationPress}
+          useGestureHandler={true}
+        />
+      ) : null}
 
       <AppButton
         title={`Confirm`}
         onPress={handleConfirm}
+        useGestureHandler={true}
         disabled={
           pickupLocation !== null &&
           destinationLocation?.placeName === 'Add Destination Location'
@@ -218,7 +203,7 @@ const LocationSheet: FC<Props> = ({
           {recentSearches.map(location => renderLocationItem(location))}
         </View>
       )} */}
-    </BottomSheetScrollView>
+    </View>
   );
 };
 

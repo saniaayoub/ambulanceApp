@@ -143,11 +143,10 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
 
     try {
       setIsFetchingRoute(true);
-      console.log(markers, 'ks');
       // 1) Driver -> Pickup
       if (step === 'ASSIGNED') {
         if (!driverMarker || !pickupMarker) {
-          console.log(driverMarker, pickupMarker, 'inner');
+          // console.log(driverMarker, pickupMarker, 'inner');
           setRouteCoords([]);
           return;
         }
