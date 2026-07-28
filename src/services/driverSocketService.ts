@@ -5,17 +5,20 @@ export const isSocketConnected = () => {
 };
 
 export const emitDriverLocation = ({
+  userId,
   driverId,
   lat,
   lng,
 }: {
+  userId: string;
   driverId: string;
-  lat: number;
-  lng: number;
+  lat: number | any;
+  lng: number | any;
 }) => {
   if (!socketInstance?.connected) return;
-
+  console.log('emit,');
   socketInstance.emit('driver_location_update', {
+    userId,
     driverId,
     lat,
     lng,

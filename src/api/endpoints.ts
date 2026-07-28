@@ -22,7 +22,7 @@ export const ENDPOINTS = {
     ESTIMATE: 'user/estimate',
     CREATE: 'user/create',
     TRIP_CANCEL: 'user/cancelTrip',
-    TRIP_STATUS: `user/trip-status`,
+    SUBMIT_REVIEW: 'user/submitReview',
     ONLINEDRIVERS: 'user/onlineDrivers',
   },
 

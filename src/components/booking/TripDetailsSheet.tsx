@@ -1,8 +1,8 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React, { useState, type FC } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
+import { useHomeData } from '../../hooks/useHomeData';
 import { BookingStep, bookingSteps } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
@@ -13,11 +13,9 @@ import AmbulanceCategories from './AmbulanceCategories';
 import BookingStepIndicator from './BookingStepIndicator';
 import DetailColumnComp from './DetailColumnComp';
 import InfoCard from './InfoCard';
-import { useHomeData } from '../../hooks/useHomeData';
 
 type Props = {
   currentStep: BookingStep;
-  steps: BookingStep[];
   bookingData: any;
   selectedAmbulance: AmbulanceType;
   setSelectedAmbulance: (type: AmbulanceType) => void;
@@ -28,7 +26,6 @@ type Props = {
 
 const TripDetailsSheet: FC<Props> = ({
   currentStep,
-  // steps,
   bookingData,
   selectedAmbulance,
   setSelectedAmbulance,

@@ -47,17 +47,17 @@ export const cancelBooking = async (payload: object) =>
     url: ENDPOINTS.USER.TRIP_CANCEL, // The endpoint URL for the dashboard
     data: payload,
   });
+export const submitReview = async (payload: object) =>
+  handleResponse({
+    method: 'post', // HTTP method used for the request
+    url: ENDPOINTS.USER.SUBMIT_REVIEW, // The endpoint URL for the dashboard
+    data: payload,
+  });
 
 export const stopSearchingTrip = async (payload: string) =>
   handleResponse({
     method: 'post', // HTTP method used for the request
     url: ENDPOINTS.TRIP.STOP_SEARCH(payload), // The endpoint URL for the dashboard
-  });
-
-export const getTripStatus = async () =>
-  handleResponse({
-    method: 'get', // HTTP method used for the request
-    url: ENDPOINTS.USER.TRIP_STATUS, // The endpoint URL for the dashboard
   });
 
 export const getTrips = async (params: {

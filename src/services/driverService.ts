@@ -53,6 +53,7 @@ export const completeTrip = async (tripId: string) =>
     method: 'post',
     url: ENDPOINTS.TRIP.COMPLETE(tripId),
   });
+
 export const paymentRecieved = async (tripId: string) =>
   handleResponse({
     method: 'post',

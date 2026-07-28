@@ -1,14 +1,12 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-
-import AppButton from '../AppButton';
-import DetailColumnComp from '../booking/DetailColumnComp';
+import { TripData } from '../../stores/driverStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
-import { TripData } from '../../stores/driverStore';
+import AppButton from '../AppButton';
+import DetailColumnComp from '../booking/DetailColumnComp';
 import InfoCard from '../booking/InfoCard';
 
 type Props = {
@@ -23,10 +21,7 @@ const TripCompletedSheet = ({ currentTrip, onDone }: Props) => {
   const waitingCharge = currentTrip?.fare?.waitingCharge ?? 0;
   const nightSurcharge = currentTrip?.fare?.nightSurcharge ?? 0;
   return (
-    <BottomSheetScrollView
-      showsVerticalScrollIndicator={false}
-      style={globalStyles.paddingH15}
-    >
+    <View style={[globalStyles.flex, globalStyles.padding15]}>
       <View style={[globalStyles.alignCenter, globalStyles.mB15]}>
         <MaterialDesignIcons
           name="check-circle"
@@ -151,7 +146,7 @@ const TripCompletedSheet = ({ currentTrip, onDone }: Props) => {
         }
         onPress={onDone}
       />
-    </BottomSheetScrollView>
+    </View>
   );
 };
 

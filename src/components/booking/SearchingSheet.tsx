@@ -1,9 +1,7 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React from 'react';
 import { Text, View } from 'react-native';
 import AppButton from '../../components/AppButton';
-import { bookingSteps } from '../../hooks/useBooking';
-import { BookingStep } from '../../stores/bookingStore';
+import { BookingStep, bookingSteps } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import BookingStepIndicator from './BookingStepIndicator';
 import DetailColumnComp from './DetailColumnComp';

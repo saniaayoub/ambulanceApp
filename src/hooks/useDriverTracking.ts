@@ -7,6 +7,7 @@ import {
   emitDriverLocation,
   isSocketConnected,
 } from '../services/driverSocketService';
+import { useAuthStore } from '../stores/authStore';
 
 const REVERSE_GEOCODE_DISTANCE_METERS = 150;
 
@@ -18,6 +19,7 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
   } | null>(null);
   const isGeocodingRef = useRef(false);
   const { setCurrentLocation, currentLocation } = useLocationStore();
+  const userData = useAuthStore(state => state.userData);
 
   useEffect(() => {
     if (!isOnline) {
@@ -26,6 +28,7 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
       }
       return;
     }
+    console.log('DriverTracking mounted');
 
     watchId.current = Geolocation.watchPosition(
       async position => {
@@ -40,8 +43,10 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
         });
 
         // 2) emit live location to backend
+        console.log('watchher driver location,', latitude, longitude);
         if (isSocketConnected()) {
           emitDriverLocation({
+            userId: userData?.userId,
             driverId,
             lat: latitude,
             lng: longitude,

@@ -1,4 +1,3 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -6,19 +5,19 @@ import { moderateScale } from 'react-native-size-matters';
 import { TripData } from '../../stores/driverStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
-import { formatTime, makeaCall } from '../../utils/functions';
+import { makeaCall } from '../../utils/functions';
 import AppButton from '../AppButton';
 import DetailColumnComp from '../booking/DetailColumnComp';
 import { Location } from './ActiveTrip';
-import { useLiveWaitingTimer } from '../../hooks/useWaitingTimer';
+import ShowWaitingTimer from './ShowWaitingTimer';
 
 type Props = {
   currentTrip: TripData | null;
   handlePress: () => void;
   handleCancel?: () => void;
 
-  etaMinutes: number | null;
-  distanceKm: number | null;
+  etaMinutes: any;
+  distance: string | null;
   title: string;
   btnTitle: string;
 
@@ -32,21 +31,18 @@ const NavigateToPickupSheet = ({
   handlePress,
   handleCancel,
   etaMinutes,
-  distanceKm,
+  distance,
   title,
   btnTitle,
   showWaiting = false,
   showCancel = true,
-  disableActionButton = distanceKm != null ? distanceKm < 0.1 : true,
+  disableActionButton = distance != null ? distance < 0.1 : true,
 }: Props) => {
   const styles = useGlobalStyles();
-  const seconds = useLiveWaitingTimer(currentTrip?.waitingStartedAt);
 
+  console.log(distance, etaMinutes, 'l');
   return (
-    <BottomSheetScrollView
-      showsVerticalScrollIndicator={false}
-      style={[globalStyles.paddingH15]}
-    >
+    <View style={[globalStyles.flex, globalStyles.padding15]}>
       {/* Header */}
       <Text style={[styles.h5, globalStyles.textCenter, globalStyles.mB15]}>
         {title}
@@ -78,11 +74,10 @@ const NavigateToPickupSheet = ({
 
       {/* Waiting Timer */}
       {showWaiting && (
-        <View style={globalStyles.mB10}>
-          <Text style={[styles.lightText, styles.link]}>
-            Waiting Since: {formatTime(seconds)} 🕒
-          </Text>
-        </View>
+        <ShowWaitingTimer
+          waitingStartedAt={currentTrip?.waitingStartedAt}
+          styles={styles}
+        />
       )}
 
       {/* ETA / Distance */}
@@ -90,7 +85,7 @@ const NavigateToPickupSheet = ({
         title1="ETA"
         text1={`${etaMinutes ?? '--'} min`}
         title2="Distance"
-        text2={`${distanceKm ?? '--'} km`}
+        text2={`${distance ?? '--'}`}
       />
 
       {/* Patient */}
@@ -169,7 +164,7 @@ const NavigateToPickupSheet = ({
           disabled={disableActionButton}
         />
       </View>
-    </BottomSheetScrollView>
+    </View>
   );
 };
 

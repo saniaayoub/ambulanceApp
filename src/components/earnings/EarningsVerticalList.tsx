@@ -34,7 +34,7 @@ const EarningsVerticalList: FC<Props> = ({ title, data }) => {
                 <Text style={styles.h6}>{item.label}</Text>
 
                 <Text style={[styles.smallText, globalStyles.mT5]}>
-                  {item.trips} Trips
+                  {item.trips} Trip(s)
                 </Text>
               </View>
 

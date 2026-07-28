@@ -1,15 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-
+import { useNavigation } from '@react-navigation/native';
+import { Alert } from 'react-native';
+import { queryClient } from '../../App';
 import { BaseURL } from '../api/axiosInstance';
 import { useAuthStore } from '../stores/authStore';
 import { useBookingStore } from '../stores/bookingStore';
-import { useBooking } from './useBooking';
 import { TRIP_STATUS } from '../utils/enums';
-import { useNavigation } from '@react-navigation/native';
-import { queryClient } from '../../App';
-import { toastError } from '../services/toast';
-import { Alert } from 'react-native';
 export let userSocketInstance: Socket | null = null;
 
 export const getUserSocket = () => userSocketInstance;
@@ -19,7 +16,8 @@ export const useUserSocket = () => {
   const currentUser = useAuthStore(state => state.userData);
   const hasHydrated = useAuthStore(state => state.hasHydrated);
 
-  const { setTrip, setStep, resetBooking } = useBookingStore();
+  const { setTrip, setDriverLocation, setStep, resetBooking } =
+    useBookingStore();
   const navigation = useNavigation();
 
   const hasJoinedRef = useRef(false);
@@ -83,7 +81,7 @@ export const useUserSocket = () => {
     if (!userSocketInstance) return;
 
     const socket = userSocketInstance;
-
+    console.log('handlers added');
     const onTripStatusUpdated = trip => {
       queryClient.invalidateQueries({ queryKey: ['home-data'] });
 
@@ -104,10 +102,17 @@ export const useUserSocket = () => {
       // }
     };
 
+    const onDriverLocationUpdate = location => {
+      console.log(location, 'driver location updated');
+      setDriverLocation(location);
+    };
+
     socket.on('trip_status_updated', onTripStatusUpdated);
+    socket.on('driver_location_changed', onDriverLocationUpdate);
 
     return () => {
       socket.off('trip_status_updated', onTripStatusUpdated);
+      socket.off('driver_location_changed', onDriverLocationUpdate);
     };
   }, []);
 };

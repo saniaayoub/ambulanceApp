@@ -1,16 +1,14 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialIcons from '@react-native-vector-icons/material-design-icons';
-import React, { useCallback, useEffect, useState, type FC } from 'react';
+import React, { useEffect, useState, type FC } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
+import { bookingSteps } from '../../stores/bookingStore';
+import { Location } from '../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import AppButton from '../AppButton';
-import BookingStepIndicator from './BookingStepIndicator';
-import { Location } from '../../stores/locationStore';
-import AppInput from '../AppInput';
-import { bookingSteps } from '../../stores/bookingStore';
 import SearchAutocomplete from '../map/SearchAutocomplete';
+import BookingStepIndicator from './BookingStepIndicator';
 
 type LocationItem = {
   id: string;
@@ -28,7 +26,6 @@ type Props = {
   pickupLocation?: Location;
   destinationLocation?: Location;
   currentStep: string;
-  showSearch: boolean;
 };
 
 const recentLocations: LocationItem[] = [
@@ -69,7 +66,6 @@ const LocationSheet: FC<Props> = ({
   pickupLocation,
   destinationLocation,
   onPressChangeonMap,
-  showSearch,
   onCurrentLocationPress,
 }) => {
   const styles = useGlobalStyles();
@@ -135,7 +131,6 @@ const LocationSheet: FC<Props> = ({
       )}
     </Pressable>
   );
-
   return (
     // <BottomSheetScrollView
     //   // scrollEnabled={true}
@@ -145,26 +140,25 @@ const LocationSheet: FC<Props> = ({
     // >
     <View style={[globalStyles.flex, globalStyles.padding15]}>
       <BookingStepIndicator currentStep={currentStep} steps={bookingSteps} />
-      {pickupLocation?.placeName ? (
+      {pickupLocation?.address ? (
         <Text style={[styles.smallText, globalStyles.mT10]}>
-          From: <Text style={[styles.h6]}>{pickupLocation?.placeName}</Text>
+          From: <Text style={[styles.h6]}>{pickupLocation?.address}</Text>
         </Text>
       ) : null}
 
-      {destinationLocation?.placeName ? (
+      {destinationLocation?.address ? (
         <Text style={[styles.smallText, globalStyles.mB10]}>
           To:{' '}
           <Text style={[styles.h6, globalStyles.mB10]}>
-            {destinationLocation?.placeName}
+            {destinationLocation?.address}
           </Text>
         </Text>
       ) : null}
-      {showSearch && (
-        <SearchAutocomplete
-          setSelectedLocation={setSelectedLocation}
-          onPressChangeonMap={onPressChangeonMap}
-        />
-      )}
+
+      <SearchAutocomplete
+        setSelectedLocation={setSelectedLocation}
+        onPressChangeonMap={onPressChangeonMap}
+      />
 
       {currentStep === 'PICKUP' ? (
         <AppButton

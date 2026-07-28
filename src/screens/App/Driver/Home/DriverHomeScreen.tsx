@@ -1,21 +1,22 @@
-import React, { useCallback, useEffect, type FC } from 'react';
+import React, { useCallback, useEffect, useRef, type FC } from 'react';
 import { ScrollView, View } from 'react-native';
 import InfoCard from '../../../../components/booking/InfoCard';
 import ActiveTripComp from '../../../../components/driver/ActiveTrip';
 import DashboardComp from '../../../../components/driver/DashboardComp';
-import HomeMapComp from '../../../../components/driver/HomeMapComp';
 import IncomingRequestSheet from '../../../../components/driver/IncomingRequestSheet';
 import OnlineToggle from '../../../../components/driver/OnlineToggle';
+import FullScreenLoader from '../../../../components/FullScreenLoader';
 import HomeHeader from '../../../../components/home/header';
 import { useDriver, useDriverDashboard } from '../../../../hooks/useDriver';
 import { useDriverTracking } from '../../../../hooks/useDriverTracking';
+import useDriverTrips from '../../../../hooks/useDriverTrips';
 import { useAuthStore } from '../../../../stores/authStore';
 import { useDriverStore } from '../../../../stores/driverStore';
 import { useLocationStore } from '../../../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
-import { ambulanceImages } from '../../../../utils/constants';
-import useDriverTrips from '../../../../hooks/useDriverTrips';
-import FullScreenLoader from '../../../../components/FullScreenLoader';
+import { ambulanceImages, screenHeight } from '../../../../utils/constants';
+import BottomSheet from '../../../../components/BottomSheet';
+import { Modalize } from 'react-native-modalize';
 
 type Props = {
   navigation: any;
@@ -23,16 +24,28 @@ type Props = {
 
 const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
   const styles = useGlobalStyles();
+  const bottomSheetRef = useRef<Modalize>(null);
+
   const userData = useAuthStore(state => state.userData);
   const { data, isLoading } = useDriver(userData?.driverId);
-  const { isOnline, toggleOnline, setCurrentTrip, setIsOnline, setTripStep } =
-    useDriverStore();
+  const {
+    incomingRequest,
+    isOnline,
+    toggleOnline,
+    setCurrentTrip,
+    setIsOnline,
+    setTripStep,
+  } = useDriverStore();
   const currentLocation = useLocationStore(state => state.currentLocation);
   useDriverTracking(userData?.driverId, isOnline);
   const { data: stats, isLoading: isLoadingStats } = useDriverDashboard(
     userData?.driverId,
   );
-  const { arrived } = useDriverTrips();
+  const {
+    arrived,
+    start: startTrip,
+    complete: completeTrip,
+  } = useDriverTrips();
 
   const openDrawer = useCallback(() => {
     navigation.openDrawer();
@@ -40,10 +53,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
 
   useEffect(() => {
     if (stats?.activeTrip) {
-      const status = stats?.activeTrip?.status;
-
-      setTripStep(status);
-      console.log(stats.activeTrip, 'l');
+      setTripStep(stats?.activeTrip?.status);
       setCurrentTrip(stats?.activeTrip);
     }
   }, [stats]);
@@ -53,6 +63,14 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
       setIsOnline(data.isOnline);
     }
   }, [data?.isOnline]);
+
+  useEffect(() => {
+    if (incomingRequest) {
+      bottomSheetRef.current?.open();
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [incomingRequest]);
 
   const navigateToEarnings = () => {
     navigation.navigate('Earnings');
@@ -76,13 +94,13 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
             driverLoc={currentLocation}
             activeTrip={stats?.activeTrip}
             onPressDetails={() => navigation.navigate('Booking')}
-            onStartTrip={() => console.log('start')}
+            onStartTrip={() => startTrip(stats.activeTrip?._id)}
             onArrived={() => arrived(stats.activeTrip?._id)}
+            onCompleteTrip={() => completeTrip(stats.activeTrip?._id)}
           />
         ) : (
           <OnlineToggle isOnline={isOnline} toggleOnline={toggleOnline} />
         )}
-        {/* <OnlineToggle isOnline={isOnline} toggleOnline={toggleOnline} /> */}
 
         {/* Driver Profile Card */}
         <InfoCard
@@ -106,8 +124,9 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
           <HomeMapComp />
         </View> */}
       </ScrollView>
-
-      <IncomingRequestSheet />
+      <BottomSheet bottomSheetRef={bottomSheetRef} height={screenHeight * 0.5}>
+        <IncomingRequestSheet bottomSheetRef={bottomSheetRef} />
+      </BottomSheet>
     </View>
   );
 };

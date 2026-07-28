@@ -24,7 +24,7 @@ const PerformanceCard = ({
       <Text style={[styles.h5, globalStyles.mB10]}>Performance</Text>
 
       <ProfileRow
-        label="Trips"
+        label="Trip(s)"
         value={tripCount?.toString()}
         icon="map-marker-path"
       />

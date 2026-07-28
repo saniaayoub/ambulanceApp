@@ -1,12 +1,10 @@
+import polyline from '@mapbox/polyline';
 import Geolocation from '@react-native-community/geolocation';
+import { getDistance } from 'geolib';
 import { PermissionsAndroid, Platform } from 'react-native';
 import Config from 'react-native-config';
-import polyline from '@mapbox/polyline';
 import { Location } from '../stores/locationStore';
-import axios from 'axios';
-import { apiCall } from '../api/apiCall';
 import { handleResponse } from './authService';
-import { getDistance } from 'geolib';
 
 export const getNearbyDrivers = async (drivers: any[], pickup: Location) => {
   const nearbyDrivers = drivers.map(item => ({

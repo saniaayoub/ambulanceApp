@@ -42,6 +42,7 @@ export const useDriverSocket = () => {
   const setIncomingRequest = useDriverStore(state => state.setIncomingRequest);
   const setCurrentTrip = useDriverStore(state => state.setIncomingRequest);
   const setTripStep = useDriverStore(state => state.setTripStep);
+  const setTripTracking = useDriverStore(state => state.setTripTracking);
 
   const hasHydrated = useAuthStore(state => state.hasHydrated); // if you have this in zustand
 
@@ -186,18 +187,10 @@ export const useDriverSocket = () => {
     };
 
     const onTripStatusUpdated = (payload: TripStatusPayload) => {
-      console.log('📌 trip_status_updated =>', payload);
+      console.log('📌 trip_tracking_updated =>', payload);
 
       // Example:
-      // setTripStatus(payload);
-    };
-
-    const onDriverApproved = (payload: any) => {
-      console.log('✅ driver_approved =>', payload);
-    };
-
-    const onDriverRejected = (payload: any) => {
-      console.log('⛔ driver_rejected =>', payload);
+      setTripTracking(payload);
     };
 
     // ===== REGISTER LISTENERS =====
@@ -205,18 +198,14 @@ export const useDriverSocket = () => {
     socket.on('trip_request_taken', onTripRequestTaken);
     socket.on('trip_search_stopped', onTripRequestTaken);
     socket.on('trip_cancelled', onTripCancelled);
-    socket.on('trip_status_updated', onTripStatusUpdated);
-    socket.on('driver_approved', onDriverApproved);
-    socket.on('driver_rejected', onDriverRejected);
+    socket.on('trip_tracking_updated', onTripStatusUpdated);
 
     return () => {
       socket.off('incoming_trip_request', onIncomingTrip);
       socket.off('trip_request_taken', onTripRequestTaken);
       socket.off('trip_search_stopped', onTripRequestTaken);
       socket.off('trip_cancelled', onTripCancelled);
-      socket.off('trip_status_updated', onTripStatusUpdated);
-      socket.off('driver_approved', onDriverApproved);
-      socket.off('driver_rejected', onDriverRejected);
+      socket.off('trip_tracking_updated', onTripStatusUpdated);
     };
   }, []);
 };

@@ -1,12 +1,10 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React from 'react';
 import { Text, View } from 'react-native';
-import AppButton from '../AppButton';
-import { bookingSteps } from '../../hooks/useBooking';
-import { BookingStep } from '../../stores/bookingStore';
+import { BookingStep, bookingSteps } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
-import { DetailCard } from './TripDetailsSheet';
+import AppButton from '../AppButton';
 import BookingStepIndicator from './BookingStepIndicator';
+import DetailColumnComp from './DetailColumnComp';
 
 type Props = {
   nearbyCount?: number;
@@ -35,7 +33,7 @@ const DriverArrivedSheet = ({
         Searching nearby ambulances...
       </Text>
 
-      <DetailCard
+      <DetailColumnComp
         title1="Response"
         text1={estimatedTime}
         title2="Nearby"

@@ -2,6 +2,25 @@ import { create } from 'zustand';
 import { Location } from './locationStore';
 import { AmbulanceType } from '../components/home/AmbulanceCard';
 
+export interface DriverTrackingInfo {
+  distanceMeters: number;
+  distanceText: string;
+  etaSeconds: number;
+  etaText: string;
+  estimatedArrival: string;
+  calculatedAt: string; // ISO date string
+  fromLocation: {
+    lat: number;
+    lng: number;
+  };
+}
+
+export interface DriverLocationUpdatePayload {
+  lat: number;
+  lng: number;
+  tracking: DriverTrackingInfo;
+}
+
 export type BookingStep =
   | 'PICKUP'
   | 'DESTINATION'
@@ -33,7 +52,7 @@ interface BookingState {
   bookingStep: BookingStep;
   isBookingActive: boolean;
   homeData: object | null;
-  driverLocation: Location;
+  driverLocation: DriverLocationUpdatePayload;
 
   setSelectedAmbulance: (value: AmbulanceType) => void;
   setPickupLocation: (value: Location) => void;

@@ -101,7 +101,7 @@ const ActiveTripComp = ({
         return {
           title: 'Arrived',
           onPress: onArrived,
-          disabled: distanceM >= 100,
+          disabled: distanceM !== null && distanceM >= 100,
         };
 
       case 'WAITING':
@@ -115,7 +115,7 @@ const ActiveTripComp = ({
         return {
           title: 'Complete',
           onPress: onCompleteTrip, // or onStartTrip if intentional
-          disabled: true,
+          disabled: distanceM !== null && distanceM >= 100,
         };
 
       default:

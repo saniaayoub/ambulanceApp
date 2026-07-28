@@ -1,37 +1,31 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React, { FC } from 'react';
 import { Image, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { Hospital, User } from '../../assets/images/pngs';
-import { useLiveWaitingTimer } from '../../hooks/useWaitingTimer';
-import { Location } from '../../stores/locationStore';
+import { User } from '../../assets/images/pngs';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import { ambulanceImages } from '../../utils/constants';
-import { formatTime, makeaCall } from '../../utils/functions';
+import { makeaCall } from '../../utils/functions';
 import AppButton from '../AppButton';
 import DetailColumnComp from './DetailColumnComp';
 import InfoCard from './InfoCard';
+import WaitingComponent from './WaitingComponent';
+import { DriverTrackingInfo } from '../../stores/bookingStore';
 
 type Props = {
   trip: any;
   onCancel?: () => void;
-  destination: Location;
-  pickupLocation: Location;
+  tracking?: DriverTrackingInfo;
 };
 
 const DriverAssignedSheet: FC<Props> = ({
   trip,
   onCancel,
-  destination,
-  pickupLocation,
+  tracking,
 }: Props) => {
   const styles = useGlobalStyles();
-  console.log(trip);
-  const seconds = useLiveWaitingTimer(trip?.waitingStartedAt);
   const driver = trip?.driver || trip?.driverId;
-
   return (
     <View style={[globalStyles.flex, globalStyles.padding15]}>
       <View
@@ -46,21 +40,21 @@ const DriverAssignedSheet: FC<Props> = ({
           <Text style={[styles.h5]}>{trip?.ambulanceType} Ambulance</Text>
 
           {trip?.status === 'WAITING' ? (
-            <Text style={[styles.lightText]}>
-              Driver is waiting outside {'\n'}
-              <Text style={[styles.lightText, styles.link]}>
-                {formatTime(seconds)} 🕒
-              </Text>
-            </Text>
+            <WaitingComponent
+              styles={styles}
+              waitingStartedAt={trip?.waitingStartedAt}
+            />
           ) : trip?.status === 'STARTED' ? (
             <Text style={[styles.lightText]}>
-              Reaching Destination in {trip?.etaMinutes} mins
+              Eta: {tracking?.etaText ?? `${trip?.etaMinutes} mins`}{' '}
+              {tracking?.distanceText ?? `${trip?.distanceKm} km`}
             </Text>
           ) : (
             <Text style={[styles.lightText]}>
-              Arriving in {trip?.etaMinutes} mins
+              Arriving in {tracking?.etaText ?? `${trip?.etaMinutes} mins`}
             </Text>
           )}
+
           <View style={[globalStyles.row, globalStyles.alignCenter]}>
             <MaterialDesignIcons
               name="cash"
@@ -108,15 +102,15 @@ const DriverAssignedSheet: FC<Props> = ({
       <DetailColumnComp
         title1={'Pickup'}
         title2={'Destination'}
-        text1={pickupLocation?.address}
-        text2={destination?.address}
+        text1={trip?.pickupLocation?.address}
+        text2={trip?.destination?.address}
         // style={globalStyles.mT10}
       />
       <InfoCard
         icon={'cash'}
         name={'Payment Method'}
         rightActionText="Cash"
-        onPressRightAction={() => {}}
+        // onPressRightAction={() => {}}
       />
       {/* 
       <DetailCard
@@ -127,7 +121,7 @@ const DriverAssignedSheet: FC<Props> = ({
       /> */}
 
       <AppButton
-        disabled={trip?.status === 'Waiting'}
+        disabled={trip?.status === 'STARTED' || trip?.status === 'COMPLETED'}
         title="Cancel Ride"
         onPress={onCancel}
       />

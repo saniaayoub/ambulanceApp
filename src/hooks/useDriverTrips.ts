@@ -8,14 +8,24 @@ import {
   tripCancel,
   tripReject,
 } from '../services/driverService';
+import {
+  emitDriverLocation,
+  isSocketConnected,
+} from '../services/driverSocketService';
 import { toastError, toastSuccess } from '../services/toast';
+import { useAuthStore } from '../stores/authStore';
 import { useDriverStore } from '../stores/driverStore';
 import { useLoaderStore } from '../stores/loaderStore';
+import { useLocationStore } from '../stores/locationStore';
 import { getErrorMessage } from './useAuth';
 import { useNavigation } from '@react-navigation/native';
 const useDriverTrips = () => {
   const navigation = useNavigation();
   const { showLoader, hideLoader } = useLoaderStore();
+
+  const userData = useAuthStore(state => state.userData);
+  const currentLocation = useLocationStore(state => state.currentLocation);
+
   const setCurrentTrip = useDriverStore(state => state.setCurrentTrip);
   const setIncomingRequest = useDriverStore(state => state.setIncomingRequest);
   const setTripStep = useDriverStore(state => state.setTripStep);
@@ -35,6 +45,16 @@ const useDriverTrips = () => {
       queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
       toastSuccess(response?.message);
       navigation.navigate('Booking');
+
+      if (isSocketConnected()) {
+        emitDriverLocation({
+          userId: userData?.userId,
+          driverId: userData?.driverId,
+          lat: currentLocation?.latitude,
+          lng: currentLocation?.longitude,
+        });
+      }
+
       // return response;
     } finally {
       hideLoader();
@@ -71,6 +91,7 @@ const useDriverTrips = () => {
       toastSuccess(response?.message);
       setTripStep(response?.data?.status);
       queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
+
       // return response;
     } finally {
       hideLoader();

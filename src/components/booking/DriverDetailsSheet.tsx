@@ -1,15 +1,11 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React, { FC } from 'react';
 import { Image, ImageSourcePropType, Text, View } from 'react-native';
-import { Hospital, VentilatorAmbulance } from '../../assets/images/pngs';
-import { BookingStep } from '../../stores/bookingStore';
+import { VentilatorAmbulance } from '../../assets/images/pngs';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import AppButton from '../AppButton';
-import InfoCard from './InfoCard';
 import DetailColumnComp from './DetailColumnComp';
-import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
-import { moderateScale } from 'react-native-size-matters';
-import theme from '../../styles/theme';
+import InfoCard from './InfoCard';
 
 type DriverData = {
   driverName: string;

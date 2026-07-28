@@ -7,25 +7,27 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { verticalScale } from 'react-native-size-matters';
 import AppButton from '../../../../components/AppButton';
 import AmbulanceCategories from '../../../../components/booking/AmbulanceCategories';
+import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
+import RideCompletedSheet from '../../../../components/booking/RideCompletedSheet';
+import ActiveTripUser from '../../../../components/home/ActiveTripUser';
 import HomeHeader from '../../../../components/home/header';
 import HospitalsList from '../../../../components/home/HospitalsList';
+import { useBooking } from '../../../../hooks/useBooking';
 import { useHomeData, useHospitalsData } from '../../../../hooks/useHomeData';
 import { useHospitalActions } from '../../../../hooks/useHospitalActions';
 import { useLocation } from '../../../../hooks/useLocation';
+import { toastError } from '../../../../services/toast';
 import { useAuthStore } from '../../../../stores/authStore';
 import { useBookingStore } from '../../../../stores/bookingStore';
-import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import { useLocationStore } from '../../../../stores/locationStore';
-import ActiveTripUser from '../../../../components/home/ActiveTripUser';
-import { useBooking } from '../../../../hooks/useBooking';
-import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
+import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import { reasons_user } from '../../../../utils/constants';
-import { Modalize } from 'react-native-modalize';
-import { moderateScale, verticalScale } from 'react-native-size-matters';
 import { showAlert } from '../../../../utils/functions';
-import { toastError } from '../../../../services/toast';
+import BottomSheet from '../../../../components/BottomSheet';
 
 const Home: FC = ({ navigation }: any) => {
   const bottomSheetRef = useRef<Modalize>(null);
@@ -65,8 +67,11 @@ const Home: FC = ({ navigation }: any) => {
     if (homeData?.activeTrip) {
       setTrip(homeData?.activeTrip);
       setStep(homeData?.activeTrip?.status);
+      if (homeData?.activeTrip?.status === 'COMPLETED') {
+        bottomSheetRef?.current?.open();
+      }
     }
-  }, [homeData]);
+  }, [homeData, setTrip, setStep]);
 
   const openDrawer = () => {
     navigation.openDrawer();
@@ -88,9 +93,9 @@ const Home: FC = ({ navigation }: any) => {
     navigation.navigate('LocationScreen', { mode: 'currentLoc' });
   };
 
-  const handleNavigateToHospital = () => {
+  const handleNavigateToHospital = useCallback(() => {
     navigation.navigate('Hospitals');
-  };
+  }, [navigation]);
 
   const handleNavigateToBooking = useCallback(() => {
     navigation.navigate('BookingScreen');
@@ -183,25 +188,37 @@ const Home: FC = ({ navigation }: any) => {
         </Pressable>
       </View> */}
 
-      <Modalize
-        ref={bottomSheetRef}
-        modalHeight={verticalScale(620)}
-        keyboardAvoidingBehavior={
-          Platform.OS === 'android' ? 'height' : 'padding'
-        }
-        closeOnOverlayTap={false}
-        scrollViewProps={{
-          keyboardShouldPersistTaps: 'handled',
-        }}
-      >
-        <CancelRideBottomSheet
-          onKeepBooking={() => bottomSheetRef?.current?.close()}
-          reasons={reasons_user}
-          onCancelBooking={reason => {
-            handleBookingCancel(reason, () => bottomSheetRef.current?.close());
-          }}
-        />
-      </Modalize>
+      <BottomSheet bottomSheetRef={bottomSheetRef}>
+        {homeData?.activeTrip?.status === 'COMPLETED' ? (
+          <RideCompletedSheet
+            fare="Rs. 2500"
+            distance="12 km"
+            duration="35 mins"
+            vehicleNumber="ABC-123"
+            paymentMethod="Cash"
+            pickupLocation={homeData?.activeTrip?.pickupLocation?.address}
+            destinationLocation={
+              homeData?.activeTrip?.destinationLocation?.address
+            }
+            onSubmitReview={() => {}}
+            driverData={{
+              driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
+              driverName: 'Ahmed Khan',
+              driverRating: 4.8,
+            }}
+          />
+        ) : (
+          <CancelRideBottomSheet
+            onKeepBooking={() => bottomSheetRef?.current?.close()}
+            reasons={reasons_user}
+            onCancelBooking={reason => {
+              handleBookingCancel(reason, () =>
+                bottomSheetRef.current?.close(),
+              );
+            }}
+          />
+        )}
+      </BottomSheet>
     </View>
   );
 };

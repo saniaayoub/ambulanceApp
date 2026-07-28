@@ -29,7 +29,7 @@ const EarningsSummaryCard: FC<Props> = ({
       <Text
         style={[styles.smallText, globalStyles.textCenter, globalStyles.mT5]}
       >
-        {trips} Trips Completed
+        {trips} Trip(s) Completed
       </Text>
 
       <View style={[styles.separator, globalStyles.mV15]} />

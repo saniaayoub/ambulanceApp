@@ -49,7 +49,7 @@ const EarningsHorizontalList: FC<Props> = ({ title, data }) => {
             </Text>
 
             <Text style={[styles.smallText, globalStyles.mT5]}>
-              {item.trips} Trips
+              {item.trips} Trip(s)
             </Text>
           </View>
         )}

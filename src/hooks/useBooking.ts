@@ -1,6 +1,9 @@
 // Utility file for future step-specific sheet content routing
 
+import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { queryClient } from '../../App';
+import { toastError, toastSuccess } from '../services/toast';
 import {
   cancelBooking,
   createBooking,
@@ -8,15 +11,12 @@ import {
   getOnlineDrivers,
   getTripStatus,
   stopSearchingTrip,
+  submitReview,
 } from '../services/userService';
-import { BookingStep, useBookingStore } from '../stores/bookingStore';
+import { useBookingStore } from '../stores/bookingStore';
 import { useLoaderStore } from '../stores/loaderStore';
 import { Location } from '../stores/locationStore';
-import { getNearbyDrivers } from '../services/locationService';
-import { toastError } from '../services/toast';
 import { getErrorMessage } from './useAuth';
-import { useNavigation } from '@react-navigation/native';
-import { queryClient } from '../../App';
 // Currently routing is handled directly in BookingScreen component
 
 type EstimatePayload = {
@@ -125,7 +125,7 @@ export const useBooking = () => {
     }
   };
 
-  const stopSearching = async from => {
+  const stopSearching = async (from?: string) => {
     const fromHome = from === 'fromHome' ? true : false;
 
     showLoader();
@@ -136,8 +136,8 @@ export const useBooking = () => {
         return response;
       }
       setTrip(null);
-      queryClient.invalidateQueries({ queryKey: ['home-data'] });
       setStep('');
+      queryClient.invalidateQueries({ queryKey: ['home-data'] });
       if (!fromHome) {
         navigation?.goBack();
       }
@@ -146,13 +146,21 @@ export const useBooking = () => {
     }
   };
 
-  const getStatus = async () => {
-    // showLoader();
+  const submitReviewHandler = async (payload: any) => {
+    showLoader();
     try {
-      const response = await getTripStatus();
-      return response?.data;
+      const response = await submitReview(payload);
+      if (!response.success) {
+        toastError(getErrorMessage(response.error));
+        return response;
+      }
+      setTrip(null);
+      setStep('');
+      queryClient.invalidateQueries({ queryKey: ['home-data'] });
+      toastSuccess('Thank you for your feedback', 'Review Submitted');
+      navigation?.goBack();
     } finally {
-      // hideLoader();
+      hideLoader();
     }
   };
 
@@ -163,6 +171,6 @@ export const useBooking = () => {
     handleBookingCancel,
     drivers,
     stopSearching,
-    getStatus,
+    submitReviewHandler,
   };
 };

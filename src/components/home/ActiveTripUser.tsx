@@ -27,11 +27,11 @@ const ActiveTripUser = ({
 
   const getStatusText = () => {
     switch (activeTrip?.status) {
-      case 'PENDING':
+      case 'SEARCHING':
         return 'Looking for Driver';
 
       case 'ASSIGNED':
-        return 'Cur';
+        return 'Current Booking';
 
       case 'ARRIVED':
         return 'Driver Arrived';
@@ -128,9 +128,15 @@ const ActiveTripUser = ({
       ]}
     >
       {/* Header */}
-      <View style={[globalStyles.row, globalStyles.spaceBetween]}>
-        {/* <Text style={styles.h5}>{getStatusText()}</Text> */}
-        <Text style={styles.h5}>Current Booking</Text>
+      <View
+        style={[
+          globalStyles.row,
+          globalStyles.centered,
+          globalStyles.spaceBetween,
+        ]}
+      >
+        <Text style={styles.h5}>{getStatusText()}</Text>
+        {/* <Text style={styles.h5}>Current Booking</Text> */}
 
         <Text style={styles.smallText}>
           🚑 {activeTrip?.driverId?.userId?.fullName}{' '}
