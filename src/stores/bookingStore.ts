@@ -23,7 +23,7 @@ export interface DriverLocationUpdatePayload {
 
 export type BookingStep =
   | 'PICKUP'
-  | 'DESTINATION'
+  | 'DROP OFF'
   | 'TRIP'
   | 'SEARCHING'
   | 'ASSIGNED'
@@ -34,7 +34,7 @@ export type BookingStep =
 
 export const bookingSteps = [
   'pickup',
-  'destination',
+  'drop off',
   'trip',
   'searching',
   'Assigned',
@@ -78,12 +78,12 @@ export const useBookingStore = create<BookingState>(set => ({
   pickupLocation: {
     latitude: 1234,
     longitude: 12233,
-    placeName: 'Current Location',
+    placeName: 'Add Pickup Location',
   },
   destinationLocation: {
     latitude: 1234,
     longitude: 12233,
-    placeName: 'Add Destination Location',
+    placeName: 'Add Drop off Location',
   },
   bookingStep: 'PICKUP',
   isBookingActive: false,
@@ -108,14 +108,14 @@ export const useBookingStore = create<BookingState>(set => ({
       pickupLocation: {
         latitude: 1234,
         longitude: 12233,
-        placeName: 'Current Location',
-        address: 'Current Location',
+        placeName: 'Add Pickup Location',
+        address: 'Add Pickup Location',
       },
       destinationLocation: {
         latitude: 1234,
         longitude: 12233,
-        placeName: 'Add Destination Location',
-        address: 'Current Location',
+        placeName: 'Add Drop Off Location',
+        address: 'Add Pickup Location',
       },
       bookingStep: 'PICKUP',
       isBookingActive: false,

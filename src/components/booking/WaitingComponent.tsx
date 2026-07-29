@@ -10,7 +10,6 @@ const WaitingComponent = ({
   styles: object;
   waitingStartedAt: any;
 }) => {
-  console.log(waitingStartedAt, 'waitingStartedAt');
   const seconds = useLiveWaitingTimer(waitingStartedAt);
   return (
     <Text style={[styles.lightText]}>

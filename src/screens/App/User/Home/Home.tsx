@@ -45,7 +45,8 @@ const Home: FC = ({ navigation }: any) => {
     destinationLocation,
   } = useBookingStore();
 
-  const { stopSearching, handleBookingCancel } = useBooking();
+  const { stopSearching, submitReviewHandler, handleBookingCancel } =
+    useBooking();
   const { userData } = useAuthStore();
   const { currentLocation } = useLocationStore();
   const { fetchCurrentLocation } = useLocation();
@@ -191,21 +192,10 @@ const Home: FC = ({ navigation }: any) => {
       <BottomSheet bottomSheetRef={bottomSheetRef}>
         {homeData?.activeTrip?.status === 'COMPLETED' ? (
           <RideCompletedSheet
-            fare="Rs. 2500"
-            distance="12 km"
-            duration="35 mins"
-            vehicleNumber="ABC-123"
-            paymentMethod="Cash"
-            pickupLocation={homeData?.activeTrip?.pickupLocation?.address}
-            destinationLocation={
-              homeData?.activeTrip?.destinationLocation?.address
+            trip={homeData?.activeTrip}
+            onSubmitReview={payload =>
+              submitReviewHandler(payload, bottomSheetRef)
             }
-            onSubmitReview={() => {}}
-            driverData={{
-              driverImage: require('../../../../assets/images/pngs/Mortuary.png'),
-              driverName: 'Ahmed Khan',
-              driverRating: 4.8,
-            }}
           />
         ) : (
           <CancelRideBottomSheet

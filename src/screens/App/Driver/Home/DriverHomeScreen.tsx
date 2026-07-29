@@ -35,6 +35,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
     setCurrentTrip,
     setIsOnline,
     setTripStep,
+    tripTracking,
   } = useDriverStore();
   const currentLocation = useLocationStore(state => state.currentLocation);
   useDriverTracking(userData?.driverId, isOnline);
@@ -45,6 +46,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
     arrived,
     start: startTrip,
     complete: completeTrip,
+    paymentReceived,
   } = useDriverTrips();
 
   const openDrawer = useCallback(() => {
@@ -91,12 +93,13 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
         {/* Online/Offline Toggle */}
         {stats?.activeTrip ? (
           <ActiveTripComp
-            driverLoc={currentLocation}
+            tracking={tripTracking ?? {}}
             activeTrip={stats?.activeTrip}
             onPressDetails={() => navigation.navigate('Booking')}
             onStartTrip={() => startTrip(stats.activeTrip?._id)}
             onArrived={() => arrived(stats.activeTrip?._id)}
             onCompleteTrip={() => completeTrip(stats.activeTrip?._id)}
+            onPaymentRecieved={() => paymentReceived(stats.activeTrip?._id)}
           />
         ) : (
           <OnlineToggle isOnline={isOnline} toggleOnline={toggleOnline} />

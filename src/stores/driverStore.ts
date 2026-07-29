@@ -78,7 +78,7 @@ export const useDriverStore = create<DriverState>(set => ({
       toastSuccess(res?.message);
       queryClient.invalidateQueries({ queryKey: ['driver-data'] });
     } catch (error) {
-      console.log(error, 'toggle error');
+      console.log(error, 'online toggle error');
     } finally {
       useLoaderStore.getState().hideLoader();
     }

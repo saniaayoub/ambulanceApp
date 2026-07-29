@@ -16,7 +16,6 @@ export const emitDriverLocation = ({
   lng: number | any;
 }) => {
   if (!socketInstance?.connected) return;
-  console.log('emit,');
   socketInstance.emit('driver_location_update', {
     userId,
     driverId,

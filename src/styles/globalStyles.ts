@@ -280,6 +280,9 @@ export const globalStyles = StyleSheet.create({
   paddingH10: {
     paddingHorizontal: moderateScale(10),
   },
+  paddingH0: {
+    paddingHorizontal: moderateScale(0),
+  },
   paddingV40: {
     paddingVertical: moderateScale(40),
   },

@@ -81,7 +81,6 @@ export const useUserSocket = () => {
     if (!userSocketInstance) return;
 
     const socket = userSocketInstance;
-    console.log('handlers added');
     const onTripStatusUpdated = trip => {
       queryClient.invalidateQueries({ queryKey: ['home-data'] });
 
@@ -93,7 +92,6 @@ export const useUserSocket = () => {
         return;
       }
 
-      console.log(trip, 'trip status updated');
       setTrip(trip);
       setStep(trip.status);
 
@@ -103,7 +101,6 @@ export const useUserSocket = () => {
     };
 
     const onDriverLocationUpdate = location => {
-      console.log(location, 'driver location updated');
       setDriverLocation(location);
     };
 

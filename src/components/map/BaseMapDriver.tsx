@@ -146,7 +146,6 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
       // 1) Driver -> Pickup
       if (step === 'ASSIGNED') {
         if (!driverMarker || !pickupMarker) {
-          // console.log(driverMarker, pickupMarker, 'inner');
           setRouteCoords([]);
           return;
         }

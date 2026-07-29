@@ -43,7 +43,7 @@ const ActiveTripUser = ({
         return 'Trip in Progress';
 
       case 'COMPLETED':
-        return 'Trip Completed';
+        return 'Submit a Review';
 
       case 'CANCELLED':
         return 'Trip Cancelled';

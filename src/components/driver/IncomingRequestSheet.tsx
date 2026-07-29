@@ -38,7 +38,6 @@ const IncomingRequestSheet: FC = ({ bottomSheetRef }: any) => {
     }
   }, [countdown, incomingRequest, setIncomingRequest, bottomSheetRef]);
 
-  // console.log(incomingRequest, countdown, 'in');
   return (
     <View style={[globalStyles.flex, globalStyles.padding15]}>
       <View style={[globalStyles.centered, globalStyles.mB15]}>

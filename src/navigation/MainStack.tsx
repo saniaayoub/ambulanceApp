@@ -59,7 +59,6 @@ export default function MainStack() {
           // show custom splash for 2 sec
 
           setShowSplash(false);
-          console.log('Splash screen hidden');
         }, 2000);
       }
     };

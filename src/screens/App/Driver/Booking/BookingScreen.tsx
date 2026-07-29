@@ -142,8 +142,6 @@ const BookingScreen = ({ navigation }: any) => {
       },
     );
 
-    console.log(driver, pickup, 'lo');
-
     const distanceKm = Number((distanceMeters / 1000).toFixed(1));
     const etaMinutes = Math.max(1, Math.ceil((distanceKm / 30) * 60));
 
@@ -195,12 +193,7 @@ const BookingScreen = ({ navigation }: any) => {
       setTripStep('CANCEL');
     }, 'Are you sure you want to cancel the ride?');
   };
-  console.log(
-    tripTracking,
-    pickupMeta,
-    destinationMeta,
-    'lltripTracking?.etaText',
-  );
+
   const tripSheetConfig = {
     ASSIGNED: {
       handlePress: () => arrived(currentTrip?._id),
@@ -208,6 +201,7 @@ const BookingScreen = ({ navigation }: any) => {
       distance:
         tripTracking?.distanceText ??
         formatDistance(pickupMeta?.distanceMeters),
+      distanceMeters: tripTracking?.distanceMeters,
       title: 'Navigate to Pickup',
       btnTitle: 'Arrived',
       handleCancel: handleShowAlert,
@@ -218,6 +212,7 @@ const BookingScreen = ({ navigation }: any) => {
       distance:
         tripTracking?.distanceText ??
         formatDistance(destinationMeta?.distanceMeters),
+      distanceMeters: tripTracking?.distanceMeters,
       title: 'Reached at Pickup',
       btnTitle: 'Start Trip',
       showWaiting: true,
@@ -229,7 +224,7 @@ const BookingScreen = ({ navigation }: any) => {
       distance:
         tripTracking?.distanceText ??
         formatDistance(destinationMeta?.distanceMeters),
-
+      distanceMeters: tripTracking?.distanceMeters,
       title: 'Trip In Progress',
       btnTitle: 'Complete Trip',
       showCancel: false,
@@ -240,7 +235,7 @@ const BookingScreen = ({ navigation }: any) => {
       distance:
         tripTracking?.distanceText ??
         formatDistance(destinationMeta?.distanceMeters),
-
+      distanceMeters: tripTracking?.distanceMeters,
       title: 'Trip Completed',
       btnTitle: 'Go Back to Home',
       showCancel: false,
@@ -279,7 +274,13 @@ const BookingScreen = ({ navigation }: any) => {
 
     if (!config) return null;
 
-    return <NavigateToPickupSheet currentTrip={currentTrip} {...config} />;
+    return (
+      <NavigateToPickupSheet
+        currentTrip={currentTrip}
+        {...config}
+        navigation={navigation}
+      />
+    );
   };
 
   const getBottomSheetHeight = (status: TripStatus) => {
@@ -298,7 +299,6 @@ const BookingScreen = ({ navigation }: any) => {
         return moderateScale(300);
     }
   };
-  console.log(tripStep, 'l');
 
   return (
     <View style={globalStyles.flex}>

@@ -1,6 +1,6 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React, { FC } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { User } from '../../assets/images/pngs';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
@@ -17,17 +17,31 @@ type Props = {
   trip: any;
   onCancel?: () => void;
   tracking?: DriverTrackingInfo;
+  navigation: any;
 };
 
 const DriverAssignedSheet: FC<Props> = ({
   trip,
   onCancel,
   tracking,
+  navigation,
 }: Props) => {
   const styles = useGlobalStyles();
   const driver = trip?.driver || trip?.driverId;
   return (
     <View style={[globalStyles.flex, globalStyles.padding15]}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.goBack();
+        }}
+        style={styles.indicatorDot}
+      >
+        <MaterialDesignIcons
+          name="chevron-left"
+          size={moderateScale(24)}
+          color={theme.colors.dark.background}
+        />
+      </TouchableOpacity>
       <View
         style={[
           globalStyles.row,
@@ -98,7 +112,7 @@ const DriverAssignedSheet: FC<Props> = ({
         value={`⭐ ${driver?.rating ?? 0}`}
         onPress={() => makeaCall(driver?.userId?.phone)}
       />
-      {/* DESTINATION INFORMATION */}
+      {/* DROP OFF INFORMATION */}
       <DetailColumnComp
         title1={'Pickup'}
         title2={'Destination'}

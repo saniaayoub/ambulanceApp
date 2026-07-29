@@ -63,7 +63,6 @@ export const useAuth = () => {
       }
       setToken(response.data.token);
       setUserData(response.data.user);
-      // console.log(response?.data);
       queryClient.clear();
       toastSuccess('Logged in successfully');
       return response;

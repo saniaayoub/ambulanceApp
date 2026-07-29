@@ -6,7 +6,6 @@ export const useLiveWaitingTimer = (waitingStartedAt: any) => {
   useEffect(() => {
     if (!waitingStartedAt) return;
     const startTime = new Date(waitingStartedAt).getTime();
-    console.log(startTime, 'startTime');
 
     const updateTimer = () => {
       const now = Date.now();

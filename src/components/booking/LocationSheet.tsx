@@ -178,7 +178,7 @@ const LocationSheet: FC<Props> = ({
         useGestureHandler={true}
         disabled={
           pickupLocation !== null &&
-          destinationLocation?.placeName === 'Add Destination Location'
+          destinationLocation?.address === 'Add Drop off Location'
             ? true
             : false
         }

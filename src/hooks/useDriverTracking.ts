@@ -28,7 +28,6 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
       }
       return;
     }
-    console.log('DriverTracking mounted');
 
     watchId.current = Geolocation.watchPosition(
       async position => {
@@ -43,7 +42,6 @@ export const useDriverTracking = (driverId: string, isOnline: boolean) => {
         });
 
         // 2) emit live location to backend
-        console.log('watchher driver location,', latitude, longitude);
         if (isSocketConnected()) {
           emitDriverLocation({
             userId: userData?.userId,

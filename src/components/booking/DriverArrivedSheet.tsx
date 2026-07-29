@@ -37,7 +37,7 @@ const DriverArrivedSheet = ({
         title1="Response"
         text1={estimatedTime}
         title2="Nearby"
-        text2={`${nearbyCount} Vehicles`}
+        text2={`${nearbyCount} Vehicle(s)`}
       />
 
       <AppButton title="Cancel Request" onPress={onCancel} />

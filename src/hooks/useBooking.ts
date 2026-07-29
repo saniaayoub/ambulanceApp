@@ -146,7 +146,8 @@ export const useBooking = () => {
     }
   };
 
-  const submitReviewHandler = async (payload: any) => {
+  const submitReviewHandler = async (payload: any, bottomSheetRef?: any) => {
+    showLoader();
     showLoader();
     try {
       const response = await submitReview(payload);
@@ -158,6 +159,10 @@ export const useBooking = () => {
       setStep('');
       queryClient.invalidateQueries({ queryKey: ['home-data'] });
       toastSuccess('Thank you for your feedback', 'Review Submitted');
+      if (bottomSheetRef) {
+        bottomSheetRef.current.close();
+        return;
+      }
       navigation?.goBack();
     } finally {
       hideLoader();

@@ -21,14 +21,7 @@ export const useProfile = () => {
         toastError(getErrorMessage(response.error));
         return response;
       }
-      console.log(
-        queryClient
-          .getQueryCache()
-          .getAll()
-          .map(q => q.queryKey),
-        'k',
-        ['driver-data', userData?.driverId],
-      );
+
       queryClient.invalidateQueries({
         queryKey: ['driver-data', userData?.driverId],
       });

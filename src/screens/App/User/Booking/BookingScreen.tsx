@@ -25,8 +25,7 @@ import { Location, useLocationStore } from '../../../../stores/locationStore';
 import { globalStyles } from '../../../../styles/globalStyles';
 import { reasons_user, screenHeight } from '../../../../utils/constants';
 import { showAlert } from '../../../../utils/functions';
-
-const BookingScreen = () => {
+const BookingScreen = ({ navigation }: any) => {
   const bottomSheetRef = useRef<Modalize>(null);
   const { currentLocation } = useLocationStore();
   const {
@@ -67,7 +66,6 @@ const BookingScreen = () => {
     longitudeDelta: 0.01,
   });
   const [estimate, setEstimate] = useState(null);
-  console.log(driverTracking, 'driverTracking');
 
   useFocusEffect(
     useCallback(() => {
@@ -81,11 +79,6 @@ const BookingScreen = () => {
     }, []), // Keep this array empty
   );
 
-  useEffect(() => {
-    if (trip?.status === 'PAID') {
-      bottomSheetRef.current?.open();
-    }
-  }, [trip]);
   const markers = useMemo(
     () => [
       ...(pickupLocation
@@ -159,17 +152,17 @@ const BookingScreen = () => {
             onCurrentLocationPress={() => {
               if (!currentLocation) return;
               setPickupLocation(currentLocation);
-              setStep('DESTINATION');
+              setStep('DROP OFF');
             }}
             onPressChangeonMap={changeLocationOnMap}
             onSelectLocation={location => {
               setPickupLocation(location);
-              setStep('DESTINATION');
+              setStep('DROP OFF');
             }}
           />
         );
 
-      case 'DESTINATION':
+      case 'DROP OFF':
         return (
           <LocationSheet
             pickupLocation={pickupLocation}
@@ -209,6 +202,7 @@ const BookingScreen = () => {
             onCancel={handleRideCancel}
             trip={trip}
             tracking={driverTracking?.tracking}
+            navigation={navigation}
           />
         );
 
@@ -218,6 +212,7 @@ const BookingScreen = () => {
             trip={trip}
             onCancel={handleRideCancel}
             tracking={driverTracking?.tracking}
+            navigation={navigation}
           />
         );
 
@@ -226,6 +221,7 @@ const BookingScreen = () => {
           <DriverAssignedSheet
             trip={trip}
             tracking={driverTracking?.tracking}
+            navigation={navigation}
           />
         );
 
@@ -280,13 +276,12 @@ const BookingScreen = () => {
     setEstimate(data);
   };
 
-  const showCenterPin =
-    bookingStep === 'PICKUP' || bookingStep === 'DESTINATION';
+  const showCenterPin = bookingStep === 'PICKUP' || bookingStep === 'DROP OFF';
 
   const getBottomSheetHeight = (status: BookingStep) => {
     switch (status) {
       case 'PICKUP':
-      case 'DESTINATION':
+      case 'DROP OFF':
       case 'CANCELLED':
         return screenHeight * 0.9;
 

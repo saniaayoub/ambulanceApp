@@ -6,6 +6,7 @@ import { User } from '../../assets/images/pngs';
 import AppButton from '../../components/AppButton';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
+import { Location } from '../driver/ActiveTrip';
 
 type Props = {
   trip: any;
@@ -24,6 +25,8 @@ const RideCompletedSheet = ({ trip, onSubmitReview }: Props) => {
 
   const [rating, setRating] = useState(0);
   console.log(trip);
+
+  const driverData = trip?.driver || trip?.driverId;
   return (
     <View style={[globalStyles.flex, globalStyles.padding15]}>
       <View>
@@ -45,15 +48,15 @@ const RideCompletedSheet = ({ trip, onSubmitReview }: Props) => {
           <View style={[globalStyles.flex, globalStyles.centered]}>
             <Image
               source={
-                trip?.driver?.userId?.profileImage
-                  ? { uri: trip?.driver?.userId?.profileImage }
+                driverData?.userId?.profileImage
+                  ? { uri: driverData?.userId?.profileImage }
                   : User
               }
               resizeMode="cover"
               style={[globalStyles.size80, styles.round]}
             />
 
-            <Text style={styles.h5}>{trip?.driver?.userId?.fullName}</Text>
+            <Text style={styles.h5}>{driverData?.userId?.fullName}</Text>
           </View>
         </View>
         <Text style={[styles.h4, globalStyles.textCenter, globalStyles.mB10]}>
@@ -70,7 +73,7 @@ const RideCompletedSheet = ({ trip, onSubmitReview }: Props) => {
             <TouchableOpacity key={star} onPress={() => setRating(star)}>
               <MaterialDesignIcons
                 name={star <= rating ? 'star' : 'star-outline'}
-                size={34}
+                size={moderateScale(30)}
                 color="#FFC107"
               />
             </TouchableOpacity>
@@ -86,18 +89,34 @@ const RideCompletedSheet = ({ trip, onSubmitReview }: Props) => {
           ]}
         >
           <Text style={[styles.h5, globalStyles.mB15]}>Trip Details</Text>
-
           {renderRow('Distance', trip?.distanceKm, styles)}
           {renderRow('Duration', `${trip?.duration} min(s)`, styles)}
           {renderRow('Fare', trip?.fare?.total, styles)}
           {renderRow('Vehicle', trip?.vehicleId?.vehicleNumber, styles)}
           {renderRow('Payment', trip?.paymentMethod, styles)}
-
           <View style={styles.separator} />
+          <View style={[globalStyles.paddingH10, globalStyles.mB15]}>
+            <Location
+              color={theme.colors.common.success}
+              value={trip?.pickupLocation?.address || 'N/A'}
+              styles={styles}
+            />
 
-          {renderRow('Pickup', trip?.pickupLocation?.address, styles)}
+            <View style={[globalStyles.row, globalStyles.alignCenter]}>
+              <View style={globalStyles.mR20}>
+                <View style={[styles.greyCard, styles.dot]} />
+                <View style={[styles.greyCard, styles.dot]} />
+                <View style={[styles.greyCard, styles.dot]} />
+              </View>
+              <View style={styles.horizontalLine} />
+            </View>
 
-          {renderRow('Destination', trip?.destination?.address, styles)}
+            <Location
+              color={theme.colors.common.warning}
+              value={trip?.destination?.address || 'N/A'}
+              styles={styles}
+            />
+          </View>
         </View>
       </View>
       <AppButton

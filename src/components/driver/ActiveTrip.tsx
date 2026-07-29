@@ -1,10 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
+import { DriverTrackingInfo } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import AppButton from '../AppButton';
-import { Location as LocationProp } from '../../stores/locationStore';
-import { getDistance } from 'geolib';
 
 export const Location = ({
   color,
@@ -40,21 +39,23 @@ const ActiveTripComp = ({
   onStartTrip,
   onArrived,
   onCompleteTrip,
-  driverLoc,
+  tracking,
+  onPaymentRecieved,
 }: {
   activeTrip: any;
   onPressDetails: () => void;
   onStartTrip: () => void;
   onArrived: () => void;
   onCompleteTrip: () => void;
-  driverLoc: LocationProp | null;
+  tracking: DriverTrackingInfo;
+  onPaymentRecieved: () => {};
 }) => {
   const styles = useGlobalStyles();
 
   const getStatusText = () => {
     switch (activeTrip?.status) {
       case 'ASSIGNED':
-        return 'New Trip Assigned';
+        return 'Current Booking';
       case 'ARRIVED':
         return 'Arrived at Pickup';
       case 'WAITING':
@@ -65,35 +66,6 @@ const ActiveTripComp = ({
         return 'Active Trip';
     }
   };
-  const distanceM = useMemo(() => {
-    if (activeTrip?.status === 'ASSIGNED') {
-      const driverLat = driverLoc?.latitude;
-      const driverLng = driverLoc?.longitude;
-      const pickupLat = activeTrip?.pickupLocation?.lat;
-      const pickupLng = activeTrip?.pickupLocation?.lng;
-
-      if (
-        driverLat == null ||
-        driverLng == null ||
-        pickupLat == null ||
-        pickupLng == null
-      ) {
-        return Infinity;
-      }
-
-      return getDistance(
-        {
-          latitude: driverLat,
-          longitude: driverLng,
-        },
-        {
-          latitude: pickupLat,
-          longitude: pickupLng,
-        },
-      );
-    }
-    return null;
-  }, [driverLoc, activeTrip]);
 
   const getTripAction = () => {
     switch (activeTrip?.status) {
@@ -101,7 +73,8 @@ const ActiveTripComp = ({
         return {
           title: 'Arrived',
           onPress: onArrived,
-          disabled: distanceM !== null && distanceM >= 100,
+          disabled:
+            tracking?.distanceMeters !== null && tracking.distanceMeters <= 100,
         };
 
       case 'WAITING':
@@ -115,7 +88,15 @@ const ActiveTripComp = ({
         return {
           title: 'Complete',
           onPress: onCompleteTrip, // or onStartTrip if intentional
-          disabled: distanceM !== null && distanceM >= 100,
+          disabled:
+            tracking?.distanceMeters !== null &&
+            tracking?.distanceMeters <= 100,
+        };
+      case 'COMPLETED':
+        return {
+          title: 'Payment Recieved',
+          onPress: onPaymentRecieved, // or onStartTrip if intentional
+          disabled: false,
         };
 
       default:

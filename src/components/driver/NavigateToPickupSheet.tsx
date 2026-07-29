@@ -1,6 +1,6 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { TripData } from '../../stores/driverStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
@@ -10,6 +10,7 @@ import AppButton from '../AppButton';
 import DetailColumnComp from '../booking/DetailColumnComp';
 import { Location } from './ActiveTrip';
 import ShowWaitingTimer from './ShowWaitingTimer';
+import BackButton from '../BackButton';
 
 type Props = {
   currentTrip: TripData | null;
@@ -24,6 +25,8 @@ type Props = {
   showWaiting?: boolean;
   showCancel?: boolean;
   disableActionButton?: boolean;
+  navigation: any;
+  distanceMeters?: number;
 };
 
 const NavigateToPickupSheet = ({
@@ -36,17 +39,15 @@ const NavigateToPickupSheet = ({
   btnTitle,
   showWaiting = false,
   showCancel = true,
-  disableActionButton = distance != null ? distance < 0.1 : true,
+  distanceMeters,
+  disableActionButton = distanceMeters !== undefined && distanceMeters > 100,
+  navigation,
 }: Props) => {
   const styles = useGlobalStyles();
 
-  console.log(distance, etaMinutes, 'l');
   return (
     <View style={[globalStyles.flex, globalStyles.padding15]}>
-      {/* Header */}
-      <Text style={[styles.h5, globalStyles.textCenter, globalStyles.mB15]}>
-        {title}
-      </Text>
+      <BackButton title={title} style={[globalStyles.paddingH0]} />
 
       {/* Pickup & Destination */}
       <View style={[globalStyles.paddingH10, globalStyles.mB15]}>
