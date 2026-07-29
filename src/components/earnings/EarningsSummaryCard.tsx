@@ -1,6 +1,5 @@
 import React, { FC, memo } from 'react';
 import { Text, View } from 'react-native';
-
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 
 interface Props {

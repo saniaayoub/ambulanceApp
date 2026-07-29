@@ -1,7 +1,6 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import { View, StyleSheet } from 'react-native';
-import { globalStyles } from '../../styles/globalStyles';
 
 const HomeMapComp = ({ driverLocation, activeTrip }: any) => {
   const pickup = activeTrip?.pickupLocation;

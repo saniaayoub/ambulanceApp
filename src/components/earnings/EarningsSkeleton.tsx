@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
-
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 
 const Box = ({ height }: { height: number }) => {

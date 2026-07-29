@@ -1,6 +1,5 @@
 import React, { FC, memo } from 'react';
 import { FlatList, Text, View } from 'react-native';
-
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import { BreakdownItem } from './EarningsHorizontalList';
 

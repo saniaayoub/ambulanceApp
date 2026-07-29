@@ -1,15 +1,14 @@
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React from 'react';
 import {
-  Alert,
   Image,
   ImageSourcePropType,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
-import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { moderateScale } from 'react-native-size-matters';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 
 export type InfoCardProps = {

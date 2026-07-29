@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import { getDistance } from 'geolib';
-
 import AppButton from '../AppButton';
 import { Location as LocationProp } from '../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';

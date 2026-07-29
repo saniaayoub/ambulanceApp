@@ -8,7 +8,6 @@ import MapView, {
 import { StyleSheet, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { getDistance } from 'geolib';
-
 import MapMarker from './MapMarker';
 import { globalStyles } from '../../styles/globalStyles';
 import BackButton from '../BackButton';

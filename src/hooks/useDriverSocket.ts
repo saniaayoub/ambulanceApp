@@ -1,12 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-// import your zustand auth store
 import { BaseURL } from '../api/axiosInstance';
 import { useAuthStore } from '../stores/authStore'; // <-- change path
 import { useDriverStore } from '../stores/driverStore';
 import { queryClient } from '../../App';
-// import your trip/driver store if needed
-// import { useTripStore } from '../store/tripStore';
 
 type JoinPayload = {
   userId: string;

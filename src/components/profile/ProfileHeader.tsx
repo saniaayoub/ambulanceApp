@@ -9,7 +9,6 @@ import {
   View,
 } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-
 import { User } from '../../assets/images/pngs';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';

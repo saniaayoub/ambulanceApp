@@ -1,7 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, Modal, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-// import { useLoaderStore } from '../stores/loaderStore';
 import { useThemedStyles } from '../styles/createThemedStyles';
 
 const FullScreenLoader = ({ loading }: { loading: boolean }) => {

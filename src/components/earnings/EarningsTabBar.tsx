@@ -1,6 +1,5 @@
 import React, { FC, memo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import { EarningsTab } from '../../screens/App/Driver/Earnings/EarningsScreen';
 

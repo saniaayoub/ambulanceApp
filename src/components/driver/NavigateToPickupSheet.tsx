@@ -1,16 +1,16 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React from 'react';
-import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { TripData } from '../../stores/driverStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import { makeaCall } from '../../utils/functions';
 import AppButton from '../AppButton';
+import BackButton from '../BackButton';
 import DetailColumnComp from '../booking/DetailColumnComp';
 import { Location } from './ActiveTrip';
 import ShowWaitingTimer from './ShowWaitingTimer';
-import BackButton from '../BackButton';
 
 type Props = {
   currentTrip: TripData | null;

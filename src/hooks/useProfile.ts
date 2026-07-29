@@ -1,5 +1,4 @@
 import { queryClient } from '../../App';
-import { logout as authLogout } from '../services/authService';
 import { updateProfile } from '../services/profileService';
 import { toastError, toastSuccess } from '../services/toast';
 import { useAuthStore } from '../stores/authStore';

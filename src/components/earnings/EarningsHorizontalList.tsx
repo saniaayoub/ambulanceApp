@@ -1,7 +1,6 @@
 import React, { FC, memo } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 
 export interface BreakdownItem {

@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
-import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import MapMarker from './MapMarker';
+import MapView, {
+  Marker,
+  Polyline,
+  PROVIDER_GOOGLE,
+  Region,
+} from 'react-native-maps';
 import { moderateScale } from 'react-native-size-matters';
-import { globalStyles } from '../../styles/globalStyles';
-import BackButton from '../BackButton';
-import { fetchRoute } from '../../services/locationService';
-import { Polyline } from 'react-native-maps';
 import { BookingStep } from '../../stores/bookingStore';
+import { globalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
+import BackButton from '../BackButton';
+import MapMarker from './MapMarker';
 export interface MarkerData {
   id: string;
   latitude: number;
