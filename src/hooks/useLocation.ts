@@ -48,7 +48,6 @@ export const useLocation = () => {
     };
     setCurrentLocation(customizeLoc);
     setLocation?.(customizeLoc);
-
     hideLoader();
   };
 

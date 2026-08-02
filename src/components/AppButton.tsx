@@ -2,6 +2,7 @@ import MaterialDesignIcons from '@react-native-vector-icons/material-design-icon
 import React from 'react';
 import {
   ActivityIndicator,
+  Platform,
   Text,
   TextStyle,
   TouchableOpacity,
@@ -81,7 +82,7 @@ const AppButton: React.FC<AppButtonProps> = ({
     </>
   );
 
-  if (useGestureHandler) {
+  if (useGestureHandler && Platform.OS === 'android') {
     return (
       <GesturePressable
         onPress={onPress}

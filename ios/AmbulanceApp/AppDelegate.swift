@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-     GMSServices.provideAPIKey("AIzaSyAcu_fFKhbnd-duqNk_92S572YlXZqpZms")
+     GMSServices.provideAPIKey("AIzaSyCujzN2ul_pmv7IT4yZb7a2dpXyeHOecV4")
     FirebaseApp.configure()
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)

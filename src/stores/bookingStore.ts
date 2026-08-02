@@ -47,12 +47,12 @@ export const bookingSteps = [
 interface BookingState {
   trip: object | null;
   selectedAmbulance: AmbulanceType;
-  pickupLocation: Location;
-  destinationLocation: Location;
+  pickupLocation: Location | null;
+  destinationLocation: Location | null;
   bookingStep: BookingStep;
   isBookingActive: boolean;
   homeData: object | null;
-  driverLocation: DriverLocationUpdatePayload;
+  driverLocation: DriverLocationUpdatePayload | null;
 
   setSelectedAmbulance: (value: AmbulanceType) => void;
   setPickupLocation: (value: Location) => void;
@@ -61,7 +61,7 @@ interface BookingState {
   resetBooking: () => void;
   startBooking: () => void;
   setTrip: (trip: object) => void;
-  setDriverLocation: (loc: Location) => void;
+  setDriverLocation: (loc: DriverLocationUpdatePayload) => void;
 }
 
 export const useBookingStore = create<BookingState>(set => ({
@@ -75,20 +75,13 @@ export const useBookingStore = create<BookingState>(set => ({
   },
 
   homeData: null,
-  pickupLocation: {
-    latitude: 1234,
-    longitude: 12233,
-    placeName: 'Add Pickup Location',
-  },
-  destinationLocation: {
-    latitude: 1234,
-    longitude: 12233,
-    placeName: 'Add Drop off Location',
-  },
+  pickupLocation: null,
+  destinationLocation: null,
   bookingStep: 'PICKUP',
   isBookingActive: false,
   setTrip: trip => set({ trip }),
-  setDriverLocation: loc => set({ driverLocation: loc }),
+  setDriverLocation: (loc: DriverLocationUpdatePayload) =>
+    set({ driverLocation: loc }),
   setSelectedAmbulance: selectedAmbulance => set({ selectedAmbulance }),
   setPickupLocation: pickupLocation => set({ pickupLocation }),
   setDestinationLocation: destinationLocation => set({ destinationLocation }),
@@ -105,18 +98,20 @@ export const useBookingStore = create<BookingState>(set => ({
         baseFare: 900,
         perKm: 125,
       },
-      pickupLocation: {
-        latitude: 1234,
-        longitude: 12233,
-        placeName: 'Add Pickup Location',
-        address: 'Add Pickup Location',
-      },
-      destinationLocation: {
-        latitude: 1234,
-        longitude: 12233,
-        placeName: 'Add Drop Off Location',
-        address: 'Add Pickup Location',
-      },
+      pickupLocation: null,
+      destinationLocation: null,
+      // pickupLocation: {
+      //   latitude: 1234,
+      //   longitude: 12233,
+      //   placeName: 'Add Pickup Location',
+      //   address: 'Add Pickup Location',
+      // },
+      // destinationLocation: {
+      //   latitude: 1234,
+      //   longitude: 12233,
+      //   placeName: 'Add Drop Off Location',
+      //   address: 'Add Drop Off Location',
+      // },
       bookingStep: 'PICKUP',
       isBookingActive: false,
     }),

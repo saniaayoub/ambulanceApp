@@ -137,7 +137,6 @@ export const useDriverSocket = () => {
     // avoid duplicate join spam for same room
     const alreadyJoinedSameRoom =
       hasJoinedRef.current && lastJoinedRoomRef.current === roomKey;
-    console.log(alreadyJoinedSameRoom, 'alreadyJoinedSameRoom');
     if (alreadyJoinedSameRoom) return;
 
     const payload: JoinPayload = {
@@ -168,7 +167,6 @@ export const useDriverSocket = () => {
     };
     const onTripRequestTaken = ({ tripId }) => {
       const request = useDriverStore.getState().incomingRequest;
-      console.log('clear incoming');
       if (request?.tripId === tripId) {
         setIncomingRequest(null);
       }

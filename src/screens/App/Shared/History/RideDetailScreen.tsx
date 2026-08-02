@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
-import { VentilatorAmbulance } from '../../../../assets/images/pngs';
+import { User, VentilatorAmbulance } from '../../../../assets/images/pngs';
 import AppButton from '../../../../components/AppButton';
 import BackButton from '../../../../components/BackButton';
 import FullScreenLoader from '../../../../components/FullScreenLoader';
@@ -42,13 +42,18 @@ const RideDetailScreen = ({ detail, role }: Props) => {
   }
 
   const personTitle = role === Roles.USER ? 'Driver' : 'Patient';
-
+  console.log(trip, role);
   const personValue =
     role === Roles.USER
       ? `${trip?.driver?.name ?? '-'}${
           trip?.driver?.rating ? ` (${trip.driver.rating}★)` : ''
         }`
       : trip?.passenger?.name ?? '-';
+
+  const profileImage =
+    role === Roles.USER
+      ? trip?.driver?.profileImage
+      : trip?.passenger?.profileImage;
 
   const getText = () => {
     switch (trip?.status) {
@@ -84,7 +89,7 @@ const RideDetailScreen = ({ detail, role }: Props) => {
               />
 
               <Image
-                source={VentilatorAmbulance}
+                source={profileImage ? { uri: profileImage } : User}
                 resizeMode="cover"
                 style={[
                   globalStyles.size80,
@@ -173,7 +178,7 @@ const RideDetailScreen = ({ detail, role }: Props) => {
         {/* Delete button only for user */}
         {role === Roles.USER && (
           <AppButton
-            title="Delete Record"
+            title="Delete"
             onPress={() => handleDeleteTrip(trip._id)}
             style={globalStyles.mT20}
           />

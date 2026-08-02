@@ -62,7 +62,7 @@ const RideCard = ({ item, onPress }: Props) => {
         </View>
         <View style={[globalStyles.row]}>
           <Text style={styles.smallText}>
-            {formatTripDate(item?.updatedAt)}
+            {formatTripDate(item?.createdAt)}
           </Text>
           <MaterialIcons name="chevron-right" size={moderateScale(22)} />
         </View>

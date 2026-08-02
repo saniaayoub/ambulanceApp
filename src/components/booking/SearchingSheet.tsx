@@ -39,7 +39,11 @@ const SearchingSheet = ({
         text2={`${nearbyCount} Vehicle(s)`}
       />
 
-      <AppButton title="Stop Searching" onPress={onStopSearching} />
+      <AppButton
+        title="Stop Searching"
+        onPress={onStopSearching}
+        useGestureHandler={true}
+      />
     </View>
   );
 };

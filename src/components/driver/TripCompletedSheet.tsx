@@ -26,12 +26,10 @@ const TripCompletedSheet = ({ currentTrip, onDone }: Props) => {
         <MaterialDesignIcons
           name="check-circle"
           color={theme.colors.common.success}
-          size={moderateScale(60)}
+          size={moderateScale(50)}
         />
 
-        <Text style={[styles.h4, globalStyles.textCenter, globalStyles.mT10]}>
-          Trip Completed
-        </Text>
+        <Text style={[styles.h4, globalStyles.textCenter]}>Trip Completed</Text>
 
         <Text style={[styles.smallText, globalStyles.mT5]}>
           {currentTrip?.userId?.fullName}
@@ -43,6 +41,7 @@ const TripCompletedSheet = ({ currentTrip, onDone }: Props) => {
         text1={`${currentTrip?.distanceKm ?? 0} km`}
         title2="Duration"
         text2={`${currentTrip?.tripDuration ?? 0} min`}
+        style={globalStyles.mB0}
       />
 
       <View style={[styles.border, globalStyles.padding15, globalStyles.mV15]}>

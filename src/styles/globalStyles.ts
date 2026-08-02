@@ -403,6 +403,7 @@ export const useGlobalStyles = () => {
       ...typography.lightText,
       color: colors.text,
     },
+
     normalText: {
       ...typography.label,
       color: colors.text,

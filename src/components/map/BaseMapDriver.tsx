@@ -14,6 +14,7 @@ import BackButton from '../BackButton';
 import { fetchRoute } from '../../services/locationService';
 import theme from '../../styles/theme';
 import { DriverTripStep } from '../../stores/driverStore'; // adjust path
+import { useLoaderStore } from '../../stores/loaderStore';
 
 export interface MarkerData {
   id: string;
@@ -52,6 +53,8 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
   const mapRef = useRef<MapView | null>(null);
   const [routeCoords, setRouteCoords] = useState<any[]>([]);
   const [isFetchingRoute, setIsFetchingRoute] = useState(false);
+  const [mapReady, setMapReady] = useState(false);
+  const { showLoader, hideLoader } = useLoaderStore();
 
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastRouteOriginRef = useRef<{
@@ -102,20 +105,7 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
       );
       return;
     }
-
-    setTimeout(() => {
-      mapRef.current?.fitToCoordinates(coords, {
-        edgePadding: {
-          top: 140,
-          right: 60,
-          bottom: 320,
-          left: 60,
-        },
-        animated: true,
-      });
-    }, 300);
   };
-
   useEffect(() => {
     fitMapToMarkers();
   }, [markers]);
@@ -136,14 +126,15 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
 
     return movedDistance >= ROUTE_RECALC_DISTANCE_METERS || destinationChanged;
   };
-
+  console.log(routeCoords, 'r');
   const getPolylineData = async () => {
     if (isFetchingRoute) return;
 
     try {
       setIsFetchingRoute(true);
       // 1) Driver -> Pickup
-      if (step === 'ASSIGNED') {
+      console.log(driverMarker, step, pickupMarker, destinationMarker);
+      if (step === 'ASSIGNED' || step === 'WAITING') {
         if (!driverMarker || !pickupMarker) {
           setRouteCoords([]);
           return;
@@ -158,30 +149,33 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
           latitude: pickupMarker.latitude,
           longitude: pickupMarker.longitude,
         };
-
+        console.log(mapRef);
         if (!hasRouteChangedEnough(origin, destination)) {
-          return;
+          // return;
         }
-
         const polylineData = await fetchRoute(origin, destination);
-        const fallbackPolyline = [
-          { latitude: 24.90904585357697, longitude: 67.19322588362331 },
-          { latitude: 24.911376682861575, longitude: 67.17200070689865 },
-          { latitude: 24.91370751214618, longitude: 67.15077553017399 },
-          { latitude: 24.91603834143079, longitude: 67.12955035344932 },
-          { latitude: 24.918369170715393, longitude: 67.10832517672466 },
-          { latitude: 24.9207, longitude: 67.0871 },
-        ];
-        // setRouteCoords(polylineData || []);
-        setRouteCoords(fallbackPolyline || []);
 
+        setRouteCoords(polylineData || []);
+        if (mapReady && polylineData.length > 1) {
+          setTimeout(() => {
+            mapRef.current?.fitToCoordinates(polylineData, {
+              edgePadding: {
+                top: 140,
+                right: 60,
+                bottom: 320,
+                left: 60,
+              },
+              animated: true,
+            });
+          }, 1000);
+        }
         lastRouteOriginRef.current = origin;
         lastRouteDestinationRef.current = destination;
         return;
       }
 
       // 2) Driver -> Destination (better for active trip)
-      if (step === 'trip_in_progress') {
+      if (step === 'STARTED') {
         if (!driverMarker || !destinationMarker) {
           setRouteCoords([]);
           return;
@@ -196,14 +190,28 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
           latitude: destinationMarker.latitude,
           longitude: destinationMarker.longitude,
         };
-
+        console.log(origin, destination, 'or');
         if (!hasRouteChangedEnough(origin, destination)) {
           return;
         }
 
         const polylineData = await fetchRoute(origin, destination);
-
+        // const polylineData = [];
         setRouteCoords(polylineData || []);
+        if (mapReady && polylineData.length > 1) {
+          setTimeout(() => {
+            mapRef.current?.fitToCoordinates(polylineData, {
+              edgePadding: {
+                top: 140,
+                right: 60,
+                bottom: 320,
+                left: 60,
+              },
+              animated: true,
+            });
+          }, 1000);
+        }
+
         lastRouteOriginRef.current = origin;
         lastRouteDestinationRef.current = destination;
         return;
@@ -226,6 +234,7 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
     }
 
     debounceTimerRef.current = setTimeout(() => {
+      console.log('get');
       getPolylineData();
     }, ROUTE_DEBOUNCE_MS);
 
@@ -243,12 +252,12 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
     destinationMarker?.latitude,
     destinationMarker?.longitude,
   ]);
-  console.log(routeCoords, 'routeCoords');
 
   return (
     <View style={globalStyles.flex}>
       <MapView
         ref={mapRef}
+        onMapReady={() => setMapReady(true)}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={initialRegion}
@@ -273,6 +282,7 @@ const BaseMapDriver: React.FC<BaseMapProps> = ({
 
         {routeCoords?.length > 0 && (
           <Polyline
+            key={JSON.stringify(routeCoords[routeCoords?.length - 1])}
             coordinates={routeCoords}
             strokeWidth={4}
             strokeColor={theme.colors.common.primary}

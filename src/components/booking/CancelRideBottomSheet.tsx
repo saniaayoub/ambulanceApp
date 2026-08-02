@@ -34,7 +34,7 @@ const CancelRideSheet = ({
         return (
           <TouchableOpacity
             key={item.id}
-            activeOpacity={0.8}
+            // activeOpacity={0.8}
             onPress={() => setSelectedReason(item.title)}
             style={[
               globalStyles.row,

@@ -1,13 +1,13 @@
 import MaterialIcons from '@react-native-vector-icons/material-design-icons';
-import React, { useEffect, useState, type FC } from 'react';
+import React, { useState, type FC } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { bookingSteps } from '../../stores/bookingStore';
+import { bookingSteps, useBookingStore } from '../../stores/bookingStore';
 import { Location } from '../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import AppButton from '../AppButton';
-import SearchAutocomplete from '../map/SearchAutocomplete';
+import SearchAutocomplete from '../map/CustomSearchAutocomplete/SearchAutocomplete';
 import BookingStepIndicator from './BookingStepIndicator';
 
 type LocationItem = {
@@ -19,12 +19,12 @@ type LocationItem = {
 };
 
 type Props = {
-  onSelectLocation: (location: Location) => void;
+  onSelectLocation: () => void;
   onCurrentLocationPress?: () => void;
   onPressChangeonMap: () => void;
   currentLocation?: Location;
-  pickupLocation?: Location;
-  destinationLocation?: Location;
+  pickupLocation?: Location | null;
+  destinationLocation?: Location | null;
   currentStep: string;
 };
 
@@ -61,7 +61,6 @@ const recentLocations: LocationItem[] = [
 
 const LocationSheet: FC<Props> = ({
   onSelectLocation,
-  currentLocation,
   currentStep,
   pickupLocation,
   destinationLocation,
@@ -72,6 +71,10 @@ const LocationSheet: FC<Props> = ({
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null,
   );
+
+  const setPickupLocation = useBookingStore(s => s.setPickupLocation);
+  const setDestinationLocation = useBookingStore(s => s.setDestinationLocation);
+
   const tabStyle = [
     globalStyles.flexStart,
     globalStyles.mB10,
@@ -80,21 +83,21 @@ const LocationSheet: FC<Props> = ({
     styles.text,
     styles.card,
   ];
-  useEffect(() => {
-    if (currentStep === 'PICKUP') {
-      setSelectedLocation(pickupLocation);
-    } else {
-      setSelectedLocation(destinationLocation);
-    }
-  }, [pickupLocation, destinationLocation, currentStep]);
 
   const handleSelectLocation = (location: Location) => {
     setSelectedLocation(location);
   };
 
   const handleConfirm = () => {
-    if (!selectedLocation) return;
-    onSelectLocation(selectedLocation);
+    if (currentStep === 'PICKUP' && !pickupLocation) {
+      return;
+    }
+    if (currentStep === 'DROP OFF' && !destinationLocation) {
+      return;
+    }
+
+    onSelectLocation();
+    setSelectedLocation(null);
   };
 
   const savedAddresses = recentLocations.filter(loc => loc.isSaved);
@@ -131,32 +134,38 @@ const LocationSheet: FC<Props> = ({
       )}
     </Pressable>
   );
+
+  const handleSearchLocationSelect = (location: Location) => {
+    if (currentStep === 'PICKUP') {
+      setPickupLocation(location);
+    } else {
+      setDestinationLocation(location);
+    }
+  };
+
   return (
-    // <BottomSheetScrollView
-    //   // scrollEnabled={true}
-    //   keyboardShouldPersistTaps="handled"
-    //   showsVerticalScrollIndicator={false}
-    //   style={globalStyles.padding15}
-    // >
     <View style={[globalStyles.flex, globalStyles.padding15]}>
       <BookingStepIndicator currentStep={currentStep} steps={bookingSteps} />
-      {pickupLocation?.address ? (
+      {pickupLocation?.address || currentStep === 'PICKUP' ? (
         <Text style={[styles.smallText, globalStyles.mT10]}>
-          From: <Text style={[styles.h6]}>{pickupLocation?.address}</Text>
+          From:{' '}
+          <Text style={[styles.h6]}>
+            {pickupLocation?.address ?? 'Add Pickup'}
+          </Text>
         </Text>
       ) : null}
 
-      {destinationLocation?.address ? (
+      {destinationLocation?.address || currentStep === 'DROP OFF' ? (
         <Text style={[styles.smallText, globalStyles.mB10]}>
           To:{' '}
           <Text style={[styles.h6, globalStyles.mB10]}>
-            {destinationLocation?.address}
+            {destinationLocation?.address ?? 'Add Destination'}
           </Text>
         </Text>
       ) : null}
 
       <SearchAutocomplete
-        setSelectedLocation={setSelectedLocation}
+        handleSearchLocationSelect={handleSearchLocationSelect}
         onPressChangeonMap={onPressChangeonMap}
       />
 
@@ -177,10 +186,7 @@ const LocationSheet: FC<Props> = ({
         onPress={handleConfirm}
         useGestureHandler={true}
         disabled={
-          pickupLocation !== null &&
-          destinationLocation?.address === 'Add Drop off Location'
-            ? true
-            : false
+          pickupLocation !== null && destinationLocation === null ? true : false
         }
       />
       {/* 

@@ -91,7 +91,7 @@ export const useUserSocket = () => {
         Alert.alert('Driver has cancelled the trip');
         return;
       }
-
+      console.log('trip dtatasu');
       setTrip(trip);
       setStep(trip.status);
 

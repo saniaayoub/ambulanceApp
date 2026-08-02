@@ -1,19 +1,24 @@
-import React, { type FC } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
-import { moderateScale } from 'react-native-size-matters';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
-import theme from '../../styles/theme';
 import { useNavigation } from '@react-navigation/native';
-import { showAlert } from '../../utils/functions';
+import React, { type FC } from 'react';
+import { Platform, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable } from 'react-native-gesture-handler';
+import { moderateScale } from 'react-native-size-matters';
 import { useBooking } from '../../hooks/useBooking';
 import { useBookingStore } from '../../stores/bookingStore';
+import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
+import theme from '../../styles/theme';
+import { showAlert } from '../../utils/functions';
 type Props = {
   currentStep: string;
   steps: string[];
 };
 
-const BookingStepIndicator: FC<Props> = ({ currentStep, steps }: any) => {
+const BookingStepIndicator: FC<Props> = ({
+  currentStep,
+  steps,
+  onBack,
+}: any) => {
   const styles = useGlobalStyles();
   const currentIndex = steps?.indexOf(currentStep?.toLowerCase());
   const { stopSearching } = useBooking();
@@ -25,6 +30,7 @@ const BookingStepIndicator: FC<Props> = ({ currentStep, steps }: any) => {
     switch (currentStep) {
       case 'PICKUP':
         // Go back to previous screen
+
         navigation.goBack();
         break;
 
@@ -36,6 +42,7 @@ const BookingStepIndicator: FC<Props> = ({ currentStep, steps }: any) => {
       case 'TRIP':
         // Return to destination selection
         setStep('DROP OFF');
+        onBack();
         break;
 
       case 'SEARCHING':
@@ -57,16 +64,26 @@ const BookingStepIndicator: FC<Props> = ({ currentStep, steps }: any) => {
         <Text style={styles.smallText}></Text>
 
         <View style={[globalStyles.row, { alignItems: 'center' }]}>
-          <TouchableOpacity
-            onPress={handleBackPress}
-            style={styles.indicatorDot}
-          >
-            <MaterialDesignIcons
-              name="chevron-left"
-              size={moderateScale(24)}
-              color={theme.colors.dark.background}
-            />
-          </TouchableOpacity>
+          {Platform.OS === 'android' ? (
+            <Pressable onPress={handleBackPress} style={styles.indicatorDot}>
+              <MaterialDesignIcons
+                name="chevron-left"
+                size={moderateScale(24)}
+                color={theme.colors.dark.background}
+              />
+            </Pressable>
+          ) : (
+            <TouchableOpacity
+              onPress={handleBackPress}
+              style={styles.indicatorDot}
+            >
+              <MaterialDesignIcons
+                name="chevron-left"
+                size={moderateScale(24)}
+                color={theme.colors.dark.background}
+              />
+            </TouchableOpacity>
+          )}
 
           <View style={[styles.indicatorLine, { width: 30, flex: 0 }]} />
         </View>

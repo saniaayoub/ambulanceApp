@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, type FC } from 'react';
 import {
-  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -8,11 +7,11 @@ import {
   View,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { verticalScale } from 'react-native-size-matters';
 import AppButton from '../../../../components/AppButton';
 import AmbulanceCategories from '../../../../components/booking/AmbulanceCategories';
 import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
 import RideCompletedSheet from '../../../../components/booking/RideCompletedSheet';
+import BottomSheet from '../../../../components/BottomSheet';
 import ActiveTripUser from '../../../../components/home/ActiveTripUser';
 import HomeHeader from '../../../../components/home/header';
 import HospitalsList from '../../../../components/home/HospitalsList';
@@ -27,7 +26,6 @@ import { useLocationStore } from '../../../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
 import { reasons_user } from '../../../../utils/constants';
 import { showAlert } from '../../../../utils/functions';
-import BottomSheet from '../../../../components/BottomSheet';
 
 const Home: FC = ({ navigation }: any) => {
   const bottomSheetRef = useRef<Modalize>(null);
@@ -42,6 +40,7 @@ const Home: FC = ({ navigation }: any) => {
     startBooking,
     setTrip,
     setStep,
+    bookingStep,
     destinationLocation,
   } = useBookingStore();
 
@@ -68,8 +67,15 @@ const Home: FC = ({ navigation }: any) => {
     if (homeData?.activeTrip) {
       setTrip(homeData?.activeTrip);
       setStep(homeData?.activeTrip?.status);
-      if (homeData?.activeTrip?.status === 'COMPLETED') {
+      console.log(bookingStep, 'll');
+      if (
+        homeData?.activeTrip?.status === 'COMPLETED' &&
+        bookingStep !== 'PICKUP'
+      ) {
+        console.log('hhia');
         bottomSheetRef?.current?.open();
+      } else {
+        bottomSheetRef?.current?.close();
       }
     }
   }, [homeData, setTrip, setStep]);
@@ -113,7 +119,7 @@ const Home: FC = ({ navigation }: any) => {
       <HomeHeader
         onOpenMenu={openDrawer}
         name={userData?.fullName}
-        locationLabel={currentLocation?.placeName}
+        locationLabel={currentLocation?.address}
         handleLocationPress={handleLocationSelect}
       />
 
@@ -151,23 +157,27 @@ const Home: FC = ({ navigation }: any) => {
           isLoading={isHomeLoading}
         />
         <AppButton title="Request Ambulance" onPress={handleRequestAmbulance} />
-        <View
-          style={[
-            globalStyles.row,
-            globalStyles.alignCenter,
-            globalStyles.justifyBetween,
-            globalStyles.mB10,
-          ]}
-        >
-          <Text style={styles.h5}>Nearby hospitals</Text>
-          <TouchableOpacity onPress={handleNavigateToHospital}>
-            <Text style={[styles.h6, styles.link]}>See All</Text>
-          </TouchableOpacity>
-        </View>
-        <HospitalsList
-          nearbyHospitals={nearbyHospitals}
-          startHospitalBooking={startHospitalBooking}
-        />
+        {nearbyHospitals?.length ? (
+          <>
+            <View
+              style={[
+                globalStyles.row,
+                globalStyles.alignCenter,
+                globalStyles.justifyBetween,
+                globalStyles.mB10,
+              ]}
+            >
+              <Text style={styles.h5}>Nearby hospitals</Text>
+              <TouchableOpacity onPress={handleNavigateToHospital}>
+                <Text style={[styles.h6, styles.link]}>See All</Text>
+              </TouchableOpacity>
+            </View>
+            <HospitalsList
+              nearbyHospitals={nearbyHospitals}
+              startHospitalBooking={startHospitalBooking}
+            />
+          </>
+        ) : null}
       </ScrollView>
       {/* 
       <View style={styles.fabContainer}>
@@ -202,9 +212,10 @@ const Home: FC = ({ navigation }: any) => {
             onKeepBooking={() => bottomSheetRef?.current?.close()}
             reasons={reasons_user}
             onCancelBooking={reason => {
-              handleBookingCancel(reason, () =>
-                bottomSheetRef.current?.close(),
-              );
+              handleBookingCancel(reason, () => {
+                console.log('hhi');
+                bottomSheetRef.current?.close();
+              });
             }}
           />
         )}

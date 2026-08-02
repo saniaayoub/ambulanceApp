@@ -1,6 +1,6 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Platform, Pressable, Text, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { TripData } from '../../stores/driverStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
@@ -41,7 +41,6 @@ const NavigateToPickupSheet = ({
   showCancel = true,
   distanceMeters,
   disableActionButton = distanceMeters !== undefined && distanceMeters > 100,
-  navigation,
 }: Props) => {
   const styles = useGlobalStyles();
 
@@ -151,6 +150,7 @@ const NavigateToPickupSheet = ({
               styles.border,
               styles.round,
             ]}
+            useGestureHandler={Platform.OS === 'android' ? true : false}
             textStyle={styles.text2}
           />
         )}
@@ -162,6 +162,7 @@ const NavigateToPickupSheet = ({
             globalStyles.mV5,
             showCancel ? globalStyles.halfwidth : { width: '100%' },
           ]}
+          useGestureHandler={Platform.OS === 'android' ? true : false}
           disabled={disableActionButton}
         />
       </View>

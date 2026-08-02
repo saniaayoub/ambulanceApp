@@ -28,6 +28,7 @@ export const ENDPOINTS = {
 
   PROFILE: {
     DRIVER_UPDATE: 'driver/profile',
+    USER_PROFILE: 'user/profile',
   },
 
   DRIVER: {

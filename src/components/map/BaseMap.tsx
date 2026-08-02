@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MapView, {
   Marker,
@@ -7,16 +7,18 @@ import MapView, {
   Region,
 } from 'react-native-maps';
 import { moderateScale } from 'react-native-size-matters';
-import { BookingStep } from '../../stores/bookingStore';
 import { globalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import BackButton from '../BackButton';
 import MapMarker from './MapMarker';
+import { fetchRoute } from '../../services/locationService';
+import { BookingStep } from '../../stores/bookingStore';
+import { useLoaderStore } from '../../stores/loaderStore';
 export interface MarkerData {
   id: string;
   latitude: number;
   longitude: number;
-  type: 'pickup' | 'destination' | 'driver' | 'hospital';
+  type: 'pickup' | 'destination' | 'driver' | 'hospital' | 'nearbyDrivers';
   title?: string;
 }
 
@@ -26,11 +28,12 @@ interface BaseMapProps {
   showsUserLocation?: boolean;
   followsUserLocation?: boolean;
   // region: Region;
+  step?: BookingStep;
   onRegionChangeComplete?: (region: Region) => void;
   showCenterPin?: boolean;
   children?: React.ReactNode;
   title?: string;
-  step?: BookingStep;
+  location?: string;
 }
 
 const BaseMap: React.FC<BaseMapProps> = ({
@@ -39,47 +42,82 @@ const BaseMap: React.FC<BaseMapProps> = ({
   showsUserLocation = true,
   followsUserLocation = false,
   // region,
+  step,
   onRegionChangeComplete,
   showCenterPin,
   children,
-  step,
+  location,
   title = '',
 }: BaseMapProps) => {
+  const mapRef = useRef<MapView>(null);
   const [routeCoords, setRouteCoords] = React.useState<any>([]);
+  const pickup = markers.find(m => m.id === 'pickup');
+  const destination = markers.find(m => m.id === 'destination');
+  const driver = markers.find(m => m.type === 'driver');
+  const [mapReady, setMapReady] = useState(false);
+  useEffect(() => {
+    getPolyLineData();
+  }, [
+    step,
+    pickup?.latitude,
+    pickup?.longitude,
+    destination?.latitude,
+    destination?.longitude,
+    driver?.latitude,
+    driver?.longitude,
+  ]);
+  const getPolyLineData = async () => {
+    if (step === 'PICKUP' || step === 'DROP OFF') {
+      return;
+    }
+    let origin = null;
+    let dest = null;
 
-  // useEffect(() => {
-  //   getPolyLineData();
-  // }, [markers, step]);
+    // Driver is coming to pickup
+    if (step === 'ASSIGNED' || step === 'WAITING') {
+      origin = driver;
+      dest = pickup;
+    }
 
-  // const getPolyLineData = async () => {
-  //   if (markers.length >= 2 && step === 'Trip Details') {
-  //     const pickup = markers.find(m => m.id === 'pickup');
-  //     const destination = markers.find(m => m.id === 'destination');
+    // Trip has started
+    else if (step === 'STARTED' || step === 'SEARCHING' || step === 'TRIP') {
+      origin = pickup;
+      dest = destination;
+    }
 
-  //     if (pickup && destination) {
-  //       let polylineData = await fetchRoute(pickup, destination);
+    if (!origin || !dest) {
+      setRouteCoords([]);
+      return;
+    }
+    try {
+      const polylineData = await fetchRoute(origin, dest);
+      setRouteCoords(polylineData);
 
-  //       const coords = [
-  //         { latitude: 24.889128, longitude: 67.176883 },
-  //         { latitude: 24.890429, longitude: 67.180381 },
-  //         { latitude: 24.891732, longitude: 67.183879 },
-  //         { latitude: 24.893034, longitude: 67.187377 },
-  //         { latitude: 24.894336, longitude: 67.190875 },
-  //         { latitude: 24.895638, longitude: 67.194373 },
-  //         { latitude: 24.89694, longitude: 67.197871 },
-  //         { latitude: 24.898428, longitude: 67.201865 },
-  //       ];
-  //       setRouteCoords(coords);
-  //       // setRouteCoords(polylineData);
-  //     }
-  //   }
-  // };
-
+      if (mapReady && polylineData.length > 1) {
+        setTimeout(() => {
+          mapRef.current?.fitToCoordinates(polylineData, {
+            edgePadding: {
+              top: 100,
+              bottom: 100,
+              left: 60,
+              right: 60,
+            },
+            animated: true,
+          });
+        }, 1000);
+      }
+    } catch (error) {
+      console.log('Failed to fetch route:', error);
+      setRouteCoords([]);
+    }
+  };
   return (
     <View style={globalStyles.flex}>
       <MapView
+        ref={mapRef}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
+        onMapReady={() => setMapReady(true)}
         initialRegion={initialRegion}
         showsUserLocation={showsUserLocation}
         followsUserLocation={followsUserLocation}
@@ -104,6 +142,7 @@ const BaseMap: React.FC<BaseMapProps> = ({
 
         {routeCoords?.length > 0 && (
           <Polyline
+            key={JSON.stringify(routeCoords[routeCoords?.length - 1])}
             coordinates={routeCoords}
             strokeWidth={4}
             strokeColor={theme.colors.common.primary}
@@ -115,7 +154,7 @@ const BaseMap: React.FC<BaseMapProps> = ({
           <Text style={styles.font30}>📍</Text>
         </View>
       )}
-      <BackButton title={title} />
+      <BackButton title={title} subTitle={location} />
 
       {children}
     </View>

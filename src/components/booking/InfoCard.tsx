@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Image,
   ImageSourcePropType,
+  Platform,
   Text,
   TouchableOpacity,
   View,
@@ -10,6 +11,7 @@ import {
 import { moderateScale } from 'react-native-size-matters';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
+import { Pressable } from 'react-native-gesture-handler';
 
 export type InfoCardProps = {
   image?: ImageSourcePropType;
@@ -116,7 +118,25 @@ const InfoCard = ({
             </Text>
           </View>
         )}
-        {onPress ? (
+        {onPress && Platform.OS === 'android' ? (
+          <Pressable
+            style={[
+              globalStyles.centered,
+              styles.border,
+              styles.round,
+              globalStyles.padding10,
+            ]}
+            onPress={onPress}
+          >
+            <MaterialDesignIcons
+              name="phone"
+              size={moderateScale(30)}
+              color={theme.colors.common.success}
+            />
+          </Pressable>
+        ) : null}
+
+        {onPress && Platform.OS === 'ios' ? (
           <TouchableOpacity
             style={[
               globalStyles.centered,

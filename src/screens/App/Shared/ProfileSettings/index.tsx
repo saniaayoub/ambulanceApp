@@ -15,11 +15,14 @@ import FormInput from '../../../../components/FormInput';
 import { useForm } from 'react-hook-form';
 import { useDriver } from '../../../../hooks/useDriver';
 import { useProfile } from '../../../../hooks/useProfile';
+import { useAuth } from '../../../../hooks/useAuth';
 
 const ProfileSettings = () => {
   const userData = useAuthStore(state => state.userData);
   const { data, isLoading } = useDriver(userData?.driverId);
+
   const { updateDriverProfile } = useProfile();
+  const { logout } = useAuth();
 
   const role = useAuthStore(state => state.role);
   const styles = useGlobalStyles();
@@ -164,12 +167,12 @@ const ProfileSettings = () => {
         {role === Roles.DRIVER && (
           <PerformanceCard rating={data?.rating} tripCount={data?.tripCount} />
         )}
-        {role === Roles.USER && <SavedAddresses />}
+        {/* {role === Roles.USER && <SavedAddresses />} */}
 
         <SettingsSection />
 
         <View style={globalStyles.mT10}>
-          <AppButton title="Logout" icon="logout" size="sm" />
+          <AppButton title="Logout" icon="logout" size="sm" onPress={logout} />
         </View>
       </ScrollView>
     </View>

@@ -1,10 +1,12 @@
 import React, { useEffect, useState, type FC } from 'react';
-import { Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import useDriverTrips from '../../hooks/useDriverTrips';
 import { useDriverStore } from '../../stores/driverStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import AppButton from '../AppButton';
 import DetailColumnComp from '../booking/DetailColumnComp';
+import { Location } from './ActiveTrip';
+import theme from '../../styles/theme';
 const COUNTDOWN_SECONDS = 15;
 
 const IncomingRequestSheet: FC = ({ bottomSheetRef }: any) => {
@@ -65,13 +67,39 @@ const IncomingRequestSheet: FC = ({ bottomSheetRef }: any) => {
         New Ride incomingRequest
       </Text>
 
-      <DetailColumnComp
+      {/* <DetailColumnComp
         title1="Pickup"
         text1={incomingRequest?.pickupLocation?.address}
         title2="Destination"
         text2={incomingRequest?.destination?.address}
-      />
+      /> */}
 
+      {/* Pickup */}
+      <View style={[globalStyles.paddingH10, globalStyles.mB20]}>
+        <Location
+          color={theme.colors.common.success}
+          value={incomingRequest?.pickupLocation?.address || 'N/A'}
+          styles={styles}
+        />
+
+        {/* Divider */}
+        <View style={[globalStyles.row, globalStyles.alignCenter]}>
+          <View style={[globalStyles.mL3, globalStyles.mR10]}>
+            <View style={[styles.greyCard, styles.dot]} />
+            <View style={[styles.greyCard, styles.dot]} />
+            <View style={[styles.greyCard, styles.dot]} />
+          </View>
+
+          <View style={styles.horizontalLine} />
+        </View>
+
+        {/* Destination */}
+        <Location
+          color={theme.colors.common.warning}
+          value={incomingRequest?.destination?.address || 'N/A'}
+          styles={styles}
+        />
+      </View>
       <DetailColumnComp
         title1="Distance"
         text1={`${incomingRequest?.distanceKm} Km`}
@@ -93,12 +121,14 @@ const IncomingRequestSheet: FC = ({ bottomSheetRef }: any) => {
             globalStyles.mV5,
           ]}
           textStyle={styles.text2}
+          useGestureHandler={Platform.OS === 'android' ? true : false}
         />
 
         <AppButton
           title="Accept"
           onPress={() => accept(incomingRequest?.tripId)}
           style={[globalStyles.mV5, globalStyles.halfwidth]}
+          useGestureHandler={Platform.OS === 'android' ? true : false}
         />
       </View>
     </View>

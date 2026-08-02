@@ -12,7 +12,7 @@ import { Roles } from '../utils/enums';
 
 const CustomDrawerContent: FC<any> = props => {
   const styles = useGlobalStyles();
-  const { clearToken, logout } = useAuth();
+  const { logout } = useAuth();
   const { userData } = useAuthStore();
 
   const activeRoute = props.state.routeNames[props.state.index];

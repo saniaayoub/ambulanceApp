@@ -1,17 +1,19 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import React, { FC } from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable } from 'react-native-gesture-handler';
 import { moderateScale } from 'react-native-size-matters';
 import { User } from '../../assets/images/pngs';
+import { DriverTrackingInfo } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import { ambulanceImages } from '../../utils/constants';
 import { makeaCall } from '../../utils/functions';
 import AppButton from '../AppButton';
-import DetailColumnComp from './DetailColumnComp';
+import { Location } from '../driver/ActiveTrip';
 import InfoCard from './InfoCard';
 import WaitingComponent from './WaitingComponent';
-import { DriverTrackingInfo } from '../../stores/bookingStore';
+import ShowWaitingTimer from '../driver/ShowWaitingTimer';
 
 type Props = {
   trip: any;
@@ -28,20 +30,33 @@ const DriverAssignedSheet: FC<Props> = ({
 }: Props) => {
   const styles = useGlobalStyles();
   const driver = trip?.driver || trip?.driverId;
+
   return (
     <View style={[globalStyles.flex, globalStyles.padding15]}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.goBack();
-        }}
-        style={styles.indicatorDot}
-      >
-        <MaterialDesignIcons
-          name="chevron-left"
-          size={moderateScale(24)}
-          color={theme.colors.dark.background}
-        />
-      </TouchableOpacity>
+      {Platform.OS === 'android' ? (
+        <Pressable
+          onPress={() => navigation.goBack()}
+          style={styles.indicatorDot}
+        >
+          <MaterialDesignIcons
+            name="chevron-left"
+            size={moderateScale(24)}
+            color={theme.colors.dark.background}
+          />
+        </Pressable>
+      ) : (
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.indicatorDot}
+        >
+          <MaterialDesignIcons
+            name="chevron-left"
+            size={moderateScale(24)}
+            color={theme.colors.dark.background}
+          />
+        </TouchableOpacity>
+      )}
+
       <View
         style={[
           globalStyles.row,
@@ -54,9 +69,9 @@ const DriverAssignedSheet: FC<Props> = ({
           <Text style={[styles.h5]}>{trip?.ambulanceType} Ambulance</Text>
 
           {trip?.status === 'WAITING' ? (
-            <WaitingComponent
-              styles={styles}
+            <ShowWaitingTimer
               waitingStartedAt={trip?.waitingStartedAt}
+              styles={styles}
             />
           ) : trip?.status === 'STARTED' ? (
             <Text style={[styles.lightText]}>
@@ -80,6 +95,17 @@ const DriverAssignedSheet: FC<Props> = ({
               Rs. {trip?.fare?.total?.toLocaleString()}
             </Text>
           </View>
+          {tracking ? (
+            <View style={[globalStyles.row, globalStyles.alignCenter]}>
+              <MaterialDesignIcons
+                name="car"
+                size={moderateScale(20)}
+                color={theme.colors.common.success}
+              />
+
+              <Text style={[styles.smallText]}>{tracking?.distanceText}</Text>
+            </View>
+          ) : null}
         </View>
         <View>
           <Image
@@ -99,7 +125,31 @@ const DriverAssignedSheet: FC<Props> = ({
           </View>
         </View>
       </View>
+      {/* Pickup */}
+      <Location
+        color={theme.colors.common.success}
+        value={trip?.pickupLocation?.address || 'N/A'}
+        styles={styles}
+      />
+      {/* <View
+        style={[styles.verticalLine, globalStyles.height20, styles.buttonCard]}
+      /> */}
+      <View style={[globalStyles.row, globalStyles.alignCenter]}>
+        <View style={[globalStyles.mR20]}>
+          <View style={[styles.greyCard, styles.dot]} />
+          <View style={[styles.greyCard, styles.dot]} />
+          <View style={[styles.greyCard, styles.dot]} />
+        </View>
+        <View style={styles.horizontalLine} />
+      </View>
 
+      {/* Destination */}
+      <Location
+        color={theme.colors.common.warning}
+        value={trip?.destination?.address}
+        styles={styles}
+      />
+      <View style={globalStyles.mT10} />
       {/* DRIVER INFORMATION */}
       <InfoCard
         image={
@@ -112,14 +162,7 @@ const DriverAssignedSheet: FC<Props> = ({
         value={`⭐ ${driver?.rating ?? 0}`}
         onPress={() => makeaCall(driver?.userId?.phone)}
       />
-      {/* DROP OFF INFORMATION */}
-      <DetailColumnComp
-        title1={'Pickup'}
-        title2={'Destination'}
-        text1={trip?.pickupLocation?.address}
-        text2={trip?.destination?.address}
-        // style={globalStyles.mT10}
-      />
+
       <InfoCard
         icon={'cash'}
         name={'Payment Method'}
@@ -138,6 +181,7 @@ const DriverAssignedSheet: FC<Props> = ({
         disabled={trip?.status === 'STARTED' || trip?.status === 'COMPLETED'}
         title="Cancel Ride"
         onPress={onCancel}
+        useGestureHandler={true}
       />
     </View>
   );

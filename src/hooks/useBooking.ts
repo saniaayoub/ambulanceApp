@@ -30,6 +30,7 @@ export const useBooking = () => {
   const { showLoader, hideLoader } = useLoaderStore();
   const setTrip = useBookingStore(state => state.setTrip);
   const setStep = useBookingStore(state => state.setStep);
+  const resetBooking = useBookingStore(state => state.resetBooking);
 
   const trip = useBookingStore(state => state.trip);
 
@@ -117,6 +118,8 @@ export const useBooking = () => {
       setStep('');
       queryClient.invalidateQueries({ queryKey: ['home-data'] });
       onSuccess?.();
+      resetBooking();
+
       if (!onSuccess) {
         navigation?.goBack();
       }
@@ -138,6 +141,8 @@ export const useBooking = () => {
       setTrip(null);
       setStep('');
       queryClient.invalidateQueries({ queryKey: ['home-data'] });
+      resetBooking();
+
       if (!fromHome) {
         navigation?.goBack();
       }
@@ -147,7 +152,6 @@ export const useBooking = () => {
   };
 
   const submitReviewHandler = async (payload: any, bottomSheetRef?: any) => {
-    showLoader();
     showLoader();
     try {
       const response = await submitReview(payload);
@@ -159,6 +163,8 @@ export const useBooking = () => {
       setStep('');
       queryClient.invalidateQueries({ queryKey: ['home-data'] });
       toastSuccess('Thank you for your feedback', 'Review Submitted');
+      resetBooking();
+
       if (bottomSheetRef) {
         bottomSheetRef.current.close();
         return;

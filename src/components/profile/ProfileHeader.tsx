@@ -38,7 +38,7 @@ const ProfileHeader = ({ name, image, uploadImage }: Props) => {
                 uploadImage(selectedImage);
               }
             } catch (error) {
-              console.log(error);
+              console.log(error, 'camera error');
             }
           },
         },
@@ -52,7 +52,7 @@ const ProfileHeader = ({ name, image, uploadImage }: Props) => {
                 uploadImage(selectedImage);
               }
             } catch (error) {
-              console.log(error);
+              console.log(error, 'camera error');
             }
           },
         },

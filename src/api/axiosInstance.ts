@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from '../stores/authStore';
 import { API_BASE_URL } from './environment';
 
-export const BaseURL = 'http://192.168.1.2:5000';
+export const BaseURL = 'http://192.168.1.4:5000';
 // export const BaseURL = 'https://ambulanceappbe.onrender.com';
 
 const axiosInstance = axios.create({
@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   config => {
-    const { token } = useAuthStore.getState();
+    const token = useAuthStore.getState().token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

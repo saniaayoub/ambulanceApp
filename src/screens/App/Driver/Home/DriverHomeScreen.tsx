@@ -85,7 +85,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
       <HomeHeader
         onOpenMenu={openDrawer}
         name={data?.fullName}
-        locationLabel={currentLocation?.placeName}
+        locationLabel={currentLocation?.address}
         role={userData?.role}
       />
 
@@ -111,7 +111,7 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
           image={ambulanceImages[userData?.ambulanceType]}
           text={data?.vehicleNumber}
           label={'Rating'}
-          value={`${data?.rating}★`}
+          value={`${stats?.rating}★`}
         />
 
         {/* Stats Row - Today's Earnings & Completed Trips */}
@@ -127,7 +127,10 @@ const DriverHomeScreen: FC<Props> = ({ navigation }: Props) => {
           <HomeMapComp />
         </View> */}
       </ScrollView>
-      <BottomSheet bottomSheetRef={bottomSheetRef} height={screenHeight * 0.5}>
+      <BottomSheet
+        bottomSheetRef={bottomSheetRef}
+        modalHeight={screenHeight * 0.6}
+      >
         <IncomingRequestSheet bottomSheetRef={bottomSheetRef} />
       </BottomSheet>
     </View>

@@ -4,6 +4,7 @@ import { DriverTrackingInfo } from '../../stores/bookingStore';
 import { globalStyles, useGlobalStyles } from '../../styles/globalStyles';
 import theme from '../../styles/theme';
 import AppButton from '../AppButton';
+import { moderateScale } from 'react-native-size-matters';
 
 export const Location = ({
   color,
@@ -28,7 +29,15 @@ export const Location = ({
       >
         <View style={[styles.round, globalStyles.size5, styles.card]} />
       </View>
-      <Text style={[styles.smallText, globalStyles.mT5]}>{value}</Text>
+      <Text
+        style={[
+          styles.smallText,
+          globalStyles.mT5,
+          { marginRight: moderateScale(15) },
+        ]}
+      >
+        {value}
+      </Text>
     </View>
   );
 };
@@ -94,7 +103,7 @@ const ActiveTripComp = ({
         };
       case 'COMPLETED':
         return {
-          title: 'Payment Recieved',
+          title: 'Paid',
           onPress: onPaymentRecieved, // or onStartTrip if intentional
           disabled: false,
         };

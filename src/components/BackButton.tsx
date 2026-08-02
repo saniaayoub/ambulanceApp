@@ -1,13 +1,22 @@
-import React from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
-import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
-import { moderateScale } from 'react-native-size-matters';
-import theme from '../styles/theme';
-import { useThemeStore } from '../stores/themeStore';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { Platform, Text, TouchableOpacity, View } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
+import { useThemeStore } from '../stores/themeStore';
+import { globalStyles, useGlobalStyles } from '../styles/globalStyles';
+import theme from '../styles/theme';
+import { Pressable } from 'react-native-gesture-handler';
 
-const BackButton = ({ title, style }: { title?: string; style?: object }) => {
+const BackButton = ({
+  title,
+  style,
+  subTitle,
+}: {
+  title?: string;
+  style?: object;
+  subTitle?: string;
+}) => {
   const isDark = useThemeStore(state => state.isDark);
   const styles = useGlobalStyles();
   const navigation = useNavigation();
@@ -22,19 +31,45 @@ const BackButton = ({ title, style }: { title?: string; style?: object }) => {
         style,
       ]}
     >
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <MaterialDesignIcons
-          name="chevron-left"
-          size={moderateScale(24)}
-          color={
-            isDark
-              ? theme.colors.light.background
-              : theme.colors.dark.background
-          }
-        />
-      </TouchableOpacity>
+      {Platform.OS === 'android' ? (
+        <Pressable onPress={() => navigation.goBack()}>
+          <MaterialDesignIcons
+            name="chevron-left"
+            size={moderateScale(24)}
+            color={
+              isDark
+                ? theme.colors.light.background
+                : theme.colors.dark.background
+            }
+          />
+        </Pressable>
+      ) : (
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <MaterialDesignIcons
+            name="chevron-left"
+            size={moderateScale(24)}
+            color={
+              isDark
+                ? theme.colors.light.background
+                : theme.colors.dark.background
+            }
+          />
+        </TouchableOpacity>
+      )}
+
       {title ? (
-        <Text style={[styles.h4, globalStyles.mL10]}>{title}</Text>
+        <>
+          <Text style={[styles.h4, globalStyles.mL10, globalStyles.mR20]}>
+            {title}
+
+            {subTitle && (
+              <Text style={[styles.smallText]}>
+                {'\n'}
+                {subTitle}
+              </Text>
+            )}
+          </Text>
+        </>
       ) : null}
     </View>
   );

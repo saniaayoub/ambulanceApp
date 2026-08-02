@@ -24,7 +24,6 @@ const RideCompletedSheet = ({ trip, onSubmitReview }: Props) => {
   const styles = useGlobalStyles();
 
   const [rating, setRating] = useState(0);
-  console.log(trip);
 
   const driverData = trip?.driver || trip?.driverId;
   return (
@@ -101,7 +100,17 @@ const RideCompletedSheet = ({ trip, onSubmitReview }: Props) => {
               value={trip?.pickupLocation?.address || 'N/A'}
               styles={styles}
             />
-
+            <AppButton
+              useGestureHandler={true}
+              title="Submit Review"
+              onPress={() =>
+                onSubmitReview({
+                  rating: rating,
+                  review: 'Driver behavior is good.',
+                  tripId: trip?._id || trip?.id,
+                })
+              }
+            />
             <View style={[globalStyles.row, globalStyles.alignCenter]}>
               <View style={globalStyles.mR20}>
                 <View style={[styles.greyCard, styles.dot]} />
@@ -119,16 +128,6 @@ const RideCompletedSheet = ({ trip, onSubmitReview }: Props) => {
           </View>
         </View>
       </View>
-      <AppButton
-        title="Submit Review"
-        onPress={() =>
-          onSubmitReview({
-            rating: rating,
-            review: 'Driver behavior is good.',
-            tripId: trip?._id || trip?.id,
-          })
-        }
-      />
     </View>
   );
 };

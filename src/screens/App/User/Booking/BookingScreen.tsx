@@ -7,8 +7,8 @@ import React, {
   useState,
 } from 'react';
 import { Keyboard, View } from 'react-native';
+import { Region } from 'react-native-maps';
 import { Modalize } from 'react-native-modalize';
-import { moderateScale } from 'react-native-size-matters';
 import AppButton from '../../../../components/AppButton';
 import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
 import DriverAssignedSheet from '../../../../components/booking/DriverAssignedSheet';
@@ -20,14 +20,16 @@ import BottomSheet from '../../../../components/BottomSheet';
 import BaseMap from '../../../../components/map/BaseMap';
 import { useBooking } from '../../../../hooks/useBooking';
 import { useLocation } from '../../../../hooks/useLocation';
-import { BookingStep, useBookingStore } from '../../../../stores/bookingStore';
-import { Location, useLocationStore } from '../../../../stores/locationStore';
+import { useBookingStore } from '../../../../stores/bookingStore';
+import { useLocationStore } from '../../../../stores/locationStore';
 import { globalStyles } from '../../../../styles/globalStyles';
 import { reasons_user, screenHeight } from '../../../../utils/constants';
 import { showAlert } from '../../../../utils/functions';
+
 const BookingScreen = ({ navigation }: any) => {
   const bottomSheetRef = useRef<Modalize>(null);
   const { currentLocation } = useLocationStore();
+  const [isOpen, setIsOpen] = useState(true);
   const {
     getEstimate,
     getOnlineDriversList,
@@ -37,6 +39,10 @@ const BookingScreen = ({ navigation }: any) => {
     handleBookingCancel,
     submitReviewHandler,
   } = useBooking();
+
+  const [selectedLocation, setSelectedLocation] =
+    useState<any>(currentLocation);
+
   const { getLocationWithName } = useLocation();
   const bookingStep = useBookingStore(s => s.bookingStep);
   const trip = useBookingStore(s => s.trip);
@@ -49,15 +55,12 @@ const BookingScreen = ({ navigation }: any) => {
   const setDestinationLocation = useBookingStore(s => s.setDestinationLocation);
   const setSelectedAmbulance = useBookingStore(s => s.setSelectedAmbulance);
   const setStep = useBookingStore(s => s.setStep);
-
-  const region = useMemo(() => {
-    return {
-      latitude: currentLocation?.latitude || 24.606,
-      longitude: currentLocation?.longitude || 67.101,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    };
-  }, [currentLocation]);
+  const [region, setRegion] = useState<Region>({
+    latitude: currentLocation?.latitude,
+    longitude: currentLocation?.longitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  });
 
   const [selected, setSelected] = useState({
     latitude: currentLocation?.latitude,
@@ -69,50 +72,106 @@ const BookingScreen = ({ navigation }: any) => {
 
   useFocusEffect(
     useCallback(() => {
+      setSelectedLocation(pickupLocation);
+      setRegion({
+        latitude: currentLocation?.latitude,
+        longitude: currentLocation?.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+
       if (trip?.status === 'SEARCHING') {
         getOnlineDriversList(trip?.ambulanceType, trip?.pickupLocation);
       }
 
       requestAnimationFrame(() => {
         bottomSheetRef.current?.open();
+        setIsOpen(true);
       });
     }, []), // Keep this array empty
   );
 
+  useEffect(() => {
+    let timeout;
+    if (bookingStep === 'PICKUP' || bookingStep === 'DROP OFF') {
+      timeout = setTimeout(() => {
+        bottomSheetRef?.current?.open();
+        setIsOpen(true);
+      }, 100);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [bookingStep]);
+
+  const handleRegionChangeComplete = async (region: Region) => {
+    if (!isOpen && (bookingStep === 'PICKUP' || bookingStep === 'DROP OFF')) {
+      setSelected(region);
+
+      const location = await getLocationWithName(
+        region.latitude,
+        region.longitude,
+      );
+      if (location) {
+        setSelectedLocation(location);
+      }
+    }
+  };
   const markers = useMemo(
     () => [
-      ...(pickupLocation
+      ...(pickupLocation || trip?.pickupLocation
         ? [
             {
               id: 'pickup',
-              latitude: pickupLocation.latitude,
-              longitude: pickupLocation.longitude,
+              latitude: trip?.pickupLocation?.lat ?? pickupLocation?.latitude,
+              longitude: trip?.pickupLocation?.lng ?? pickupLocation?.longitude,
               type: 'pickup' as const,
             },
           ]
         : []),
 
-      ...(destinationLocation
+      ...(destinationLocation || trip?.destination
         ? [
             {
               id: 'destination',
-              latitude: destinationLocation.latitude,
-              longitude: destinationLocation.longitude,
+              latitude: trip?.destination?.lat ?? destinationLocation?.latitude,
+              longitude:
+                trip?.destination?.lng ?? destinationLocation?.longitude,
               type: 'destination' as const,
             },
           ]
         : []),
 
-      ...(bookingStep === 'SEARCHING'
+      ...(driverTracking || trip?.driverId?.currentLocation
+        ? [
+            {
+              id: 'driver',
+              latitude:
+                driverTracking?.lat ?? trip?.driverId?.currentLocation?.lat,
+              longitude:
+                driverTracking?.lng ?? trip?.driverId?.currentLocation?.lng,
+              type: 'driver' as const,
+            },
+          ]
+        : []),
+
+      ...(bookingStep === 'SEARCHING' || bookingStep === 'TRIP'
         ? nearbyDrivers.map((item: any) => ({
-            id: item?.user?.phone, // or any unique value
+            id: 'nearbydriver', // or any unique value
             latitude: item?.currentLocation?.lat,
             longitude: item?.currentLocation?.lng,
-            type: 'driver' as const,
+            type: 'nearbydriver' as const,
           }))
         : []),
     ],
-    [pickupLocation, destinationLocation, bookingStep, nearbyDrivers],
+    [
+      pickupLocation,
+      destinationLocation,
+      driverTracking,
+      trip,
+      bookingStep,
+      nearbyDrivers,
+    ],
   );
 
   const handleRideCancel = () => {
@@ -139,6 +198,7 @@ const BookingScreen = ({ navigation }: any) => {
 
     setTimeout(() => {
       bottomSheetRef.current?.close();
+      setIsOpen(false);
     }, 100);
   }, []);
 
@@ -155,8 +215,7 @@ const BookingScreen = ({ navigation }: any) => {
               setStep('DROP OFF');
             }}
             onPressChangeonMap={changeLocationOnMap}
-            onSelectLocation={location => {
-              setPickupLocation(location);
+            onSelectLocation={() => {
               setStep('DROP OFF');
             }}
           />
@@ -168,7 +227,7 @@ const BookingScreen = ({ navigation }: any) => {
             pickupLocation={pickupLocation}
             destinationLocation={destinationLocation}
             currentStep={bookingStep}
-            onSelectLocation={getEstimatedData}
+            onSelectLocation={fetchDrivers}
             onPressChangeonMap={changeLocationOnMap}
           />
         );
@@ -181,7 +240,16 @@ const BookingScreen = ({ navigation }: any) => {
             selectedAmbulance={selectedAmbulance}
             pickupLocation={pickupLocation?.address}
             destinationLocation={destinationLocation?.address}
-            setSelectedAmbulance={setSelectedAmbulance}
+            setSelectedAmbulance={ambulance => {
+              setSelectedAmbulance(ambulance);
+              fetchDrivers(ambulance?.type);
+            }}
+            onBack={() => {
+              setTimeout(() => {
+                bottomSheetRef?.current?.open();
+                setIsOpen(true);
+              }, 100);
+            }}
             onNext={handleSearchStart}
           />
         );
@@ -261,66 +329,117 @@ const BookingScreen = ({ navigation }: any) => {
       setDestinationLocation(location);
     }
 
+    setIsOpen(true);
     bottomSheetRef.current?.open();
   };
 
-  const getEstimatedData = async (location: Location) => {
-    setDestinationLocation(location);
-    let data = await getEstimate({
-      pickupLocation: pickupLocation,
-      destination: location,
+  useEffect(() => {
+    if (pickupLocation && destinationLocation) {
+      fetchEstimate();
+    }
+  }, [pickupLocation, destinationLocation, selectedAmbulance]);
+
+  const fetchEstimate = async () => {
+    const data = await getEstimate({
+      pickupLocation,
+      destination: destinationLocation,
       ambulanceType: selectedAmbulance?.type,
     });
-    getOnlineDriversList(selectedAmbulance?.type, pickupLocation);
-    setStep('TRIP');
+
+    console.log(data, 'estimate');
+
+    if (!data) return;
     setEstimate(data);
+  };
+
+  const fetchDrivers = async (ambulanceType?: string) => {
+    const ambType = ambulanceType ?? selectedAmbulance?.type;
+
+    await getOnlineDriversList(ambType, pickupLocation);
+    setStep('TRIP');
   };
 
   const showCenterPin = bookingStep === 'PICKUP' || bookingStep === 'DROP OFF';
 
-  const getBottomSheetHeight = (status: BookingStep) => {
-    switch (status) {
+  const getBookingTitle = (bookingStep: string): string => {
+    switch (bookingStep) {
       case 'PICKUP':
       case 'DROP OFF':
-      case 'CANCELLED':
-        return screenHeight * 0.9;
-
-      case 'COMPLETED':
-        return screenHeight * 0.98;
-      case 'ASSIGNED':
-      case 'STARTED':
-      case 'WAITING':
       case 'TRIP':
-        return screenHeight * 0.8;
+        return 'Booking Ambulance';
 
       case 'SEARCHING':
-        return screenHeight * 0.5;
+        return 'Searching Ambulance';
 
       default:
-        return moderateScale(300);
+        return 'Ongoing Trip';
     }
   };
 
+  const bottomSheetConfig = useMemo(() => {
+    switch (bookingStep) {
+      case 'PICKUP':
+      case 'DROP OFF':
+        return {
+          modalHeight: screenHeight * 0.85,
+          alwaysOpen: screenHeight * 0.85,
+          panGestureEnabled: false,
+        };
+
+      case 'SEARCHING':
+        return {
+          modalHeight: screenHeight * 0.8,
+          alwaysOpen: screenHeight * 0.2,
+          panGestureEnabled: true,
+        };
+
+      case 'TRIP':
+      case 'ASSIGNED':
+      case 'WAITING':
+      case 'STARTED':
+        return {
+          modalHeight: screenHeight * 0.9,
+          alwaysOpen: screenHeight * 0.3,
+          panGestureEnabled: true,
+        };
+
+      default:
+        return {
+          modalHeight: screenHeight * 0.9,
+          alwaysOpen: screenHeight * 0.9,
+          panGestureEnabled: false,
+        };
+    }
+  }, [bookingStep]);
   return (
     <View style={globalStyles.flex}>
       <BaseMap
         initialRegion={region}
         markers={markers}
         step={bookingStep}
-        title={'Booking Ambulance'}
-        onRegionChangeComplete={setSelected}
+        title={getBookingTitle(bookingStep)}
+        onRegionChangeComplete={handleRegionChangeComplete}
         showCenterPin={showCenterPin}
+        location={
+          trip?.destination?.address ??
+          pickupLocation?.address ??
+          selectedLocation?.address
+        }
       >
-        <AppButton
-          title="Confirm Location"
-          style={globalStyles.absBottomTxt}
-          onPress={onConfirmLocation}
-        />
+        {bookingStep === 'PICKUP' || bookingStep === 'DROP OFF' ? (
+          <AppButton
+            title="Confirm Location"
+            style={globalStyles.absBottomTxt}
+            onPress={onConfirmLocation}
+          />
+        ) : null}
       </BaseMap>
 
       <BottomSheet
         bottomSheetRef={bottomSheetRef}
-        height={getBottomSheetHeight(bookingStep)}
+        modalHeight={bottomSheetConfig.modalHeight}
+        alwaysOpen={bottomSheetConfig.alwaysOpen}
+        panGestureEnabled={bottomSheetConfig.panGestureEnabled}
       >
         {renderSheetContent()}
       </BottomSheet>

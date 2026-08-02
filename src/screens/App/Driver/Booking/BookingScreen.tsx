@@ -2,21 +2,21 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getDistance } from 'geolib';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Alert, View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { moderateScale } from 'react-native-size-matters';
 import CancelRideBottomSheet from '../../../../components/booking/CancelRideBottomSheet';
+import BottomSheet from '../../../../components/BottomSheet';
 import NavigateToPickupSheet from '../../../../components/driver/NavigateToPickupSheet';
+import TripCompletedSheet from '../../../../components/driver/TripCompletedSheet';
 import BaseMapDriver, {
   MarkerData,
 } from '../../../../components/map/BaseMapDriver';
 import useDriverTrips from '../../../../hooks/useDriverTrips';
 import { useDriverStore } from '../../../../stores/driverStore';
 import { useLocationStore } from '../../../../stores/locationStore';
-import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
-import { formatDistance, showAlert } from '../../../../utils/functions';
-import TripCompletedSheet from '../../../../components/driver/TripCompletedSheet';
+import { globalStyles } from '../../../../styles/globalStyles';
 import { reasons_driver, screenHeight } from '../../../../utils/constants';
-import BottomSheet from '../../../../components/BottomSheet';
-import { Modalize } from 'react-native-modalize';
-import { moderateScale, verticalScale } from 'react-native-size-matters';
+import { formatDistance, showAlert } from '../../../../utils/functions';
 
 // SEARCHING / ASSIGNED -> ASSIGNED
 // ARRIVED / STARTED -> trip_in_progress
@@ -78,9 +78,11 @@ const BookingScreen = ({ navigation }: any) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      requestAnimationFrame(() => {
+      bottomSheetRef.current?.open();
+
+      setTimeout(() => {
         bottomSheetRef.current?.open();
-      });
+      }, 100);
 
       return () => {};
     }, []),
@@ -283,20 +285,37 @@ const BookingScreen = ({ navigation }: any) => {
     );
   };
 
-  const getBottomSheetHeight = (status: TripStatus) => {
+  const getBottomSheetHeight = (status: string) => {
     switch (status) {
       case 'ASSIGNED':
       case 'WAITING':
       case 'STARTED':
-        return screenHeight * 0.5;
+        return screenHeight * 0.65;
 
       case 'COMPLETED':
-        return screenHeight * 0.7;
-      case 'CANCEL':
         return screenHeight * 0.85;
+      case 'CANCEL':
+        return screenHeight * 0.9;
 
       default:
         return moderateScale(300);
+    }
+  };
+
+  const getAlwaysOpenHeight = (bookingStep: string) => {
+    switch (bookingStep) {
+      case 'ASSIGNED':
+      case 'WAITING':
+      case 'STARTED':
+        return screenHeight * 0.28;
+
+      case 'COMPLETED':
+        return screenHeight * 0.85;
+      case 'CANCEL':
+        return screenHeight * 0.9;
+
+      default:
+        return screenHeight * 0.5;
     }
   };
 
@@ -311,7 +330,9 @@ const BookingScreen = ({ navigation }: any) => {
 
       <BottomSheet
         bottomSheetRef={bottomSheetRef}
-        height={getBottomSheetHeight(tripStep)}
+        modalHeight={getBottomSheetHeight(tripStep)}
+        alwaysOpen={getAlwaysOpenHeight(tripStep)}
+        panGestureEnabled={true}
       >
         {renderBottomSheet()}
       </BottomSheet>

@@ -17,7 +17,7 @@ const SearchAutocomplete = ({ setSelectedLocation, onPressChangeonMap }) => {
       fetchDetails
       debounce={300}
       query={{
-        key: Config.GOOGLE_MAPS_API_KEY,
+        key: Config.API_KEY,
         language: 'en',
       }}
       onPress={(data, details = null) => {
@@ -29,6 +29,9 @@ const SearchAutocomplete = ({ setSelectedLocation, onPressChangeonMap }) => {
             longitude: location.lng,
           });
         }
+      }}
+      onFail={error => {
+        console.log('Places Error:', error);
       }}
       textInputProps={{
         placeholderTextColor: '#999',

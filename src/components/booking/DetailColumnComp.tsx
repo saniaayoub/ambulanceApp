@@ -10,6 +10,7 @@ import {
   PickupSvg,
 } from '../../assets/images/svgs';
 import { moderateScale } from 'react-native-size-matters';
+import theme from '../../styles/theme';
 
 type DetailCardProps = {
   title1: string;
@@ -52,7 +53,16 @@ const DetailCard: FC<DetailCardProps> = ({
 
           <Text style={[globalStyles.mL10, styles.smallText]}>{title1}</Text>
         </View>
-        <Text style={[styles.h6, textStyle]}>{text1}</Text>
+        <Text
+          style={[
+            styles.smallText,
+            textStyle,
+            globalStyles.textCenter,
+            { fontFamily: theme.fonts.bold },
+          ]}
+        >
+          {text1}
+        </Text>
       </Pressable>
       <View style={styles.verticalLine} />
       <Pressable style={styles.statBox}>
@@ -69,7 +79,16 @@ const DetailCard: FC<DetailCardProps> = ({
           )}
           <Text style={[globalStyles.mL10, styles.smallText]}>{title2}</Text>
         </View>
-        <Text style={[styles.h6, textStyle]}>{text2}</Text>
+        <Text
+          style={[
+            styles.smallText,
+            textStyle,
+            globalStyles.textCenter,
+            { fontFamily: theme.fonts.bold },
+          ]}
+        >
+          {text2}
+        </Text>
       </Pressable>
     </View>
   );

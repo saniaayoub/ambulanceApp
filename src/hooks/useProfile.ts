@@ -14,7 +14,7 @@ export const useProfile = () => {
   const updateDriverProfile = async (formData: FormData) => {
     showLoader();
     try {
-      const response = await updateProfile(formData);
+      const response = await updateProfile(formData, userData?.role);
 
       if (!response.success) {
         toastError(getErrorMessage(response.error));
