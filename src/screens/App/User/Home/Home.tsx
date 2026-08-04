@@ -67,18 +67,13 @@ const Home: FC = ({ navigation }: any) => {
     if (homeData?.activeTrip) {
       setTrip(homeData?.activeTrip);
       setStep(homeData?.activeTrip?.status);
-      console.log(bookingStep, 'll');
-      if (
-        homeData?.activeTrip?.status === 'COMPLETED' &&
-        bookingStep !== 'PICKUP'
-      ) {
-        console.log('hhia');
+      if (homeData?.activeTrip?.status === 'COMPLETED') {
         bottomSheetRef?.current?.open();
       } else {
         bottomSheetRef?.current?.close();
       }
     }
-  }, [homeData, setTrip, setStep]);
+  }, [homeData]);
 
   const openDrawer = () => {
     navigation.openDrawer();
