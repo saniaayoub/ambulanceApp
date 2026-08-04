@@ -10,6 +10,7 @@ export const getErrorMessage = (error: any) =>
 export const useProfile = () => {
   const { showLoader, hideLoader } = useLoaderStore();
   const userData = useAuthStore(state => state.userData);
+  const setUserData = useAuthStore(state => state.setUserData);
 
   const updateDriverProfile = async (formData: FormData) => {
     showLoader();
@@ -24,6 +25,16 @@ export const useProfile = () => {
       queryClient.invalidateQueries({
         queryKey: ['driver-data', userData?.driverId],
       });
+
+      console.log(response, 'res');
+      if (userData?.role === 'USER') {
+        setUserData({
+          ...userData,
+          fullName: response?.data?.fullName,
+          email: response?.data.email,
+          profileImage: response?.data?.image,
+        });
+      }
 
       toastSuccess(response?.message);
     } finally {

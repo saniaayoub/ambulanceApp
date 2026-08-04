@@ -13,7 +13,7 @@ import {
   verifyOtp as authVerifyOtp,
   logout as authLogout,
 } from '../services/authService';
-// import auth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { formatPhoneNumber } from '../utils/functions';
 import { disconnectSocket } from '../services/driverSocketService';
@@ -93,7 +93,7 @@ export const useAuth = () => {
       }
 
       // toastSuccess('Account created successfully');
-      await sendOtp(payload.phone);
+      await sendOtp(response?.data?.user?.phone);
       // return response;
     } finally {
       hideLoader();
@@ -104,8 +104,7 @@ export const useAuth = () => {
     showLoader();
 
     try {
-      // const result = await auth().signInWithPhoneNumber(phoneNumber);
-      const result = {};
+      const result = await auth().signInWithPhoneNumber(phoneNumber);
 
       setOTPResult(result);
       navigation.navigate('OTPScreen');
@@ -123,8 +122,10 @@ export const useAuth = () => {
   // 2️⃣ Verify OTP locally first
   const verifyOtp = async (otp: string) => {
     if (otpResult && otp.length) {
+      showLoader();
       try {
         const userCredential = await otpResult.confirm(otp);
+
         const idToken = await userCredential.user.getIdToken(); // Firebase ID token
 
         // Send this token to your backend for verification
@@ -135,12 +136,16 @@ export const useAuth = () => {
         }
         toastSuccess('Account registered successfully');
         setToken(response.data.token);
+        setUserData(response.data.user);
+
         return response;
       } catch (err) {
         toastError('Failed to verify OTP');
 
-        console.log(err);
+        console.log(err, err?.response, 'err');
         // setMessage('Invalid OTP');
+      } finally {
+        hideLoader();
       }
     }
   };

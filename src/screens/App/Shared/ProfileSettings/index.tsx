@@ -19,6 +19,8 @@ import { useAuth } from '../../../../hooks/useAuth';
 
 const ProfileSettings = () => {
   const userData = useAuthStore(state => state.userData);
+  const setUserData = useAuthStore(state => state.setUserData);
+
   const { data, isLoading } = useDriver(userData?.driverId);
 
   const { updateDriverProfile } = useProfile();
