@@ -165,10 +165,13 @@ export const useDriverSocket = () => {
       // If you want a local notification / sound, trigger it here
       // playIncomingTripSound();
     };
-    const onTripRequestTaken = ({ tripId }) => {
+    const onTripRequestTaken = ({ tripId, trip }) => {
       const request = useDriverStore.getState().incomingRequest;
       if (request?.tripId === tripId) {
         setIncomingRequest(null);
+      }
+      if (trip) {
+        queryClient.invalidateQueries({ queryKey: ['driver-stats'] });
       }
     };
 
