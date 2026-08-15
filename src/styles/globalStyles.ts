@@ -15,6 +15,10 @@ export const globalStyles = StyleSheet.create({
   height200: {
     height: moderateScale(200),
   },
+  widthHeight90: {
+    height: moderateScale(90),
+    width: moderateScale(90),
+  },
   absPosition2: {
     position: 'absolute',
     bottom: 30,
@@ -73,8 +77,15 @@ export const globalStyles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
+  flexWrap: {
+    flexWrap: 'wrap',
+  },
   fullWidth: {
     width: '100%',
+  },
+  fullWidthHeight: {
+    width: '100%',
+    height: '100%',
   },
   width70: {
     width: '70%',
@@ -274,6 +285,9 @@ export const globalStyles = StyleSheet.create({
   paddingH15: {
     paddingHorizontal: moderateScale(15),
   },
+  paddingB15: {
+    paddingBottom: moderateScale(15),
+  },
   paddingB10: {
     paddingBottom: moderateScale(10),
   },
@@ -303,6 +317,23 @@ export const useGlobalStyles = () => {
       height: moderateScale(1),
       width: '100%',
       backgroundColor: colors.border,
+    },
+    borderDashed: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderStyle: 'dashed',
+      borderColor: colors.text,
+    },
+    absoluteImages: {
+      position: 'absolute',
+      right: 4,
+      top: 4,
+      width: 24,
+      height: 24,
+      borderRadius: 12,
+      backgroundColor: colors.background,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     dot: {
       width: 4,

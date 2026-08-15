@@ -11,6 +11,7 @@ import Notifications from '../screens/App/Shared/Notifications';
 import ProfileSettings from '../screens/App/Shared/ProfileSettings';
 import BookingScreen from '../screens/App/Driver/Booking/BookingScreen';
 import { useDriverSocket } from '../hooks/useDriverSocket';
+import HelpCenter from '../screens/App/Shared/Help';
 
 export type DrawerStackParamList = {
   Home: undefined;
@@ -76,9 +77,11 @@ const DriverDrawer: FC = () => {
       <Drawer.Screen name="Earnings" component={EarningsScreen} />
       <Drawer.Screen name="RideHistory" component={RideStack} />
       <Drawer.Screen name="Profile" component={ProfileSettings} />
-      {/*  <Drawer.Screen name="Earnings" component={EarningsScreen} />
+      <Drawer.Screen name="HelpSupport" component={HelpCenter} />
+
+      {/*  
       <Drawer.Screen name="Notifications" component={Notifications} />
-      <Drawer.Screen name="HelpSupport" component={DrawerPlaceholder} /> */}
+      */}
     </Drawer.Navigator>
   );
 };

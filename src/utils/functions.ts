@@ -40,10 +40,10 @@ export const openCamera = async () => {
   }
 };
 
-export const openGallery = async () => {
+export const openGallery = async (selectionLimit = 1) => {
   const result = await launchImageLibrary({
     mediaType: 'photo',
-    selectionLimit: 1,
+    selectionLimit: selectionLimit,
     quality: 0.8,
   });
 
@@ -54,8 +54,8 @@ export const openGallery = async () => {
   if (result.errorCode) {
     throw new Error(result.errorMessage);
   }
-
-  return result.assets?.[0];
+  console.log(result, 'k');
+  return selectionLimit > 1 ? result?.assets : result.assets?.[0];
 };
 
 export const initials = (name: string) => {

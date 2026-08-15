@@ -26,6 +26,8 @@ export const useHospitalsData = (latitute?: number, longitude?: number) => {
       getHospitalsData({ lat: latitute, lng: longitude, radius: 5000 }),
     staleTime: 1000 * 60 * 5, // 5 min cache
     retry: 1,
+    enabled: !!latitute && !!longitude,
+    refetchOnWindowFocus: false,
   });
 };
 

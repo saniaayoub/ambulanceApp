@@ -22,17 +22,16 @@ export const useProfile = () => {
         return response;
       }
 
-      queryClient.invalidateQueries({
-        queryKey: ['driver-data', userData?.driverId],
-      });
-
-      console.log(response, 'res');
       if (userData?.role === 'USER') {
         setUserData({
           ...userData,
           fullName: response?.data?.fullName,
           email: response?.data.email,
           profileImage: response?.data?.image,
+        });
+      } else {
+        queryClient.invalidateQueries({
+          queryKey: ['driver-data', userData?.driverId],
         });
       }
 

@@ -49,10 +49,13 @@ export const getCurrentLocation = async (): Promise<Location> =>
     Geolocation.getCurrentPosition(
       async position => {
         try {
+          console.log(position);
+
           const { address, placeName } = await getLocationName(
             position.coords.latitude,
             position.coords.longitude,
           );
+          console.log(address, placeName);
 
           resolve({
             latitude: position.coords.latitude,

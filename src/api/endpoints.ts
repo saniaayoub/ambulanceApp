@@ -25,6 +25,9 @@ export const ENDPOINTS = {
     SUBMIT_REVIEW: 'user/submitReview',
     ONLINEDRIVERS: 'user/onlineDrivers',
   },
+  HELP: {
+    SUPPORT: 'help',
+  },
 
   PROFILE: {
     DRIVER_UPDATE: 'driver/profile',

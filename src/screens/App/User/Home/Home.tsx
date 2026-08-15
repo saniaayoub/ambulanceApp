@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, type FC } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FC,
+} from 'react';
 import {
   Pressable,
   ScrollView,
@@ -24,11 +30,12 @@ import { useAuthStore } from '../../../../stores/authStore';
 import { useBookingStore } from '../../../../stores/bookingStore';
 import { useLocationStore } from '../../../../stores/locationStore';
 import { globalStyles, useGlobalStyles } from '../../../../styles/globalStyles';
-import { reasons_user } from '../../../../utils/constants';
+import { reasons_user, screenHeight } from '../../../../utils/constants';
 import { showAlert } from '../../../../utils/functions';
 
 const Home: FC = ({ navigation }: any) => {
   const bottomSheetRef = useRef<Modalize>(null);
+  const [sheetType, setSheetType] = useState(null);
 
   const { startHospitalBooking } = useHospitalActions(navigation);
   const styles = useGlobalStyles();
@@ -64,14 +71,20 @@ const Home: FC = ({ navigation }: any) => {
   }, []);
 
   useEffect(() => {
-    if (homeData?.activeTrip) {
-      setTrip(homeData?.activeTrip);
-      setStep(homeData?.activeTrip?.status);
-      if (homeData?.activeTrip?.status === 'COMPLETED') {
-        bottomSheetRef?.current?.open();
-      } else {
-        bottomSheetRef?.current?.close();
-      }
+    if (!homeData?.activeTrip) {
+      setTrip(null);
+      setStep(null);
+      setSheetType(null);
+      bottomSheetRef.current?.close();
+      return;
+    }
+
+    setTrip(homeData.activeTrip);
+    setStep(homeData.activeTrip.status);
+
+    if (homeData.activeTrip.status === 'COMPLETED') {
+      setSheetType('review');
+      bottomSheetRef.current?.open();
     }
   }, [homeData]);
 
@@ -194,15 +207,19 @@ const Home: FC = ({ navigation }: any) => {
         </Pressable>
       </View> */}
 
-      <BottomSheet bottomSheetRef={bottomSheetRef}>
-        {homeData?.activeTrip?.status === 'COMPLETED' ? (
+      <BottomSheet
+        modalHeight={screenHeight * 0.9}
+        bottomSheetRef={bottomSheetRef}
+      >
+        {sheetType === 'review' && (
           <RideCompletedSheet
             trip={homeData?.activeTrip}
             onSubmitReview={payload =>
               submitReviewHandler(payload, bottomSheetRef)
             }
           />
-        ) : (
+        )}
+        {sheetType === 'cancel' && (
           <CancelRideBottomSheet
             onKeepBooking={() => bottomSheetRef?.current?.close()}
             reasons={reasons_user}

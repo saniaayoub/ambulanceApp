@@ -16,6 +16,7 @@ interface FormInputProps<T extends FieldValues> {
   style?: any;
   secureTextEntry?: boolean;
   disabled?: boolean;
+  multiline?: boolean;
 }
 
 const FormInput = <T extends FieldValues>({
@@ -27,6 +28,7 @@ const FormInput = <T extends FieldValues>({
   style,
   secureTextEntry = false,
   disabled = false,
+  multiline,
 }: FormInputProps<T>) => {
   return (
     <Controller
@@ -48,6 +50,7 @@ const FormInput = <T extends FieldValues>({
           containerStyle={style}
           secureTextEntry={secureTextEntry}
           editable={!disabled}
+          multiline
         />
       )}
     />

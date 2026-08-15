@@ -12,6 +12,7 @@ import HospitalsScreen from '../screens/App/User/Hospital';
 import ProfileSettings from '../screens/App/Shared/ProfileSettings';
 import LocationPickerScreen from '../screens/App/Shared/Map/LocationPickerScreen';
 import { useUserSocket } from '../hooks/useUserSocket';
+import HelpCenter from '../screens/App/Shared/Help';
 
 export type DrawerStackParamList = {
   Home: undefined;
@@ -21,6 +22,7 @@ export type DrawerStackParamList = {
   Hospitals: undefined;
   Profile: undefined;
   LocationScreen: undefined;
+  HelpSupport: undefined;
 };
 const Drawer = createDrawerNavigator<DrawerStackParamList>();
 
@@ -59,8 +61,9 @@ const UserDrawer: FC = () => {
       <Drawer.Screen name="Hospitals" component={HospitalsScreen} />
       <Drawer.Screen name="RideHistory" component={RideStack} />
       <Drawer.Screen name="Profile" component={ProfileSettings} />
+      <Drawer.Screen name="HelpSupport" component={HelpCenter} />
       {/* <Drawer.Screen name="Notifications" component={Notifications} />
-      <Drawer.Screen name="HelpSupport" component={DrawerPlaceholder} /> */}
+       */}
     </Drawer.Navigator>
   );
 };

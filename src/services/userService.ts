@@ -81,3 +81,10 @@ export const deleteTrip = async (tripId: string) =>
     method: 'delete',
     url: ENDPOINTS.TRIP.DELETE(tripId),
   });
+
+export const createSupportTicketApi = async (payload: any) =>
+  handleResponse({
+    method: 'post',
+    url: ENDPOINTS.HELP.SUPPORT,
+    data: payload,
+  });
